@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.whaley.dolphin.facade.persistence.CpAccountMapper">
+
+	<sql id="cols">
+		 cpAccount, cpToken, cpName, whaleyAccount, sn,accoutSnMd5, accountStatus, createTime
+	</sql>
+
+    <insert id="insertCpAccount">
+	    insert into cp_account(<include refid="cols"/>)
+	    values(#{cpAccount},#{cpToken},#{cpName},#{whaleyAccount},#{sn},#{accoutSnMd5},#{accountStatus},#{createTime})
+	</insert>
+	
+	<select id="getCpAccount" resultType="CpAccount">
+        SELECT id, cpAccount, cpToken, cpName, whaleyAccount, sn, accoutSnMd5, accountStatus, createTime, updateTime FROM cp_account WHERE whaleyAccount = #{0} AND cpName = #{1} AND sn = #{2} And  accountStatus = 1
+    </select>
+
+	<select id="getCpAccountByWhaleyTv" resultType="CpAccount">
+		SELECT id, cpAccount, cpToken, cpName, whaleyAccount, sn, accoutSnMd5, accountStatus, createTime, updateTime FROM cp_account WHERE accountStatus = 1 AND whaleyAccount = #{0} AND sn = #{1}
+	</select>
+	
+	<select id="getCpAccountBySn" resultType="CpAccount">
+        SELECT id, cpAccount, cpToken, cpName, whaleyAccount, sn, accoutSnMd5, accountStatus, createTime, updateTime FROM cp_account WHERE sn = #{0} and accountStatus = 1
+    </select>
+    
+    <update id="updateCpAccountById">
+    	update cp_account set cpAccount = #{cpAccount},cpToken = #{cpToken},cpName = #{cpName},
+        whaleyAccount = #{whaleyAccount},sn = #{sn},accoutSnMd5 = #{accoutSnMd5},accountStatus = #{accountStatus},updateTime = #{updateTime}
+        WHERE id = #{id} and accountStatus = 1
+    </update>
+    
+    <select id="getAllCpAccount" resultType="CpAccount">
+        SELECT id, <include refid="cols"/>, updateTime FROM cp_account WHERE accountStatus = 1
+    </select>
+    
+    <update id="updateAccoutSnMd5ById">
+    	update cp_account set accoutSnMd5 = #{accoutSnMd5}
+        WHERE id = #{id} and accountStatus = 1
+    </update>
+    
+    <select id="getMultiCpAccount" resultType="CpAccount">
+        SELECT id,cpAccount,whaleyAccount,sn,cpToken,COUNT(whaleyAccount) AS sumCount FROM cp_account 
+		WHERE accountStatus =1 GROUP BY whaleyAccount,sn HAVING sumCount>1;
+    </select>
+    
+    <select id="getAllCpAccountByCreateTime" resultType="CpAccount">
+        SELECT id, <include refid="cols"/>, updateTime FROM cp_account 
+		WHERE createTime <![CDATA[<]]>  #{0}
+    </select>
+</mapper>

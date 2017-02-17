@@ -9,6 +9,7 @@
     <modules>
         <module>moretv-member-service</module>
         <module>mybatis-generator-extend</module>
+        <module>moretv-member-base</module>
     </modules>
   
     <properties>

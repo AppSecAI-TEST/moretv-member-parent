@@ -1,0 +1,12 @@
+.class
+*.iml
+/out
+/**/target
+.classpath
+.properties
+.project
+.idea/
+.settings/
+*/.project
+/**/rebel.xml
+*/coverage-report/*
