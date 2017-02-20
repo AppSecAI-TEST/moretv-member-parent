@@ -84,23 +84,29 @@ public class GenericServiceImplGeneratorPlugin extends PluginAdapter {
                 Method mapperMethod = new Method();
                 Field mapperField = new Field();
 
+                mapperField.setType(mapperType);
+                mapperField.setName(GeneratorUtil.convertLowerFieldName(shortName) + "Mapper");
+                mapperField.setVisibility(JavaVisibility.PRIVATE);
+
+
                 if (statement) {
                     FullyQualifiedJavaType autowired = new FullyQualifiedJavaType(GeneratorConstant.AUTOWIRED_CLASS_PATH);
                     FullyQualifiedJavaType service = new FullyQualifiedJavaType(GeneratorConstant.SERVICE_CLASS_PATH);
+                    FullyQualifiedJavaType transactional = new FullyQualifiedJavaType(GeneratorConstant.TRANSACTIONAL_CLASS_PATH);
                     serviceImplClass.addImportedType(autowired);
                     serviceImplClass.addImportedType(service);
+                    serviceImplClass.addImportedType(transactional);
 
                     serviceImplClass.addAnnotation("@Service");
+                    serviceImplClass.addAnnotation("@Transactional");
+
                     mapperField.addAnnotation("@Autowired");
+                    serviceImplClass.addField(mapperField);
                     mapperMethod.addBodyLine("return " + mapperField.getName() + ";");
                 } else {
+                    serviceImplClass.addField(mapperField);
                     mapperMethod.addBodyLine("return null;");
                 }
-
-                mapperField.setType(mapperType);
-                mapperField.setName(shortName + "Mapper");
-                mapperField.setVisibility(JavaVisibility.PRIVATE);
-                serviceImplClass.addField(mapperField);
 
                 mapperMethod.setName("getGenericMapper");
                 mapperMethod.setVisibility(JavaVisibility.PUBLIC);
@@ -115,6 +121,10 @@ public class GenericServiceImplGeneratorPlugin extends PluginAdapter {
                 superImplType.addTypeArgument(modelJavaType);
                 superImplType.addTypeArgument(pkType);
                 serviceImplClass.setSuperClass(superImplType);
+
+                FullyQualifiedJavaType interfaceType = new FullyQualifiedJavaType(this.serviceTargetPackageImpl + packageName + "." + shortName + "Service");
+                serviceImplClass.addImportedType(interfaceType);
+                serviceImplClass.addSuperInterface(interfaceType);
 
                 try {
                     GeneratedJavaFile file = new GeneratedJavaFile(serviceImplClass, this.serviceTargetDir, javaFormatter);

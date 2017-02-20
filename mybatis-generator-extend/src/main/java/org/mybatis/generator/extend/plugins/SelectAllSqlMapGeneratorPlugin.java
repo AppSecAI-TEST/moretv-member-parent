@@ -2,10 +2,9 @@ package org.mybatis.generator.extend.plugins;
 
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
-import org.mybatis.generator.api.dom.xml.Attribute;
-import org.mybatis.generator.api.dom.xml.Document;
-import org.mybatis.generator.api.dom.xml.TextElement;
-import org.mybatis.generator.api.dom.xml.XmlElement;
+import org.mybatis.generator.api.ShellCallback;
+import org.mybatis.generator.api.dom.xml.*;
+import org.mybatis.generator.internal.DefaultShellCallback;
 
 import java.util.List;
 
@@ -13,6 +12,12 @@ import java.util.List;
  * Created by Bob Jiang on 2017/2/13.
  */
 public class SelectAllSqlMapGeneratorPlugin extends PluginAdapter {
+
+    private ShellCallback shellCallback = null;
+
+    public SelectAllSqlMapGeneratorPlugin() {
+        this.shellCallback = new DefaultShellCallback(false);
+    }
 
     public boolean validate(List<String> list) {
         return true;

@@ -92,4 +92,27 @@ public class GenericMapperGeneratorPlugin extends PluginAdapter {
         return mapperJavaFiles;
     }
 
+    public List<GeneratedXmlFile> contextGenerateAdditionalXmlFiles() {
+        return null;
+    }
+
+    public List<GeneratedXmlFile> contextGenerateAdditionalXmlFiles(IntrospectedTable introspectedTable) {
+        List<GeneratedXmlFile> xmlFiles = introspectedTable.getGeneratedXmlFiles();
+        Iterator<GeneratedXmlFile> iterator = xmlFiles.iterator();
+
+        while (iterator.hasNext()) {
+            GeneratedXmlFile xmlFile = iterator.next();
+            try {
+                File mapperDir = this.shellCallback.getDirectory(xmlFile.getTargetProject(), xmlFile.getTargetPackage());
+                File mapperFile = new File(mapperDir, xmlFile.getFileName());
+                if(mapperFile.exists()) {
+                    iterator.remove();
+                }
+            } catch (ShellException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
 }
