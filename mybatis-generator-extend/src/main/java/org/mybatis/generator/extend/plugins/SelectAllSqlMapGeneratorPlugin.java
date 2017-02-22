@@ -2,9 +2,7 @@ package org.mybatis.generator.extend.plugins;
 
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
-import org.mybatis.generator.api.ShellCallback;
 import org.mybatis.generator.api.dom.xml.*;
-import org.mybatis.generator.internal.DefaultShellCallback;
 
 import java.util.List;
 
@@ -13,27 +11,20 @@ import java.util.List;
  */
 public class SelectAllSqlMapGeneratorPlugin extends PluginAdapter {
 
-    private ShellCallback shellCallback = null;
-
-    public SelectAllSqlMapGeneratorPlugin() {
-        this.shellCallback = new DefaultShellCallback(false);
-    }
-
     public boolean validate(List<String> list) {
         return true;
     }
 
     public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {
         String tableName = introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime();
-        String alias = introspectedTable.getFullyQualifiedTable().getAlias();
         XmlElement parentElement = document.getRootElement();
 
-        // 产生分页语句前半部分
+        // 生成查询语句Element
         XmlElement selectAllElement = new XmlElement("select");
         selectAllElement.addAttribute(new Attribute("id", "selectAll"));
         selectAllElement.addAttribute(new Attribute("resultMap", "BaseResultMap"));
 
-        String sql = "select <include refid=\"Base_Column_List\" /> from " + tableName + " " + alias;
+        String sql = "select <include refid=\"Base_Column_List\" /> from " + tableName;
         selectAllElement.addElement(new TextElement(sql));
         parentElement.addElement(selectAllElement);
         return super.sqlMapDocumentGenerated(document, introspectedTable);

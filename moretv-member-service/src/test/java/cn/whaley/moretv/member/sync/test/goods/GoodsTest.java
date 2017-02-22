@@ -5,7 +5,6 @@ import cn.whaley.moretv.member.sync.service.goods.GoodsService;
 import cn.whaley.moretv.member.sync.test.base.BaseTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;

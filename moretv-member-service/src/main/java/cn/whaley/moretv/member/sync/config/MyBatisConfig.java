@@ -41,7 +41,7 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
         bean.setTypeAliasesPackage("cn.whaley.moretv.member.model");
 
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        bean.setMapperLocations(resolver.getResources("classpath:cn/whaley/moretv/member/mapper/*/*Mapper.xml"));
+        bean.setMapperLocations(resolver.getResources("classpath:cn/whaley/moretv/member/mapper/**/*Mapper.xml"));
         return bean.getObject();
     }
 
