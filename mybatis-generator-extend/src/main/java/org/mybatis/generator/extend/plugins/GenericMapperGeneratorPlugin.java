@@ -144,9 +144,52 @@ public class GenericMapperGeneratorPlugin extends PluginAdapter {
         return extXmlFiles;
     }
 
+    /**
+     * 修改mapper的namespace
+     * @param document
+     * @param introspectedTable
+     * @return
+     */
     public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {
         String nameSpace = mapperTargetPackage + "." + introspectedTable.getTableConfiguration().getDomainObjectName() + "Mapper";
         introspectedTable.setMyBatis3FallbackSqlMapNamespace(nameSpace);
         return true;
+    }
+
+    /** return false; 不生成Example相关代码 */
+
+    public boolean modelExampleClassGenerated(
+            TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        return false;
+    }
+
+    public boolean sqlMapExampleWhereClauseElementGenerated(
+            XmlElement element, IntrospectedTable introspectedTable) {
+        return false;
+    }
+
+    public boolean sqlMapSelectByExampleWithoutBLOBsElementGenerated(
+            XmlElement element, IntrospectedTable introspectedTable) {
+        return false;
+    }
+
+    public boolean sqlMapDeleteByExampleElementGenerated(
+            XmlElement element, IntrospectedTable introspectedTable) {
+        return false;
+    }
+
+    public boolean sqlMapCountByExampleElementGenerated(
+            XmlElement element, IntrospectedTable introspectedTable) {
+        return false;
+    }
+
+    public boolean sqlMapUpdateByExampleSelectiveElementGenerated(
+            XmlElement element, IntrospectedTable introspectedTable) {
+        return false;
+    }
+
+    public boolean sqlMapUpdateByExampleWithoutBLOBsElementGenerated(
+            XmlElement element, IntrospectedTable introspectedTable) {
+        return false;
     }
 }

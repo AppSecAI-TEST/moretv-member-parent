@@ -70,24 +70,16 @@
             domainObjectName: Model类名称，默认为表的驼峰名称，若需指定子包，可以"模块名称.类名"规则命名。
             *ByExample: 指定是否生成相关Example的方法。
         -->
-        <table tableName="goods" alias="goods" domainObjectName="goods.Goods"
-               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false">
+        <table tableName="goods" alias="goods" domainObjectName="goods.Goods">
             <!--sqlStatement指定为JDBC即可-->
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 
-        <table tableName="goods_spu" alias="spu" domainObjectName="goods.GoodsSpu"
-               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false">
-            <!--sqlStatement指定为JDBC即可-->
+        <table tableName="goods_spu" alias="spu" domainObjectName="goods.GoodsSpu">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 
-        <table tableName="goods_sku" alias="sku" domainObjectName="goods.GoodsSku"
-               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false">
-            <!--sqlStatement指定为JDBC即可-->
+        <table tableName="goods_sku" alias="sku" domainObjectName="goods.GoodsSku">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
         
