@@ -4,8 +4,8 @@ package cn.whaley.moretv.member.base.res;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 
 public class ResEncrypt<T> extends ResBase<T> {
-    
-    protected T data;
+
+	protected T data;
 	
 	public ResEncrypt() { }
 
@@ -37,6 +37,15 @@ public class ResEncrypt<T> extends ResBase<T> {
 
 	public void setData(T data) {
 		this.data = data;
+	}
+
+	@Override
+	public String toString() {
+		return "ResEncrypt{" +
+				"code=" + code +
+				", msg='" + msg + '\'' +
+				", data=" + data +
+				'}';
 	}
 
 }

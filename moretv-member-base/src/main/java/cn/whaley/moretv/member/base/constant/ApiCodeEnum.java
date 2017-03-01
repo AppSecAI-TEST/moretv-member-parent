@@ -14,7 +14,7 @@ public enum ApiCodeEnum {
     API_SIGN_ERR(ApiCodeInfo.API_SIGN_ERR, "sign error"),
     API_DATA_NOT_EXIST(ApiCodeInfo.API_DATA_NOT_EXIST, "data not exist"),
 
-    API_DATA_GOODS_STATUS_ERR(ApiCodeInfo.API_DATA_GOODS_STATUS_ERR, "goodsStatus error");
+    API_DATA_GOODS_STATUS_ERR(ApiCodeInfo.API_DATA_GOODS_STATUS_ERR, "goodsStatus error"),
     ;
 
     private int code;
