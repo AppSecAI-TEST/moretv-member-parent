@@ -12,14 +12,14 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-  
-  
+
+
 @Configuration  
 @EnableCaching  
-public class RedisConfig extends CachingConfigurerSupport{  
+public class CacheConfig extends CachingConfigurerSupport{
   
     @Bean  
-    public KeyGenerator commonKeyGenerator(){  
+    public KeyGenerator commonKeyGenerator(){
         return new KeyGenerator() {  
             @Override  
             public Object generate(Object target, Method method, Object... params) {  
@@ -43,14 +43,14 @@ public class RedisConfig extends CachingConfigurerSupport{
   
     @Bean  
     public RedisTemplate<String, String> redisTemplate(  
-            RedisConnectionFactory factory) {  
-        StringRedisTemplate template = new StringRedisTemplate(factory);  
-       /* Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);  
-        ObjectMapper om = new ObjectMapper();  
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);  
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);  
-        jackson2JsonRedisSerializer.setObjectMapper(om);  
-        template.setValueSerializer(jackson2JsonRedisSerializer);  
+            RedisConnectionFactory factory) {
+        StringRedisTemplate template = new StringRedisTemplate(factory);
+       /* Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+        template.setValueSerializer(jackson2JsonRedisSerializer);
         template.afterPropertiesSet();  */
         return template;  
     }

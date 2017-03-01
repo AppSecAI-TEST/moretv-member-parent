@@ -13,13 +13,10 @@ public interface GlobalConstant {
     
     String WHALEY_SERVICE_ID = "111";
 
-    //商品交换机
-    String MORETV_PUBLISH_GOODS_EXCHANGE = "moretv.publish_goods";
-    //商品Queue
+    //商品队列
     String MORETV_PUBLISH_GOODS_ROUTER_KEY = "moretv.publish_goods_router";
 
     //商品模型队列
-    String MORETV_PUBLISH_GOODS_SPU_EXCHANGE = "moretv.publish_goods_spu";
     String MORETV_PUBLISH_GOODS_SPU_ROUTER_KEY = "moretv.publish_goods_spu_router";
 
 }

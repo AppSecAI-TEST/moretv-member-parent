@@ -50,15 +50,6 @@ public class MD5Util {
         String s = new String(a);  
         return s;  
   
-    }  
-  
-  // 测试主函数  
-    public static void main(String args[]) {  
-        String s = new String("PAY_AND_DOLPHIN_SIGN");  
-        System.out.println("原始：" + s);  
-        System.out.println("MD5后：" + string2MD5("WJf571feefab29467099ab3d65b88193c3TRADE_FINISHEDad39cfe2b4622015b088bb2b7a556eb8"));  
-        System.out.println("加密的：" + convertMD5(s));  
-        System.out.println("解密的：" + convertMD5(convertMD5(s)));  
-  
-    } 
+    }
+
 }  

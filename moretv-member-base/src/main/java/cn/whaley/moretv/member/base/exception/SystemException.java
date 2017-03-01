@@ -1,6 +1,6 @@
 package cn.whaley.moretv.member.base.exception;
 
-import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
+import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 
 /**
  * 系统业务异常 throw new SystemException("XXXX")
@@ -26,7 +26,7 @@ public class SystemException extends RuntimeException {
 		this.code = code;
 	}
 
-	public SystemException(ApiCodeInfo.CodeEnum codeEnum) {
+	public SystemException(ApiCodeEnum codeEnum) {
 		super(codeEnum.getMsg());
 		this.code = String.valueOf(codeEnum.getCode());
 	}

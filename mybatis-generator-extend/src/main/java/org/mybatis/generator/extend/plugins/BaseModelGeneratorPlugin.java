@@ -72,7 +72,7 @@ public class BaseModelGeneratorPlugin extends PluginAdapter {
         while (fieldsIterator.hasNext()) {
             Field field = fieldsIterator.next();
             for (IntrospectedColumn column : primaryKeyColumns) {
-                if (field.getName().equals(column.getActualColumnName())) {
+                if (field.getName().equals(column.getJavaProperty())) {
                     pkFields.add(field);
                 }
             }
