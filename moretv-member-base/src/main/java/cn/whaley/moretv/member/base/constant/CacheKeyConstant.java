@@ -10,4 +10,6 @@ public interface CacheKeyConstant {
     //商品 key
     String REDIS_KEY_GOODS = "moretv:member:goods";
 
+    //商品模型 key
+    String REDIS_KEY_GOODS_SPU = "moretv:member:goodsSpu";
 }

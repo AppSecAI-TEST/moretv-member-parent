@@ -68,7 +68,10 @@ public class GoodsServiceImpl extends GenericServiceImpl<Goods, Integer> impleme
         opsHash.delete(CacheKeyConstant.REDIS_KEY_GOODS, goodsDto.getGoodsCode());
         logger.info("syncGoods: 删除商品缓存, goodsCode:{}", goodsDto.getGoodsCode());
 
-        Goods goods = buildGoods(goodsDto, GlobalEnum.StatusText.OFFSHEIF);
+        Goods goods = new Goods();
+        goods.setId(goodsDto.getId());
+        goods.setGoodsStatus(GlobalEnum.StatusText.OFFSHEIF.getCode());
+        goods.setUpdateTime(goodsDto.getUpdateTime());
         int line = goodsMapper.updateByPrimaryKeySelective(goods);
         if (line > 0) {
             logger.info("syncGoods: 修改商品状态为下架, goodsCode:{}", goodsDto.getGoodsCode());
@@ -80,13 +83,13 @@ public class GoodsServiceImpl extends GenericServiceImpl<Goods, Integer> impleme
         opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS, goodsDto.getGoodsCode(), value);
         logger.info("syncGoods: 更新商品缓存, goodsCode:{}", goodsDto.getGoodsCode());
 
+        Goods goods = BeanHandler.copyProperties(goodsDto, Goods.class);
+
         int count = goodsMapper.existGoodsById(goodsDto.getId());
         if (count > 0) {
-            Goods goods = buildGoods(goodsDto, GlobalEnum.StatusText.PUBLISHED);
             goodsMapper.updateByPrimaryKeySelective(goods);
-            logger.info("syncGoods: 修改商品状态为上架, goodsCode:{}", goodsDto.getGoodsCode());
+            logger.info("syncGoods: 更新商品数据, goodsCode:{}", goodsDto.getGoodsCode());
         } else {
-            Goods goods = BeanHandler.copyProperties(goodsDto, Goods.class);
             goodsMapper.insertWithId(goods);
             logger.info("syncGoods: 同步商品数据, goodsCode:{}", goodsDto.getGoodsCode());
         }
@@ -99,14 +102,6 @@ public class GoodsServiceImpl extends GenericServiceImpl<Goods, Integer> impleme
                 logger.info("syncGoods: 同步商品SKU数据, goodsCode:{}, skuId:{}", goodsDto.getGoodsCode(), sku.getId());
             }
         }
-    }
-
-    private Goods buildGoods(GoodsDto goodsDto, GlobalEnum.StatusText statusText) {
-        Goods goods = new Goods();
-        goods.setId(goodsDto.getId());
-        goods.setGoodsStatus(statusText.getCode());
-        goods.setUpdateTime(goodsDto.getUpdateTime());
-        return goods;
     }
 
     @Override
