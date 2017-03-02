@@ -12,4 +12,10 @@ public interface CacheKeyConstant {
 
     //商品模型 key
     String REDIS_KEY_GOODS_SPU = "moretv:member:goodsSpu";
+    
+    //会员模型
+    String REDIS_KEY_MEMBER = "moretv:member:member";
+    
+    //会员模型和节目包
+    String REDIS_KEY_MEMBER_PACKAGE_RELATION = "moretv:member:member:package:relation";
 }

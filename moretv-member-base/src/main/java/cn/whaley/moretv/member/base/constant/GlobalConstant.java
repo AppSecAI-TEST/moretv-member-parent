@@ -18,5 +18,8 @@ public interface GlobalConstant {
 
     //商品模型队列
     String MORETV_PUBLISH_GOODS_SPU_ROUTER_KEY = "moretv.publish_goods_spu_router";
+    
+    //会员模型队列
+    String MORETV_PUBLISH_MEMBER_QUEUE = "moretv.publish.member.queue";
 
 }

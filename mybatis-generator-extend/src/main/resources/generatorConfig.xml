@@ -83,5 +83,16 @@
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
         
+        <table tableName="member" alias="mem" domainObjectName="goods.Member">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        
+        <table tableName="member_package_relation" alias="mpr" domainObjectName="goods.MemberPackageRelation">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        
+        <table tableName="member_program" alias="pro" domainObjectName="goods.MemberProgram">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
 	</context>
 </generatorConfiguration> 
