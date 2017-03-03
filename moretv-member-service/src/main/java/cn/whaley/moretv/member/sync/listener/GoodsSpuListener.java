@@ -26,7 +26,7 @@ import org.springframework.util.StringUtils;
  * Created by Bob Jiang on 2017/3/1.
  */
 @Component
-@RabbitListener(queues = GlobalConstant.MORETV_PUBLISH_GOODS_SPU_ROUTER_KEY)
+@RabbitListener(queues = GlobalConstant.MORETV_PUBLISH_GOODS_SPU_QUEUE)
 public class GoodsSpuListener {
 	
 	private static final Logger logger = LoggerFactory.getLogger(GoodsSpuListener.class);
