@@ -118,7 +118,7 @@ public class MemberServiceImpl extends GenericServiceImpl<Member, Integer> imple
             
             if(!isExist){
                 //如果老的不在新的里面，则删除
-                mpprOld.setStatus(GlobalEnum.Bound.BOUND.getCode());
+                mpprOld.setStatus(GlobalEnum.Bound.UNBOUND.getCode());
                 mpprOld.setUpdateTime(new Date());
                 memberPackageRelationMapper.updateByPrimaryKeySelective(mpprOld);
                 logger.info("mq.listen.member->delete memberPackageRelation->{}",mpprOld.toString());

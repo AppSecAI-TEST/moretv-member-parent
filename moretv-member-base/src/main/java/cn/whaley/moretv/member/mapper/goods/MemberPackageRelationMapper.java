@@ -16,6 +16,5 @@ import cn.whaley.moretv.member.model.goods.MemberPackageRelation;
 */
 public interface MemberPackageRelationMapper extends GenericMapper<MemberPackageRelation, Integer> {
 
-    @Select("select * from member_package_relation where member_code = #{memberCode}")
     List<MemberPackageRelation> listByMemberCode(String memberCode);
 }

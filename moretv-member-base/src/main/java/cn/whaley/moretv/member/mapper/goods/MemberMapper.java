@@ -14,6 +14,5 @@ import cn.whaley.moretv.member.model.goods.Member;
 */
 public interface MemberMapper extends GenericMapper<Member, Integer> {
 
-    @Select("select * from member where code = #{memberCode}")
-    Member selectByCode(String memberCode);
+    Member selectByCode(String code);
 }
