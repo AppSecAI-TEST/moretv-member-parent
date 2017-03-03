@@ -91,7 +91,7 @@
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
         
-        <table tableName="member_program" alias="pro" domainObjectName="goods.MemberProgram">
+        <table tableName="member_program_relation" alias="pro" domainObjectName="goods.MemberProgramRelation">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 	</context>
