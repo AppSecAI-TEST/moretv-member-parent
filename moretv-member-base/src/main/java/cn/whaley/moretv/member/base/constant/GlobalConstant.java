@@ -28,6 +28,6 @@ public interface GlobalConstant {
     String MORETV_PUBLISH_MEMBER_QUEUE = "moretv.publish.member.queue";
     
     //片库队列
-    String MORETV_PUBLISH_CONTENT_PRODUCT_QUEUE = "moretv.publish.member.content.product.queue";
+    String MORETV_PUBLISH_CONTENT_PRODUCT_QUEUE = "moretv.publish.content.product.queue";
 
 }
