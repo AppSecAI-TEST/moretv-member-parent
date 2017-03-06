@@ -22,6 +22,8 @@ import java.util.List;
  */
 public class BaseModelGeneratorPlugin extends PluginAdapter {
 
+    private static final String DEFAULT_PRIMARYKEY = "id";
+
     public boolean validate(List<String> list) {
         String modelTargetPackage = this.properties.getProperty("modelTargetPackage");
         return StringUtility.stringHasValue(modelTargetPackage);
@@ -72,7 +74,8 @@ public class BaseModelGeneratorPlugin extends PluginAdapter {
         while (fieldsIterator.hasNext()) {
             Field field = fieldsIterator.next();
             for (IntrospectedColumn column : primaryKeyColumns) {
-                if (field.getName().equals(column.getJavaProperty())) {
+                String pkName = column.getJavaProperty();
+                if (field.getName().equals(pkName) && DEFAULT_PRIMARYKEY.equals(pkName)) {
                     pkFields.add(field);
                 }
             }
@@ -82,10 +85,13 @@ public class BaseModelGeneratorPlugin extends PluginAdapter {
         while (methodsIterator.hasNext()) {
             Method method = methodsIterator.next();
             for (IntrospectedColumn column : primaryKeyColumns) {
-                String setter = "set" + GeneratorUtil.convertFieldName(column.getActualColumnName());
-                String getter = "get" + GeneratorUtil.convertFieldName(column.getActualColumnName());
-                if (method.getName().equals(setter) || method.getName().equals(getter)) {
-                    pkMethods.add(method);
+                String pkName = column.getJavaProperty();
+                if (DEFAULT_PRIMARYKEY.equals(pkName)) {
+                    String setter = "set" + GeneratorUtil.convertFieldName(pkName);
+                    String getter = "get" + GeneratorUtil.convertFieldName(pkName);
+                    if (method.getName().equals(setter) || method.getName().equals(getter)) {
+                        pkMethods.add(method);
+                    }
                 }
             }
         }
