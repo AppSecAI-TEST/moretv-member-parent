@@ -16,8 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +50,7 @@ public class MemberProgramRelationServiceImpl extends GenericServiceImpl<MemberP
     @Override
     public void sync(ProductDto productDto) {
         //1、查询出当前节目跟会员模型的关系
-        HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
+        ValueOperations<String, String> opsValue = redisTemplate.opsForValue();
         Date date = new Date();
         List<MemberProgramRelation> mprList = memberProgramRelationMapper.listByProgramCode(productDto.getProgramCode());
         boolean isExist = false;
@@ -67,7 +67,7 @@ public class MemberProgramRelationServiceImpl extends GenericServiceImpl<MemberP
             }
             
             memberProgramRelationMapper.updateByPrimaryKeySelective(mpr);
-            opsHash.put(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, mpr.getMemberCode() + ":" +  mpr.getProgramCode(), JSON.toJSONString(mpr));
+            opsValue.set(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION + mpr.getProgramCode() + ":" +  mpr.getMemberCode(), JSON.toJSONString(mpr));
             logger.info("mq.listen.product->update memberProgramRelation->{}",mpr.toString());
         }
         
@@ -78,7 +78,7 @@ public class MemberProgramRelationServiceImpl extends GenericServiceImpl<MemberP
             mpr.setUpdateTime(date);
             mpr.setStatus(productDto.getRelationStatus());
             memberProgramRelationMapper.insertSelective(mpr);
-            opsHash.put(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, mpr.getMemberCode() + ":" +  mpr.getProgramCode(), JSON.toJSONString(mpr));
+            opsValue.set(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION + mpr.getProgramCode() + ":" +  mpr.getMemberCode(), JSON.toJSONString(mpr));
             logger.info("mq.listen.product->insert memberProgramRelation->{}",mpr.toString());
         }
     }
