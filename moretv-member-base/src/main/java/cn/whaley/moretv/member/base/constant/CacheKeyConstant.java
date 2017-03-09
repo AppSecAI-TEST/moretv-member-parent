@@ -19,5 +19,6 @@ public interface CacheKeyConstant {
     //会员模型和节目包
     String REDIS_KEY_MEMBER_PACKAGE_RELATION = "moretv:member:package:relation";
     
-    String REDIS_KEY_MEMBER_PROGRAM_RELATION = "moretv:member:program:relation";
+    //会员模型和节目关系：member:mprelation:{programCode}:{memberCode}
+    String REDIS_KEY_MEMBER_PROGRAM_RELATION = "member:mprelation:";
 }
