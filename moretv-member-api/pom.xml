@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.whaley.moretv</groupId>
-    <artifactId>moretv-member-interface</artifactId>
+    <artifactId>moretv-member-api</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <description>前端数据读取接口</description>
     <packaging>jar</packaging>
