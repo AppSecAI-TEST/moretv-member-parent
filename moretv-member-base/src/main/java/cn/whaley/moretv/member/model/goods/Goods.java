@@ -80,6 +80,12 @@ public class Goods extends BaseModel<Integer> implements Serializable {
     private String goodsStatus;
 
     /**
+     * 商品子类，1：普通商品，2：首次商品，3：非首次商品
+     * goods_class
+     */
+    private Integer goodsClass;
+
+    /**
      * 是否外部显示
      * is_displayed
      */
@@ -334,6 +340,24 @@ public class Goods extends BaseModel<Integer> implements Serializable {
     }
 
     /**
+     * 商品子类，1：普通商品，2：首次商品，3：非首次商品
+     * goods_class
+     */
+    public Integer getGoodsClass() {
+        return goodsClass;
+    }
+
+    /**
+     * 商品子类，1：普通商品，2：首次商品，3：非首次商品
+     * goods_class
+     *
+     * @param goodsClass 商品子类，1：普通商品，2：首次商品，3：非首次商品
+     */
+    public void setGoodsClass(Integer goodsClass) {
+        this.goodsClass = goodsClass;
+    }
+
+    /**
      * 是否外部显示
      * is_displayed
      */
@@ -513,6 +537,7 @@ public class Goods extends BaseModel<Integer> implements Serializable {
         sb.append(", sellingPrice=").append(sellingPrice);
         sb.append(", goodsType=").append(goodsType);
         sb.append(", goodsStatus=").append(goodsStatus);
+        sb.append(", goodsClass=").append(goodsClass);
         sb.append(", isDisplayed=").append(isDisplayed);
         sb.append(", promotion=").append(promotion);
         sb.append(", imgUrl=").append(imgUrl);

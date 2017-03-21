@@ -18,6 +18,7 @@
     <result column="goods_selling_price" property="sellingPrice" jdbcType="INTEGER" />
     <result column="goods_goods_type" property="goodsType" jdbcType="INTEGER" />
     <result column="goods_goods_status" property="goodsStatus" jdbcType="VARCHAR" />
+    <result column="goods_goods_class" property="goodsClass" jdbcType="INTEGER" />
     <result column="goods_is_displayed" property="isDisplayed" jdbcType="BIT" />
     <result column="goods_promotion" property="promotion" jdbcType="VARCHAR" />
     <result column="goods_img_url" property="imgUrl" jdbcType="VARCHAR" />
@@ -33,10 +34,10 @@
     goods.goods_sub_name as goods_goods_sub_name, goods.goods_base_code as goods_goods_base_code, 
     goods.goods_base_name as goods_goods_base_name, goods.goods_order as goods_goods_order, 
     goods.original_price as goods_original_price, goods.discount as goods_discount, goods.selling_price as goods_selling_price, 
-    goods.goods_type as goods_goods_type, goods.goods_status as goods_goods_status, goods.is_displayed as goods_is_displayed, 
-    goods.promotion as goods_promotion, goods.img_url as goods_img_url, goods.goods_desc as goods_goods_desc, 
-    goods.start_time as goods_start_time, goods.end_time as goods_end_time, goods.remark as goods_remark, 
-    goods.create_time as goods_create_time, goods.update_time as goods_update_time
+    goods.goods_type as goods_goods_type, goods.goods_status as goods_goods_status, goods.goods_class as goods_goods_class, 
+    goods.is_displayed as goods_is_displayed, goods.promotion as goods_promotion, goods.img_url as goods_img_url, 
+    goods.goods_desc as goods_goods_desc, goods.start_time as goods_start_time, goods.end_time as goods_end_time, 
+    goods.remark as goods_remark, goods.create_time as goods_create_time, goods.update_time as goods_update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -52,17 +53,19 @@
     insert into goods (goods_code, goods_name, goods_sub_name, 
       goods_base_code, goods_base_name, goods_order, 
       original_price, discount, selling_price, 
-      goods_type, goods_status, is_displayed, 
-      promotion, img_url, goods_desc, 
-      start_time, end_time, remark, 
-      create_time, update_time)
+      goods_type, goods_status, goods_class, 
+      is_displayed, promotion, img_url, 
+      goods_desc, start_time, end_time, 
+      remark, create_time, update_time
+      )
     values (#{goodsCode,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, #{goodsSubName,jdbcType=VARCHAR}, 
       #{goodsBaseCode,jdbcType=VARCHAR}, #{goodsBaseName,jdbcType=VARCHAR}, #{goodsOrder,jdbcType=INTEGER}, 
       #{originalPrice,jdbcType=INTEGER}, #{discount,jdbcType=DECIMAL}, #{sellingPrice,jdbcType=INTEGER}, 
-      #{goodsType,jdbcType=INTEGER}, #{goodsStatus,jdbcType=VARCHAR}, #{isDisplayed,jdbcType=BIT}, 
-      #{promotion,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, #{goodsDesc,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{goodsType,jdbcType=INTEGER}, #{goodsStatus,jdbcType=VARCHAR}, #{goodsClass,jdbcType=INTEGER}, 
+      #{isDisplayed,jdbcType=BIT}, #{promotion,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, 
+      #{goodsDesc,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.whaley.moretv.member.model.goods.Goods" useGeneratedKeys="true" keyProperty="id" >
     insert into goods
@@ -99,6 +102,9 @@
       </if>
       <if test="goodsStatus != null" >
         goods_status,
+      </if>
+      <if test="goodsClass != null" >
+        goods_class,
       </if>
       <if test="isDisplayed != null" >
         is_displayed,
@@ -161,6 +167,9 @@
       </if>
       <if test="goodsStatus != null" >
         #{goodsStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsClass != null" >
+        #{goodsClass,jdbcType=INTEGER},
       </if>
       <if test="isDisplayed != null" >
         #{isDisplayed,jdbcType=BIT},
@@ -227,6 +236,9 @@
       <if test="goodsStatus != null" >
         goods_status = #{goodsStatus,jdbcType=VARCHAR},
       </if>
+      <if test="goodsClass != null" >
+        goods_class = #{goodsClass,jdbcType=INTEGER},
+      </if>
       <if test="isDisplayed != null" >
         is_displayed = #{isDisplayed,jdbcType=BIT},
       </if>
@@ -270,6 +282,7 @@
       selling_price = #{sellingPrice,jdbcType=INTEGER},
       goods_type = #{goodsType,jdbcType=INTEGER},
       goods_status = #{goodsStatus,jdbcType=VARCHAR},
+      goods_class = #{goodsClass,jdbcType=INTEGER},
       is_displayed = #{isDisplayed,jdbcType=BIT},
       promotion = #{promotion,jdbcType=VARCHAR},
       img_url = #{imgUrl,jdbcType=VARCHAR},
