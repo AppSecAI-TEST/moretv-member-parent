@@ -1,15 +1,9 @@
 package cn.whaley.moretv.member.sync.listener;
 
 
-import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
-import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
 import cn.whaley.moretv.member.base.constant.GlobalConstant;
 
-import cn.whaley.moretv.member.base.exception.SystemException;
-import cn.whaley.moretv.member.base.res.ResBase;
-import cn.whaley.moretv.member.sync.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.sync.dto.goods.MemberDto;
-import cn.whaley.moretv.member.sync.service.goods.GoodsService;
 import cn.whaley.moretv.member.sync.service.goods.MemberService;
 
 import com.alibaba.fastjson.JSON;

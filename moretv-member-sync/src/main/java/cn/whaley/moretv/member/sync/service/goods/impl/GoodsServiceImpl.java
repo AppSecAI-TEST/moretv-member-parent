@@ -4,13 +4,13 @@ import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
-import cn.whaley.moretv.member.base.res.ResBase;
-import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
+import cn.whaley.moretv.member.base.res.ResultResponse;
 import cn.whaley.moretv.member.base.util.BeanHandler;
 import cn.whaley.moretv.member.mapper.goods.GoodsMapper;
 import cn.whaley.moretv.member.mapper.goods.GoodsSkuMapper;
 import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.model.goods.GoodsSku;
+import cn.whaley.moretv.member.service.goods.impl.BaseGoodsServiceImpl;
 import cn.whaley.moretv.member.sync.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.sync.service.goods.GoodsService;
 import com.alibaba.fastjson.JSON;
@@ -33,7 +33,7 @@ import java.util.List;
 */
 @Service
 @Transactional
-public class GoodsServiceImpl extends GenericServiceImpl<Goods, Integer> implements GoodsService {
+public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsService {
 
     private static final Logger logger = LoggerFactory.getLogger(GoodsServiceImpl.class);
 
@@ -47,7 +47,7 @@ public class GoodsServiceImpl extends GenericServiceImpl<Goods, Integer> impleme
     private GoodsSkuMapper goodsSkuMapper;
 
     @Override
-    public ResBase syncGoods(GoodsDto goodsDto) {
+    public ResultResponse syncGoods(GoodsDto goodsDto) {
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
 
         String status = goodsDto.getGoodsStatus();
@@ -58,10 +58,10 @@ public class GoodsServiceImpl extends GenericServiceImpl<Goods, Integer> impleme
             publishGoods(goodsDto, opsHash);
         } else {
             logger.error("syncGoods: error: {}", ApiCodeEnum.API_DATA_GOODS_STATUS_ERR.getMsg());
-            return ResBase.define(ApiCodeEnum.API_DATA_GOODS_STATUS_ERR);
+            return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_STATUS_ERR);
         }
 
-        return ResBase.success();
+        return ResultResponse.success();
     }
 
     private void offsheifGoods(GoodsDto goodsDto, HashOperations<String, String, String> opsHash) {

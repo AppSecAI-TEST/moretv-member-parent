@@ -1,6 +1,6 @@
 package cn.whaley.moretv.member.sync.service.goods;
 
-import cn.whaley.moretv.member.base.res.ResBase;
+import cn.whaley.moretv.member.base.res.ResultResponse;
 import cn.whaley.moretv.member.base.service.GenericService;
 import cn.whaley.moretv.member.model.goods.GoodsSpu;
 
@@ -19,5 +19,5 @@ public interface GoodsSpuService extends GenericService<GoodsSpu, Integer> {
      * @param goodsSpu
      * @return
      */
-    ResBase syncGoodsSpu(GoodsSpu goodsSpu);
+    ResultResponse syncGoodsSpu(GoodsSpu goodsSpu);
 }

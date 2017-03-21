@@ -4,7 +4,7 @@ import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
-import cn.whaley.moretv.member.base.res.ResBase;
+import cn.whaley.moretv.member.base.res.ResultResponse;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.mapper.goods.GoodsSpuMapper;
 import cn.whaley.moretv.member.model.goods.GoodsSpu;
@@ -38,7 +38,7 @@ public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer> i
     private GoodsSpuMapper goodsSpuMapper;
 
     @Override
-    public ResBase syncGoodsSpu(GoodsSpu goodsSpu) {
+    public ResultResponse syncGoodsSpu(GoodsSpu goodsSpu) {
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
 
         String status = goodsSpu.getGoodsStatus();
@@ -49,10 +49,10 @@ public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer> i
             publishGoodsSpu(goodsSpu, opsHash);
         } else {
             logger.error("syncGoodsSpu: error: {}", ApiCodeEnum.API_DATA_GOODS_STATUS_ERR.getMsg());
-            return ResBase.define(ApiCodeEnum.API_DATA_GOODS_STATUS_ERR);
+            return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_STATUS_ERR);
         }
 
-        return ResBase.success();
+        return ResultResponse.success();
     }
 
     private void offsheifGoodsSpu(GoodsSpu goodsSpu, HashOperations<String, String, String> opsHash) {

@@ -5,10 +5,8 @@ import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
 import cn.whaley.moretv.member.base.constant.GlobalConstant;
 import cn.whaley.moretv.member.base.exception.SystemException;
-import cn.whaley.moretv.member.base.res.ResBase;
+import cn.whaley.moretv.member.base.res.ResultResponse;
 import cn.whaley.moretv.member.model.goods.GoodsSpu;
-import cn.whaley.moretv.member.sync.dto.goods.GoodsDto;
-import cn.whaley.moretv.member.sync.service.goods.GoodsService;
 import cn.whaley.moretv.member.sync.service.goods.GoodsSpuService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -37,9 +35,9 @@ public class GoodsSpuListener {
     @RabbitHandler
     public void listen(String goodsSpuStr) {
         GoodsSpu goodsSpu = convertGoodsSpu(goodsSpuStr);
-        ResBase resBase = goodsSpuService.syncGoodsSpu(goodsSpu);
+        ResultResponse resBase = goodsSpuService.syncGoodsSpu(goodsSpu);
 
-        if (resBase.getCode() != ApiCodeInfo.API_OK) {
+        if (!resBase.isSuccess()) {
             throw new SystemException(String.valueOf(resBase.getCode()), resBase.getMsg());
         }
         logger.info("goodsSpu_listen: sync GoodsSpu success!");

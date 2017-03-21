@@ -6,7 +6,7 @@ import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
 import cn.whaley.moretv.member.base.constant.GlobalConstant;
 
 import cn.whaley.moretv.member.base.exception.SystemException;
-import cn.whaley.moretv.member.base.res.ResBase;
+import cn.whaley.moretv.member.base.res.ResultResponse;
 import cn.whaley.moretv.member.sync.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.sync.service.goods.GoodsService;
 import com.alibaba.fastjson.JSON;
@@ -36,7 +36,7 @@ public class GoodsListener {
     @RabbitHandler
     public void listen(String goodsStr) {
         GoodsDto goodsDto = convertGoods(goodsStr);
-        ResBase resBase = goodsService.syncGoods(goodsDto);
+        ResultResponse resBase = goodsService.syncGoods(goodsDto);
 
         if (resBase.getCode() != ApiCodeInfo.API_OK) {
             throw new SystemException(String.valueOf(resBase.getCode()), resBase.getMsg());
