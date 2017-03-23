@@ -165,4 +165,36 @@ public interface GlobalEnum {
         }
     }
 
+    enum GoodsClass {
+
+        GENERAL_GOODS(1, "普通商品"),
+        FIRST_GOODS(2, "首次商品"),
+        NOT_FIRST_GOODS(3, "非首次商品");
+
+        private int code;
+        private String name;
+
+        GoodsClass (int code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public static String getGoodsClassName(int code) {
+            for (GoodsClass aEnum : GoodsClass.values()) {
+                if (aEnum.getCode() == code) {
+                    return aEnum.getName();
+                }
+            }
+            return null;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
 }

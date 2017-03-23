@@ -65,7 +65,9 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     }
 
     private void offsheifGoods(GoodsDto goodsDto, HashOperations<String, String, String> opsHash) {
-        opsHash.delete(CacheKeyConstant.REDIS_KEY_GOODS, goodsDto.getGoodsCode());
+
+        String key = String.format(CacheKeyConstant.REDIS_KEY_GOODS, goodsDto.getGoodsType());
+        opsHash.delete(key, goodsDto.getGoodsCode());
         logger.info("syncGoods: 删除商品缓存, goodsCode:{}", goodsDto.getGoodsCode());
 
         Goods goods = new Goods();
@@ -79,9 +81,17 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     }
 
     private void publishGoods(GoodsDto goodsDto, HashOperations<String, String, String> opsHash) {
-        String value = JSON.toJSONString(goodsDto);
-        opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS, goodsDto.getGoodsCode(), value);
-        logger.info("syncGoods: 更新商品缓存, goodsCode:{}", goodsDto.getGoodsCode());
+
+        List<GoodsSku> skuList = goodsDto.getGoodsSkuList();
+
+        if (skuList != null && skuList.size() == 1) {
+            String key = String.format(CacheKeyConstant.REDIS_KEY_GOODS, goodsDto.getGoodsType());
+            String value = JSON.toJSONString(goodsDto);
+            opsHash.put(key, goodsDto.getGoodsCode(), value);
+            logger.info("syncGoods: 更新商品缓存, goodsCode:{}", goodsDto.getGoodsCode());
+        } else {
+            logger.info("syncGoods: 不缓存组合商品, goodsCode:{}", goodsDto.getGoodsCode());
+        }
 
         Goods goods = BeanHandler.copyProperties(goodsDto, Goods.class);
 
@@ -94,7 +104,6 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
             logger.info("syncGoods: 同步商品数据, goodsCode:{}", goodsDto.getGoodsCode());
         }
 
-        List<GoodsSku> skuList = goodsDto.getGoodsSkuList();
         for (GoodsSku sku : skuList) {
             count = goodsSkuMapper.existGoodsSkuById(sku.getId());
             if (count == 0) {

@@ -70,9 +70,12 @@ public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer> i
     }
 
     private void publishGoodsSpu(GoodsSpu goodsSpu, HashOperations<String, String, String> opsHash) {
-        String value = JSON.toJSONString(goodsSpu);
-        opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS_SPU, goodsSpu.getGoodsBaseCode(), value);
-        logger.info("syncGoodsSpu: 更新商品模型缓存, goodsBaseCode:{}", goodsSpu.getGoodsBaseCode());
+        //独立商品模型才存入redis
+        if (GlobalEnum.CompositedType.SINGLE.getCode() == goodsSpu.getCompositedType().intValue()) {
+            String value = JSON.toJSONString(goodsSpu);
+            opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS_SPU, goodsSpu.getGoodsBaseCode(), value);
+            logger.info("syncGoodsSpu: 更新商品模型缓存, goodsBaseCode:{}", goodsSpu.getGoodsBaseCode());
+        }
 
         int count = goodsSpuMapper.existGoodsSpuById(goodsSpu.getId());
         if (count > 0) {
