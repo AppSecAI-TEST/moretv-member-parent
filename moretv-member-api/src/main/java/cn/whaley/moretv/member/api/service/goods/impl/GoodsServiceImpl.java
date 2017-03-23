@@ -14,6 +14,8 @@ import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.service.goods.impl.BaseGoodsServiceImpl;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,6 +37,8 @@ import java.util.Map;
 @Transactional
 public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsService {
 
+    private static final Logger logger = LoggerFactory.getLogger(GoodsServiceImpl.class);
+
     @Autowired
     private GoodsMapper goodsMapper;
 
@@ -50,8 +54,11 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
         boolean isMember = false; //baseMemberService.accountIsMember(accountId);
 
         Integer goodsType = isMember ? GlobalEnum.GoodsType.RENEWAL_GOODS.getValue() : normalGoods;
-        String key = String.format(CacheKeyConstant.REDIS_KEY_GOODS, goodsType);
 
+        logger.info("get_goods_by_tag : accountId:{}, goodsTag:{}, isMember:{}, goodsType:{}",
+                accountId, goodsTag, isMember, goodsType);
+
+        String key = String.format(CacheKeyConstant.REDIS_KEY_GOODS, goodsType);
         Map<String, String> map = opsHash.entries(key);
         if (CollectionUtils.isEmpty(map)) {
             return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
@@ -61,6 +68,9 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
         if (normalGoods.equals(goodsType)) {
             //hasPurchaseOrder = baseOrderService.hasPurchaseOrder(accountId);
         }
+
+        logger.info("get_goods_by_tag :  accountId:{}, goodsSize:{}, hasPurchaseOrder:{}",
+                accountId, map.size(), hasPurchaseOrder);
 
         for (Map.Entry<String, String> entry : map.entrySet()) {
             GoodsDto goodsDto = JSON.parseObject(entry.getValue(), GoodsDto.class);

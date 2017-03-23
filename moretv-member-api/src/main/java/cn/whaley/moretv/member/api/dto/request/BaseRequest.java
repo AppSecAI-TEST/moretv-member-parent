@@ -11,19 +11,19 @@ public class BaseRequest implements Serializable {
 
     private static final long serialVersionUID = 8460607853038288959L;
 
-    private String deviceId;
+    private String deviceSerial;
     private String clientType;
     private String accessToken;
     private Long timestamp;
     private String appVersion;
     private String accountId;
 
-    public String getDeviceId() {
-        return deviceId;
+    public String getDeviceSerial() {
+        return deviceSerial;
     }
 
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
+    public void setDeviceSerial(String deviceSerial) {
+        this.deviceSerial = deviceSerial;
     }
 
     public String getClientType() {
@@ -69,7 +69,7 @@ public class BaseRequest implements Serializable {
     @Override
     public String toString() {
         return "{" +
-                "deviceId='" + deviceId + '\'' +
+                "deviceSerial='" + deviceSerial + '\'' +
                 ", clientType='" + clientType + '\'' +
                 ", accessToken='" + accessToken + '\'' +
                 ", timestamp=" + timestamp +
