@@ -19,11 +19,27 @@ public class ProductDto implements Serializable {
     private String memberName;
     private String packageCode;
     private String packageName;
+    private String programSourceCode;
+    private Integer isOutsideAuthenticated;
     private String productCode;
     private String productName;
     private String programCode;
     private String programName;
     private String relationStatus;
+    
+    
+    public String getProgramSourceCode() {
+        return programSourceCode;
+    }
+    public void setProgramSourceCode(String programSourceCode) {
+        this.programSourceCode = programSourceCode;
+    }
+    public Integer getIsOutsideAuthenticated() {
+        return isOutsideAuthenticated;
+    }
+    public void setIsOutsideAuthenticated(Integer isOutsideAuthenticated) {
+        this.isOutsideAuthenticated = isOutsideAuthenticated;
+    }
     public Integer getId() {
         return id;
     }
