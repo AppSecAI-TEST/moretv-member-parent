@@ -14,6 +14,8 @@
     <result column="pro_status" property="status" jdbcType="VARCHAR" />
     <result column="pro_product_code" property="productCode" jdbcType="VARCHAR" />
     <result column="pro_product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="pro_is_outside_authenticated" property="isOutsideAuthenticated" jdbcType="INTEGER" />
+    <result column="pro_program_source_code" property="programSourceCode" jdbcType="VARCHAR" />
     <result column="pro_create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="pro_update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="pro_package_code" property="packageCode" jdbcType="VARCHAR" />
@@ -22,7 +24,8 @@
   <sql id="Base_Column_List" >
     pro.id as pro_id, pro.member_code as pro_member_code, pro.member_name as pro_member_name, 
     pro.program_code as pro_program_code, pro.program_name as pro_program_name, pro.status as pro_status, 
-    pro.product_code as pro_product_code, pro.product_name as pro_product_name, pro.create_time as pro_create_time, 
+    pro.product_code as pro_product_code, pro.product_name as pro_product_name, pro.is_outside_authenticated as pro_is_outside_authenticated, 
+    pro.program_source_code as pro_program_source_code, pro.create_time as pro_create_time, 
     pro.update_time as pro_update_time, pro.package_code as pro_package_code, pro.package_name as pro_package_name
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -38,12 +41,14 @@
   <insert id="insert" parameterType="cn.whaley.moretv.member.model.goods.MemberProgramRelation" useGeneratedKeys="true" keyProperty="id" >
     insert into member_program_relation (member_code, member_name, program_code, 
       program_name, status, product_code, 
-      product_name, create_time, update_time, 
-      package_code, package_name)
+      product_name, is_outside_authenticated, program_source_code, 
+      create_time, update_time, package_code, 
+      package_name)
     values (#{memberCode,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, #{programCode,jdbcType=VARCHAR}, 
       #{programName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}, 
-      #{productName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{packageCode,jdbcType=VARCHAR}, #{packageName,jdbcType=VARCHAR})
+      #{productName,jdbcType=VARCHAR}, #{isOutsideAuthenticated,jdbcType=INTEGER}, #{programSourceCode,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{packageCode,jdbcType=VARCHAR}, 
+      #{packageName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.whaley.moretv.member.model.goods.MemberProgramRelation" useGeneratedKeys="true" keyProperty="id" >
     insert into member_program_relation
@@ -68,6 +73,12 @@
       </if>
       <if test="productName != null" >
         product_name,
+      </if>
+      <if test="isOutsideAuthenticated != null" >
+        is_outside_authenticated,
+      </if>
+      <if test="programSourceCode != null" >
+        program_source_code,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -103,6 +114,12 @@
       </if>
       <if test="productName != null" >
         #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="isOutsideAuthenticated != null" >
+        #{isOutsideAuthenticated,jdbcType=INTEGER},
+      </if>
+      <if test="programSourceCode != null" >
+        #{programSourceCode,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -142,6 +159,12 @@
       <if test="productName != null" >
         product_name = #{productName,jdbcType=VARCHAR},
       </if>
+      <if test="isOutsideAuthenticated != null" >
+        is_outside_authenticated = #{isOutsideAuthenticated,jdbcType=INTEGER},
+      </if>
+      <if test="programSourceCode != null" >
+        program_source_code = #{programSourceCode,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -166,6 +189,8 @@
       status = #{status,jdbcType=VARCHAR},
       product_code = #{productCode,jdbcType=VARCHAR},
       product_name = #{productName,jdbcType=VARCHAR},
+      is_outside_authenticated = #{isOutsideAuthenticated,jdbcType=INTEGER},
+      program_source_code = #{programSourceCode,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       package_code = #{packageCode,jdbcType=VARCHAR},

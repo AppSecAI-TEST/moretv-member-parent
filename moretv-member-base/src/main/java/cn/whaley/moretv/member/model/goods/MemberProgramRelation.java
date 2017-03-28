@@ -55,6 +55,18 @@ public class MemberProgramRelation extends BaseModel<Integer> implements Seriali
     private String productName;
 
     /**
+     * 1:内部鉴权，2：外部鉴权
+     * is_outside_authenticated
+     */
+    private Integer isOutsideAuthenticated;
+
+    /**
+     * 节目源code
+     * program_source_code
+     */
+    private String programSourceCode;
+
+    /**
      * 创建时间
      * create_time
      */
@@ -207,6 +219,42 @@ public class MemberProgramRelation extends BaseModel<Integer> implements Seriali
     }
 
     /**
+     * 1:内部鉴权，2：外部鉴权
+     * is_outside_authenticated
+     */
+    public Integer getIsOutsideAuthenticated() {
+        return isOutsideAuthenticated;
+    }
+
+    /**
+     * 1:内部鉴权，2：外部鉴权
+     * is_outside_authenticated
+     *
+     * @param isOutsideAuthenticated 1:内部鉴权，2：外部鉴权
+     */
+    public void setIsOutsideAuthenticated(Integer isOutsideAuthenticated) {
+        this.isOutsideAuthenticated = isOutsideAuthenticated;
+    }
+
+    /**
+     * 节目源code
+     * program_source_code
+     */
+    public String getProgramSourceCode() {
+        return programSourceCode;
+    }
+
+    /**
+     * 节目源code
+     * program_source_code
+     *
+     * @param programSourceCode 节目源code
+     */
+    public void setProgramSourceCode(String programSourceCode) {
+        this.programSourceCode = programSourceCode;
+    }
+
+    /**
      * 创建时间
      * create_time
      */
@@ -292,6 +340,8 @@ public class MemberProgramRelation extends BaseModel<Integer> implements Seriali
         sb.append(", status=").append(status);
         sb.append(", productCode=").append(productCode);
         sb.append(", productName=").append(productName);
+        sb.append(", isOutsideAuthenticated=").append(isOutsideAuthenticated);
+        sb.append(", programSourceCode=").append(programSourceCode);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", packageCode=").append(packageCode);
