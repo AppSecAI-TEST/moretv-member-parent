@@ -1,0 +1,1 @@
+mvn -P prod $@ clean package -DskipTests assembly:assembly

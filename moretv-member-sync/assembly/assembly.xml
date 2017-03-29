@@ -1,0 +1,32 @@
+<assembly>
+	<id>assembly</id>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+            <directory>./assembly/scripts</directory>
+			<outputDirectory>.</outputDirectory>
+			<fileMode>0755</fileMode>
+            <filtered>true</filtered>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<includes>
+                <include>application.properties</include>
+			</includes>
+			<outputDirectory>config</outputDirectory>
+			<fileMode>0644</fileMode>
+            <filtered>true</filtered>
+		</fileSet>
+	</fileSets>
+	<dependencySets>
+		<dependencySet>
+            <includes>
+                <include>cn.whaley.moretv:moretv-member-sync</include>
+            </includes>
+			<outputDirectory>/lib</outputDirectory>
+		</dependencySet>
+	</dependencySets>
+</assembly>
