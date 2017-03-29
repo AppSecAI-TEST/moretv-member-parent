@@ -1,4 +1,4 @@
-package cn.whaley.moretv.member.model.goods;
+package cn.whaley.moretv.member.model.member;
 
 import cn.whaley.moretv.member.base.model.BaseModel;
 import java.io.Serializable;

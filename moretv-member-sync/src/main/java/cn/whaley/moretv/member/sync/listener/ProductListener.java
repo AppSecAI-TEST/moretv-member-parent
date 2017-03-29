@@ -4,7 +4,7 @@ package cn.whaley.moretv.member.sync.listener;
 import cn.whaley.moretv.member.base.constant.GlobalConstant;
 
 import cn.whaley.moretv.member.sync.dto.goods.ProductDto;
-import cn.whaley.moretv.member.sync.service.goods.MemberProgramRelationService;
+import cn.whaley.moretv.member.sync.service.member.MemberProgramRelationService;
 
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;

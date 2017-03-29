@@ -1,4 +1,4 @@
-package cn.whaley.moretv.member.sync.service.goods.impl;
+package cn.whaley.moretv.member.sync.service.member.impl;
 
 import java.util.Date;
 import java.util.List;
@@ -17,14 +17,14 @@ import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
-import cn.whaley.moretv.member.mapper.goods.MemberMapper;
-import cn.whaley.moretv.member.mapper.goods.MemberPackageRelationMapper;
-import cn.whaley.moretv.member.model.goods.Member;
-import cn.whaley.moretv.member.model.goods.MemberPackageRelation;
+import cn.whaley.moretv.member.mapper.member.MemberMapper;
+import cn.whaley.moretv.member.mapper.member.MemberPackageRelationMapper;
+import cn.whaley.moretv.member.model.member.Member;
+import cn.whaley.moretv.member.model.member.MemberPackageRelation;
 import cn.whaley.moretv.member.sync.dto.goods.MemberCppr;
 import cn.whaley.moretv.member.sync.dto.goods.MemberDto;
 import cn.whaley.moretv.member.sync.dto.goods.MemberMpr;
-import cn.whaley.moretv.member.sync.service.goods.MemberService;
+import cn.whaley.moretv.member.sync.service.member.MemberService;
 
 /**
 * ServiceImpl: MemberServiceImpl

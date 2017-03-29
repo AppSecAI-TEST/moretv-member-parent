@@ -83,15 +83,15 @@
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
         
-        <table tableName="member" alias="mem" domainObjectName="goods.Member">
+        <table tableName="member" alias="mem" domainObjectName="member.Member">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
         
-        <table tableName="member_package_relation" alias="mpr" domainObjectName="goods.MemberPackageRelation">
+        <table tableName="member_package_relation" alias="mpr" domainObjectName="member.MemberPackageRelation">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
         
-        <table tableName="member_program_relation" alias="pro" domainObjectName="goods.MemberProgramRelation">
+        <table tableName="member_program_relation" alias="pro" domainObjectName="member.MemberProgramRelation">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 	</context>

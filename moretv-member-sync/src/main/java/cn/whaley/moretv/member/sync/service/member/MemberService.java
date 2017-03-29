@@ -1,7 +1,7 @@
-package cn.whaley.moretv.member.sync.service.goods;
+package cn.whaley.moretv.member.sync.service.member;
 
 import cn.whaley.moretv.member.base.service.GenericService;
-import cn.whaley.moretv.member.model.goods.Member;
+import cn.whaley.moretv.member.model.member.Member;
 import cn.whaley.moretv.member.sync.dto.goods.MemberDto;
 
 /**
