@@ -3,6 +3,7 @@ package cn.whaley.moretv.member.sync.service.member.impl;
 import java.util.Date;
 import java.util.List;
 
+import cn.whaley.moretv.member.service.member.impl.BaseMemberServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import com.alibaba.fastjson.JSON;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
-import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.mapper.member.MemberMapper;
 import cn.whaley.moretv.member.mapper.member.MemberPackageRelationMapper;
 import cn.whaley.moretv.member.model.member.Member;
@@ -35,7 +35,8 @@ import cn.whaley.moretv.member.sync.service.member.MemberService;
 */
 @Service
 @Transactional
-public class MemberServiceImpl extends GenericServiceImpl<Member, Integer> implements MemberService {
+public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberService {
+
     private static final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
     
     @Autowired
@@ -180,5 +181,10 @@ public class MemberServiceImpl extends GenericServiceImpl<Member, Integer> imple
         
         opsHash.put(CacheKeyConstant.REDIS_KEY_MEMBER, member.getCode(), JSON.toJSONString(member));
         return member;
+    }
+
+    @Override
+    public RedisTemplate getRedisTemplate() {
+        return redisTemplate;
     }
 }

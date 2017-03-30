@@ -13,6 +13,8 @@ import cn.whaley.moretv.member.service.goods.BaseGoodsService;
 public interface GoodsService extends BaseGoodsService {
 
     /**
+     * <p>获取会员商品列表</p>
+     *
      * 根据goodsTag(即商品模型编码)获取对应的商品
      * 需判断用户是否是会员，是会员返回续费类别商品，不是会员返回购买。
      * 还需判断用户是否是首次购买，是首次购买，返回首次购买和普通商品，不是则返回非首次购买和普通商品。

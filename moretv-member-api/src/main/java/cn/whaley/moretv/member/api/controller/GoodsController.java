@@ -23,7 +23,7 @@ public class GoodsController {
     public GoodsSpuService goodsSpuService;
 
     /**
-     * 会员商品介绍列表接口
+     * <p>会员商品介绍列表接口</p>
      * 商品模型列表
      *
      * @param baseRequest
@@ -39,7 +39,7 @@ public class GoodsController {
     }
 
     /**
-     * 会员商品价格明细列表接口
+     * <p>会员商品价格明细列表接口</p>
      *
      * @param baseRequest
      * @param goodsTag
@@ -48,8 +48,7 @@ public class GoodsController {
     @RequestMapping(value = "/get_goods_by_tag", method = RequestMethod.POST)
     public ResultResponse getGoodsByTag(BaseRequest baseRequest, String goodsTag) {
         try {
-            Integer accountId = Integer.valueOf(baseRequest.getAccountId());
-            return goodsService.getGoodsByTag(accountId, goodsTag);
+            return goodsService.getGoodsByTag(baseRequest.getAccountId(), goodsTag);
         } catch (Exception e) {
             return ResultResponse.failed();
         }

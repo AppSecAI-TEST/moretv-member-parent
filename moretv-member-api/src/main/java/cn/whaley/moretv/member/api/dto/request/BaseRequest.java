@@ -16,7 +16,7 @@ public class BaseRequest implements Serializable {
     private String accessToken;
     private Long timestamp;
     private String appVersion;
-    private String accountId;
+    private Integer accountId;
 
     public String getDeviceSerial() {
         return deviceSerial;
@@ -58,11 +58,11 @@ public class BaseRequest implements Serializable {
         this.appVersion = appVersion;
     }
 
-    public String getAccountId() {
+    public Integer getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(String accountId) {
+    public void setAccountId(Integer accountId) {
         this.accountId = accountId;
     }
 

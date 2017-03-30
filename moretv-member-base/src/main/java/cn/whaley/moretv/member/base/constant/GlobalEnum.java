@@ -197,4 +197,36 @@ public interface GlobalEnum {
         }
     }
 
+    enum MemberStatus {
+
+        OPEN("open", "已开通"),
+        NOT_OPEN("not_open", "未开通"),
+        EXPIRED("expired", "已过期");
+
+        private String code;
+        private String name;
+
+        MemberStatus (String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public static String getNameByCode(String code) {
+            for (MemberStatus aEnum : MemberStatus.values()) {
+                if (aEnum.getCode().equals(code)) {
+                    return aEnum.getName();
+                }
+            }
+            return UNKNOWN;
+        }
+    }
+
 }

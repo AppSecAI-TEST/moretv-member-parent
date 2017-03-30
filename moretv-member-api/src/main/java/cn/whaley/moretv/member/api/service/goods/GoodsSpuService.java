@@ -14,6 +14,8 @@ import cn.whaley.moretv.member.model.goods.GoodsSpu;
 public interface GoodsSpuService extends GenericService<GoodsSpu, Integer> {
 
     /**
+     * <p>会员商品介绍列表</p>
+     *
      * 获取所有独立商品模型
      * @return
      */

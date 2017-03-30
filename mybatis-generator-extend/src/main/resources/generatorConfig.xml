@@ -70,28 +70,12 @@
             domainObjectName: Model类名称，默认为表的驼峰名称，若需指定子包，可以"模块名称.类名"规则命名。
             *ByExample: 指定是否生成相关Example的方法。
         -->
-        <table tableName="goods" alias="goods" domainObjectName="goods.Goods">
-            <!--sqlStatement指定为JDBC即可-->
-            <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>
 
-        <table tableName="goods_spu" alias="spu" domainObjectName="goods.GoodsSpu">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>
-
-        <table tableName="goods_sku" alias="sku" domainObjectName="goods.GoodsSku">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>
-        
         <table tableName="member" alias="mem" domainObjectName="member.Member">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
-        
-        <table tableName="member_package_relation" alias="mpr" domainObjectName="member.MemberPackageRelation">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>
-        
-        <table tableName="member_program_relation" alias="pro" domainObjectName="member.MemberProgramRelation">
+
+        <table tableName="member_user_authority" alias="mua" domainObjectName="member.MemberUserAuthority">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 	</context>
