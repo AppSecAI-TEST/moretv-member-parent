@@ -78,5 +78,13 @@
         <table tableName="member_user_authority" alias="mua" domainObjectName="member.MemberUserAuthority">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
+        
+        <table tableName="business_order" alias="bod" domainObjectName="order.Order">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="business_order_item" alias="boi" domainObjectName="order.OrderItem">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
 	</context>
 </generatorConfiguration> 
