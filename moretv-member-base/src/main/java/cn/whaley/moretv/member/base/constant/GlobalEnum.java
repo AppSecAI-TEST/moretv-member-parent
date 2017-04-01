@@ -228,5 +228,70 @@ public interface GlobalEnum {
             return UNKNOWN;
         }
     }
+    
+    enum PayMethod {
+
+        ALIPAY("alipay", "支付宝"),
+        WECHAT("wechat", "微信");
+
+        private String code;
+        private String name;
+
+        PayMethod (String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public static String getNameByCode(String code) {
+            for (PayMethod aEnum : PayMethod.values()) {
+                if (aEnum.getCode().equals(code)) {
+                    return aEnum.getName();
+                }
+            }
+            return UNKNOWN;
+        }
+    }
+    
+    
+    enum PayStatus {
+
+        WAIT_PAY(1, "代发货"),
+        PAYING(2, "支付中"),
+        DONE(3, "支付完成"),
+        TIMEOUT(4, "支付超时");
+
+        private int code;
+        private String name;
+
+        PayStatus (int code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public static String getNameByCode(int code) {
+            for (PayStatus aEnum : PayStatus.values()) {
+                if (aEnum.getCode() == code) {
+                    return aEnum.getName();
+                }
+            }
+            return UNKNOWN;
+        }
+    }
 
 }
