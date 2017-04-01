@@ -109,5 +109,12 @@ public class OrderDetailDto {
     public void setPayStatus(String payStatus) {
         this.payStatus = payStatus;
     }
+
+    @Override
+    public String toString() {
+        return "OrderDetailDto [purchaseTime=" + purchaseTime + ", orderCode=" + orderCode + ", goodsName=" + goodsName
+                + ", goodsCode=" + goodsCode + ", payMethodCode=" + payMethodCode + ", payMethodName=" + payMethodName
+                + ", price=" + price + ", payStatus=" + payStatus + "]";
+    }
     
 }

@@ -29,8 +29,6 @@ public class OrderController {
     @RequestMapping(value = "/get_order", method = RequestMethod.POST)
     public ResultResponse getOrder(BaseRequest baseRequest) {
         try {
-            logger.info("获取订单列表参数打印：" + baseRequest.toString());
-            
             if(!RequestHandler.checkBaseRequest(baseRequest)){
                 return ResultResponse.define(ApiCodeEnum.API_PARAM_ERR);
             }
@@ -50,8 +48,6 @@ public class OrderController {
     @RequestMapping(value = "/get_order_detail", method = RequestMethod.POST)
     public ResultResponse getOrderDetail(BaseRequest baseRequest, String orderCode) {
         try {
-            logger.info("获取订单明细参数打印：" + baseRequest.toString());
-            
             if(!RequestHandler.checkBaseRequest(baseRequest) || StringUtils.isEmpty(orderCode)){
                 return ResultResponse.define(ApiCodeEnum.API_PARAM_ERR);
             }
