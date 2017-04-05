@@ -6,6 +6,7 @@ import cn.whaley.moretv.member.api.dto.response.GoodsSpuResponse;
 import cn.whaley.moretv.member.api.dto.response.OrderDetailDto;
 import cn.whaley.moretv.member.api.dto.response.OrderListDto;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
+import cn.whaley.moretv.member.base.constant.OrderEnum;
 import cn.whaley.moretv.member.base.util.BeanHandler;
 import cn.whaley.moretv.member.model.goods.GoodsSku;
 import cn.whaley.moretv.member.model.goods.GoodsSpu;
@@ -37,9 +38,9 @@ public class ResponseHandler extends BeanHandler {
         orderDto.setGoodsName(order.getGoodsCode());
         orderDto.setGoodsCode(order.getGoodsCode());
         orderDto.setPayMethodCode(order.getPayChannel());
-        orderDto.setPayMethodName(GlobalEnum.PayMethod.getNameByCode(order.getPayChannel()));
+        orderDto.setPayMethodName(OrderEnum.PayChannel.getNameByCode(order.getPayChannel()));
         orderDto.setPrice(order.getRealPrice());
-        orderDto.setPayStatus(GlobalEnum.PayStatus.getNameByCode(order.getPayStatus()));
+        orderDto.setPayStatus(OrderEnum.PayStatus.getNameByCode(order.getPayStatus()));
         return orderDto;
     }
 
@@ -49,9 +50,9 @@ public class ResponseHandler extends BeanHandler {
         orderDto.setGoodsName(order.getGoodsCode());
         orderDto.setGoodsCode(order.getGoodsCode());
         orderDto.setPayMethodCode(order.getPayChannel());
-        orderDto.setPayMethodName(GlobalEnum.PayMethod.getNameByCode(order.getPayChannel()));
+        orderDto.setPayMethodName(OrderEnum.PayChannel.getNameByCode(order.getPayChannel()));
         orderDto.setPrice(order.getRealPrice());
-        orderDto.setPayStatus(GlobalEnum.PayStatus.getNameByCode(order.getPayStatus()));
+        orderDto.setPayStatus(OrderEnum.PayStatus.getNameByCode(order.getPayStatus()));
         return orderDto;
     }
 }

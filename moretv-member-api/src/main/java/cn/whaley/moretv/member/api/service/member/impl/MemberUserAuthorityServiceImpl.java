@@ -1,17 +1,18 @@
 package cn.whaley.moretv.member.api.service.member.impl;
 
 import cn.whaley.moretv.member.api.service.member.MemberUserAuthorityService;
+import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.mapper.member.MemberUserAuthorityMapper;
 import cn.whaley.moretv.member.model.member.MemberUserAuthority;
-import com.google.common.collect.Lists;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.util.List;
 
 /**
 * ServiceImpl: MemberUserAuthorityServiceImpl
@@ -31,9 +32,13 @@ public class MemberUserAuthorityServiceImpl extends GenericServiceImpl<MemberUse
     private RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public List<MemberUserAuthority> getMemberUserAuthority(Integer accountId) {
-        //TODO select from cache.
-        return Lists.newArrayList();
+    public MemberUserAuthority getMemberUserAuthority(Integer accountId, String memberCode) {
+        String key = String.format(CacheKeyConstant.REDIS_KEY_MEMBER_AUTHORITY, accountId.toString(), memberCode);
+        String auth = redisTemplate.opsForValue().get(key);
+        if (!StringUtils.isEmpty(auth)) {
+            return JSONObject.parseObject(auth, MemberUserAuthority.class);
+        }
+        return null;
     }
 
     @Override

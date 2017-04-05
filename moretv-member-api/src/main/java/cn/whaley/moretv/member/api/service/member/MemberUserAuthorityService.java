@@ -3,7 +3,6 @@ package cn.whaley.moretv.member.api.service.member;
 import cn.whaley.moretv.member.base.service.GenericService;
 import cn.whaley.moretv.member.model.member.MemberUserAuthority;
 
-import java.util.List;
 
 /**
 * Service: MemberUserAuthorityService
@@ -18,7 +17,8 @@ public interface MemberUserAuthorityService extends GenericService<MemberUserAut
      * 查询用户的会员权益，包含所有状态
      *
      * @param accountId
+     * @param memberCode
      * @return
      */
-    List<MemberUserAuthority> getMemberUserAuthority(Integer accountId);
+    MemberUserAuthority getMemberUserAuthority(Integer accountId, String memberCode);
 }

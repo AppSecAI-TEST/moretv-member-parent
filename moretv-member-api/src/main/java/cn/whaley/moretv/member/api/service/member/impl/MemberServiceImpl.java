@@ -50,8 +50,6 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
             return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
         }
 
-        List<MemberUserAuthority> authorityList = memberUserAuthorityService.getMemberUserAuthority(accountId);
-
         for (Member member : members) {
             MemberStatusResponse memberStatus = new MemberStatusResponse();
             memberStatus.setMemberCode(member.getCode());
@@ -59,18 +57,15 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
 
             GlobalEnum.MemberStatus status = GlobalEnum.MemberStatus.NOT_OPEN;
 
-            for (MemberUserAuthority authority : authorityList) {
-                if (GlobalEnum.StatusText.VALID.getCode().equals(authority.getStatus())
-                        && member.getCode().equals(authority.getMemberCode())) {
-                    memberStatus.setStartTime(authority.getStartTime());
-                    memberStatus.setEndTime(authority.getEndTime());
+            MemberUserAuthority authority = memberUserAuthorityService.getMemberUserAuthority(accountId, member.getCode());
+            if (authority != null && GlobalEnum.StatusText.VALID.getCode().equals(authority.getStatus())) {
+                memberStatus.setStartTime(authority.getStartTime());
+                memberStatus.setEndTime(authority.getEndTime());
 
-                    if (authority.getEndTime().getTime() - now.getTime() > 1) {
-                        status = GlobalEnum.MemberStatus.OPEN;
-                    } else {
-                        status = GlobalEnum.MemberStatus.EXPIRED;
-                    }
-                    break;
+                if (authority.getEndTime().getTime() - now.getTime() > 1) {
+                    status = GlobalEnum.MemberStatus.OPEN;
+                } else {
+                    status = GlobalEnum.MemberStatus.EXPIRED;
                 }
             }
             memberStatus.setMemberStatus(status.getCode());
