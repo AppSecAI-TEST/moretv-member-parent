@@ -1,7 +1,11 @@
 package cn.whaley.moretv.member.api.service.member;
 
+import cn.whaley.moretv.member.api.dto.response.MemberInfoResponse;
+import cn.whaley.moretv.member.api.dto.response.MemberStatusResponse;
 import cn.whaley.moretv.member.base.res.ResultResponse;
 import cn.whaley.moretv.member.service.member.BaseMemberService;
+
+import java.util.List;
 
 /**
 * Service: MemberService
@@ -20,5 +24,23 @@ public interface MemberService extends BaseMemberService {
      * @param accountId
      * @return
      */
-    ResultResponse getAllMemberInfo(Integer accountId);
+    ResultResponse<List<MemberStatusResponse>> getAllMemberInfo(Integer accountId);
+
+    /**
+     * <p>获取当前会员</p>
+     *
+     * 查询账户有效的会员权益
+     * @param accountId
+     * @return
+     */
+    ResultResponse<List<MemberInfoResponse>> getMemberInfo(Integer accountId);
+
+    /**
+     * <p>账户是否是有效会员</p>
+     *
+     * @param accountId
+     * @return
+     */
+    Boolean accountIsMember(Integer accountId);
+
 }

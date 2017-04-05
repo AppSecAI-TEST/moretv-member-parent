@@ -6,12 +6,18 @@ import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.mapper.member.MemberUserAuthorityMapper;
 import cn.whaley.moretv.member.model.member.MemberUserAuthority;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -32,13 +38,21 @@ public class MemberUserAuthorityServiceImpl extends GenericServiceImpl<MemberUse
     private RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public MemberUserAuthority getMemberUserAuthority(Integer accountId, String memberCode) {
-        String key = String.format(CacheKeyConstant.REDIS_KEY_MEMBER_AUTHORITY, accountId.toString(), memberCode);
-        String auth = redisTemplate.opsForValue().get(key);
-        if (!StringUtils.isEmpty(auth)) {
-            return JSONObject.parseObject(auth, MemberUserAuthority.class);
+    public List<MemberUserAuthority> getMemberUserAuthority(Integer accountId) {
+        List<MemberUserAuthority> list = Lists.newArrayList();
+        HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
+
+        String key = String.format(CacheKeyConstant.REDIS_KEY_MEMBER_AUTHORITY, accountId.toString());
+        Map<String, String> map = opsHash.entries(key);
+        if (CollectionUtils.isEmpty(map)) {
+            return list;
         }
-        return null;
+
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            MemberUserAuthority authority = JSON.parseObject(entry.getValue(), MemberUserAuthority.class);
+            list.add(authority);
+        }
+        return list;
     }
 
     @Override

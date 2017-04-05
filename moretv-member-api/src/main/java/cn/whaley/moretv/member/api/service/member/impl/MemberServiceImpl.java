@@ -1,8 +1,10 @@
 package cn.whaley.moretv.member.api.service.member.impl;
 
+import cn.whaley.moretv.member.api.dto.response.MemberInfoResponse;
 import cn.whaley.moretv.member.api.dto.response.MemberStatusResponse;
 import cn.whaley.moretv.member.api.service.member.MemberService;
 import cn.whaley.moretv.member.api.service.member.MemberUserAuthorityService;
+import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -41,14 +44,18 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
     private MemberUserAuthorityService memberUserAuthorityService;
 
     @Override
-    public ResultResponse getAllMemberInfo(Integer accountId) {
+    public ResultResponse<List<MemberStatusResponse>> getAllMemberInfo(Integer accountId) {
         List<MemberStatusResponse> statusResponseList = Lists.newArrayList();
         Date now = new Date();
 
+        //会员模型
         List<Member> members = getMemberList();
         if (members.isEmpty()) {
             return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
         }
+
+        //会员权益
+        List<MemberUserAuthority> authorityList = memberUserAuthorityService.getMemberUserAuthority(accountId);
 
         for (Member member : members) {
             MemberStatusResponse memberStatus = new MemberStatusResponse();
@@ -57,15 +64,19 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
 
             GlobalEnum.MemberStatus status = GlobalEnum.MemberStatus.NOT_OPEN;
 
-            MemberUserAuthority authority = memberUserAuthorityService.getMemberUserAuthority(accountId, member.getCode());
-            if (authority != null && GlobalEnum.StatusText.VALID.getCode().equals(authority.getStatus())) {
-                memberStatus.setStartTime(authority.getStartTime());
-                memberStatus.setEndTime(authority.getEndTime());
+            for (MemberUserAuthority authority : authorityList) {
+                if (authority != null
+                        && GlobalEnum.StatusText.VALID.getCode().equals(authority.getStatus())
+                        && member.getCode().equals(authority.getMemberCode())) {
+                    memberStatus.setStartTime(authority.getStartTime());
+                    memberStatus.setEndTime(authority.getEndTime());
 
-                if (authority.getEndTime().getTime() - now.getTime() > 1) {
-                    status = GlobalEnum.MemberStatus.OPEN;
-                } else {
-                    status = GlobalEnum.MemberStatus.EXPIRED;
+                    if (authority.getEndTime().getTime() - now.getTime() > 1) {
+                        status = GlobalEnum.MemberStatus.OPEN;
+                    } else {
+                        status = GlobalEnum.MemberStatus.EXPIRED;
+                    }
+                    break;
                 }
             }
             memberStatus.setMemberStatus(status.getCode());
@@ -74,6 +85,37 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
         }
 
         return ResultResponse.success(statusResponseList);
+    }
+
+    @Override
+    public ResultResponse<List<MemberInfoResponse>> getMemberInfo(Integer accountId) {
+        List<MemberInfoResponse> infoResponseList = Lists.newArrayList();
+        Date now = new Date();
+
+        List<MemberUserAuthority> authorityList = memberUserAuthorityService.getMemberUserAuthority(accountId);
+        if (authorityList.isEmpty()) {
+            return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
+        }
+
+        for (MemberUserAuthority authority : authorityList) {
+            //有效会员权益
+            if (authority != null
+                    && GlobalEnum.StatusText.VALID.getCode().equals(authority.getStatus())
+                    && (authority.getEndTime().getTime() - now.getTime() > 1)) {
+                MemberInfoResponse response = ResponseHandler.copyProperties(authority, MemberInfoResponse.class);
+                infoResponseList.add(response);
+            }
+        }
+        return ResultResponse.success(infoResponseList);
+    }
+
+    @Override
+    public Boolean accountIsMember(Integer accountId) {
+        ResultResponse<List<MemberInfoResponse>> response = getMemberInfo(accountId);
+        if (response.isSuccess() && !response.getData().isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
     @Override
