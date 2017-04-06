@@ -19,22 +19,16 @@ public class OrderItem extends BaseModel<Integer> implements Serializable {
     private String orderCode;
 
     /**
-     * 商品编号
-     * goods_code
-     */
-    private String goodsCode;
-
-    /**
-     * 商品名称
-     * goods_name
-     */
-    private String goodsName;
-
-    /**
      * 会员编号
      * member_code
      */
     private String memberCode;
+
+    /**
+     * 会员名称
+     * member_name
+     */
+    private String memberName;
 
     /**
      * 数量
@@ -93,42 +87,6 @@ public class OrderItem extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * 商品编号
-     * goods_code
-     */
-    public String getGoodsCode() {
-        return goodsCode;
-    }
-
-    /**
-     * 商品编号
-     * goods_code
-     *
-     * @param goodsCode 商品编号
-     */
-    public void setGoodsCode(String goodsCode) {
-        this.goodsCode = goodsCode;
-    }
-
-    /**
-     * 商品名称
-     * goods_name
-     */
-    public String getGoodsName() {
-        return goodsName;
-    }
-
-    /**
-     * 商品名称
-     * goods_name
-     *
-     * @param goodsName 商品名称
-     */
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
-    }
-
-    /**
      * 会员编号
      * member_code
      */
@@ -144,6 +102,24 @@ public class OrderItem extends BaseModel<Integer> implements Serializable {
      */
     public void setMemberCode(String memberCode) {
         this.memberCode = memberCode;
+    }
+
+    /**
+     * 会员名称
+     * member_name
+     */
+    public String getMemberName() {
+        return memberName;
+    }
+
+    /**
+     * 会员名称
+     * member_name
+     *
+     * @param memberName 会员名称
+     */
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
     }
 
     /**
@@ -262,9 +238,8 @@ public class OrderItem extends BaseModel<Integer> implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", orderCode=").append(orderCode);
-        sb.append(", goodsCode=").append(goodsCode);
-        sb.append(", goodsName=").append(goodsName);
         sb.append(", memberCode=").append(memberCode);
+        sb.append(", memberName=").append(memberName);
         sb.append(", amount=").append(amount);
         sb.append(", unitPrice=").append(unitPrice);
         sb.append(", realPrice=").append(realPrice);

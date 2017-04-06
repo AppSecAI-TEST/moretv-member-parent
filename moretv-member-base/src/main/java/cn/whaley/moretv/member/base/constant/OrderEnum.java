@@ -142,8 +142,8 @@ public interface OrderEnum {
      */
     enum TradeStatus {
 
-        WAITING_SEND(1, "待发货"),
-        WAITING_PAY(2, "待支付"),
+        TRADE_INIT(1, "订单创建"),
+        WAITING_SEND(2, "待发货"),
         TRADE_FINISHED(3, "交易完成"),
         TRADE_FAILED(4, "交易失败");
 

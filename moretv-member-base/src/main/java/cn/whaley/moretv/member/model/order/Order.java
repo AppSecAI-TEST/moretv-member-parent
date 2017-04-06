@@ -55,7 +55,7 @@ public class Order extends BaseModel<Integer> implements Serializable {
     private Integer paymentAmount;
 
     /**
-     * 支付类型，1：预设领取，2：兑换码兑换，3：支付开通，4：赠送，0：其他
+     * 业务类型，1：预设领取，2：兑换码兑换，3：支付开通，4：赠送，0：其他
      * business_type
      */
     private Integer businessType;
@@ -97,7 +97,7 @@ public class Order extends BaseModel<Integer> implements Serializable {
     private Integer validStatus;
 
     /**
-     * 订单交易状态，1：待发货，2：待支付，3：交易完成，4：交易失败
+     * 订单交易状态，1：订单创建，2：待发货，3：交易完成，4：交易失败
      * trade_status
      */
     private Integer tradeStatus;
@@ -279,7 +279,7 @@ public class Order extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * 支付类型，1：预设领取，2：兑换码兑换，3：支付开通，4：赠送，0：其他
+     * 业务类型，1：预设领取，2：兑换码兑换，3：支付开通，4：赠送，0：其他
      * business_type
      */
     public Integer getBusinessType() {
@@ -287,10 +287,10 @@ public class Order extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * 支付类型，1：预设领取，2：兑换码兑换，3：支付开通，4：赠送，0：其他
+     * 业务类型，1：预设领取，2：兑换码兑换，3：支付开通，4：赠送，0：其他
      * business_type
      *
-     * @param businessType 支付类型，1：预设领取，2：兑换码兑换，3：支付开通，4：赠送，0：其他
+     * @param businessType 业务类型，1：预设领取，2：兑换码兑换，3：支付开通，4：赠送，0：其他
      */
     public void setBusinessType(Integer businessType) {
         this.businessType = businessType;
@@ -405,7 +405,7 @@ public class Order extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * 订单交易状态，1：待发货，2：待支付，3：交易完成，4：交易失败
+     * 订单交易状态，1：订单创建，2：待发货，3：交易完成，4：交易失败
      * trade_status
      */
     public Integer getTradeStatus() {
@@ -413,10 +413,10 @@ public class Order extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * 订单交易状态，1：待发货，2：待支付，3：交易完成，4：交易失败
+     * 订单交易状态，1：订单创建，2：待发货，3：交易完成，4：交易失败
      * trade_status
      *
-     * @param tradeStatus 订单交易状态，1：待发货，2：待支付，3：交易完成，4：交易失败
+     * @param tradeStatus 订单交易状态，1：订单创建，2：待发货，3：交易完成，4：交易失败
      */
     public void setTradeStatus(Integer tradeStatus) {
         this.tradeStatus = tradeStatus;
