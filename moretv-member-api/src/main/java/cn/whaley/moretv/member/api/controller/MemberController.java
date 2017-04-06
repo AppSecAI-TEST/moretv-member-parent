@@ -34,4 +34,19 @@ public class MemberController {
             return ResultResponse.failed();
         }
     }
+
+    /**
+     * <p>获取当前会员</p>
+     *
+     * @param baseRequest
+     * @return
+     */
+    @RequestMapping(value = "/get_member_info", method = RequestMethod.POST)
+    public ResultResponse getMemberInfo(BaseRequest baseRequest) {
+        try {
+            return memberService.getMemberInfo(baseRequest.getAccountId());
+        } catch (Exception e) {
+            return ResultResponse.failed();
+        }
+    }
 }

@@ -5,6 +5,7 @@ import cn.whaley.moretv.member.model.member.MemberUserAuthority;
 
 import java.util.List;
 
+
 /**
 * Service: MemberUserAuthorityService
 * Mapper : MemberUserAuthorityMapper

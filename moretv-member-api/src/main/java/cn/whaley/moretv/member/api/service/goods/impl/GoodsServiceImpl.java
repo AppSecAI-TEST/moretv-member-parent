@@ -3,6 +3,7 @@ package cn.whaley.moretv.member.api.service.goods.impl;
 import cn.whaley.moretv.member.api.dto.response.GoodsDto;
 import cn.whaley.moretv.member.api.dto.response.GoodsResponse;
 import cn.whaley.moretv.member.api.service.goods.GoodsService;
+import cn.whaley.moretv.member.api.service.member.MemberService;
 import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
@@ -45,13 +46,16 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private MemberService memberService;
+
     @Override
     public ResultResponse getGoodsByTag(Integer accountId, String goodsTag) {
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
         List<GoodsResponse> goodsList = Lists.newArrayList();
         Integer normalGoods = GlobalEnum.GoodsType.NORMAL_GOODS.getValue();
 
-        boolean isMember = false; //baseMemberService.accountIsMember(accountId);
+        boolean isMember = memberService.accountIsMember(accountId);
 
         Integer goodsType = isMember ? GlobalEnum.GoodsType.RENEWAL_GOODS.getValue() : normalGoods;
 
@@ -66,7 +70,7 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
 
         boolean hasPurchaseOrder = true;
         if (normalGoods.equals(goodsType)) {
-            //hasPurchaseOrder = baseOrderService.hasPurchaseOrder(accountId);
+            //TODO hasPurchaseOrder = baseOrderService.hasPurchaseOrder(accountId);
         }
 
         logger.info("get_goods_by_tag :  accountId:{}, goodsSize:{}, hasPurchaseOrder:{}",
