@@ -34,7 +34,7 @@ public class Order extends BaseModel<Integer> implements Serializable {
      * 账号ID
      * account_id
      */
-    private String accountId;
+    private Integer accountId;
 
     /**
      * 订单价格
@@ -139,6 +139,12 @@ public class Order extends BaseModel<Integer> implements Serializable {
     private String goodsCode;
 
     /**
+     * 商品名称
+     * goods_name
+     */
+    private String goodsName;
+
+    /**
      * 商品类别
      * goods_type
      */
@@ -204,7 +210,7 @@ public class Order extends BaseModel<Integer> implements Serializable {
      * 账号ID
      * account_id
      */
-    public String getAccountId() {
+    public Integer getAccountId() {
         return accountId;
     }
 
@@ -214,7 +220,7 @@ public class Order extends BaseModel<Integer> implements Serializable {
      *
      * @param accountId 账号ID
      */
-    public void setAccountId(String accountId) {
+    public void setAccountId(Integer accountId) {
         this.accountId = accountId;
     }
 
@@ -525,6 +531,24 @@ public class Order extends BaseModel<Integer> implements Serializable {
     }
 
     /**
+     * 商品名称
+     * goods_name
+     */
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    /**
+     * 商品名称
+     * goods_name
+     *
+     * @param goodsName 商品名称
+     */
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    /**
      * 商品类别
      * goods_type
      */
@@ -570,6 +594,7 @@ public class Order extends BaseModel<Integer> implements Serializable {
         sb.append(", overTime=").append(overTime);
         sb.append(", foreignKey=").append(foreignKey);
         sb.append(", goodsCode=").append(goodsCode);
+        sb.append(", goodsName=").append(goodsName);
         sb.append(", goodsType=").append(goodsType);
         sb.append("]");
         return sb.toString();
