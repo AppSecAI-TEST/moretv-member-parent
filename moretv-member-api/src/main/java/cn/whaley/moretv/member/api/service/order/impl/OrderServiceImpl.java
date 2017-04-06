@@ -13,6 +13,7 @@ import cn.whaley.moretv.member.api.dto.response.OrderListDto;
 import cn.whaley.moretv.member.api.service.order.OrderService;
 import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
+import cn.whaley.moretv.member.base.constant.OrderEnum;
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.base.res.ResultResponse;
 import cn.whaley.moretv.member.mapper.order.OrderMapper;
@@ -37,8 +38,9 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
         List<Order> orderList = orderMapper.listByAccountId(baseRequest.getAccountId().toString());
         List<OrderListDto> orderDtoList = new ArrayList<>(orderList.size());
         for(Order order : orderList){
-            //TODO 已查询出用户所有的订单，需要过滤
-            
+            //只有交易状态为已完成的才返回
+            if(order.getTradeStatus().intValue() != OrderEnum.TradeStatus.TRADE_FINISHED.getCode())
+                continue;
             OrderListDto orderDto = new OrderListDto();
             orderDtoList.add(ResponseHandler.convert2OrderListDto(order, orderDto));
         }
@@ -50,7 +52,8 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
     @Override
     public ResultResponse getByOrderCode(String orderCode) {
         Order order = orderMapper.getByOrderCode(orderCode);
-        if(order == null)
+        //只有交易状态为已完成的才返回
+        if(order == null || (order.getTradeStatus().intValue() != OrderEnum.TradeStatus.TRADE_FINISHED.getCode()) )
             return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
         
         OrderDetailDto orderDto = new OrderDetailDto();
