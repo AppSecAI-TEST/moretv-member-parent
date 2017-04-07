@@ -7,8 +7,8 @@ package cn.whaley.moretv.member.base.constant;
  */
 public interface CacheKeyConstant {
 
-    //商品 hash key，%s为goodsType，field：goodsCode
-    String REDIS_KEY_GOODS = "moretv:member:goods:%s";
+    //商品 hash key，field：goodsCode
+    String REDIS_KEY_GOODS = "moretv:member:goods";
 
     //商品模型 hash key，field：goodsBaseCode
     String REDIS_KEY_GOODS_SPU = "moretv:member:goodsSpu";

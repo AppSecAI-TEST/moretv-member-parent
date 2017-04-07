@@ -3,7 +3,6 @@ package cn.whaley.moretv.member.sync.service.goods.impl;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
-import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.mapper.goods.GoodsSpuMapper;
@@ -27,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 */
 @Service
 @Transactional
-public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer> implements GoodsSpuService {
+public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer, GoodsSpuMapper> implements GoodsSpuService {
 
     private static final Logger logger = LoggerFactory.getLogger(GoodsSpuServiceImpl.class);
 
@@ -88,7 +87,7 @@ public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer> i
     }
 
     @Override
-    public GenericMapper<GoodsSpu, Integer> getGenericMapper() {
+    public GoodsSpuMapper getGenericMapper() {
         return goodsSpuMapper;
     }
 }

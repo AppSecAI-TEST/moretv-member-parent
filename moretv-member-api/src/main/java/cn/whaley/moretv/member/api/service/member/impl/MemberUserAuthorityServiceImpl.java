@@ -2,7 +2,6 @@ package cn.whaley.moretv.member.api.service.member.impl;
 
 import cn.whaley.moretv.member.api.service.member.MemberUserAuthorityService;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
-import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.mapper.member.MemberUserAuthorityMapper;
 import cn.whaley.moretv.member.model.member.MemberUserAuthority;
@@ -14,7 +13,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +27,8 @@ import java.util.Map;
 */
 @Service
 @Transactional
-public class MemberUserAuthorityServiceImpl extends GenericServiceImpl<MemberUserAuthority, Integer> implements MemberUserAuthorityService {
+public class MemberUserAuthorityServiceImpl extends GenericServiceImpl<MemberUserAuthority, Integer, MemberUserAuthorityMapper>
+        implements MemberUserAuthorityService {
 
     @Autowired
     private MemberUserAuthorityMapper memberUserAuthorityMapper;
@@ -56,7 +55,7 @@ public class MemberUserAuthorityServiceImpl extends GenericServiceImpl<MemberUse
     }
 
     @Override
-    public GenericMapper<MemberUserAuthority, Integer> getGenericMapper() {
+    public MemberUserAuthorityMapper getGenericMapper() {
         return memberUserAuthorityMapper;
     }
 

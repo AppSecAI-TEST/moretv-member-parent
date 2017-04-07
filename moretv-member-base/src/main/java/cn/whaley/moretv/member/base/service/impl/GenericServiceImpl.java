@@ -13,10 +13,10 @@ import java.util.List;
  *
  * Created by Bob Jiang on 2017/2/13.
  */
-public abstract class GenericServiceImpl<T extends BaseModel<PK>, PK extends Serializable>
+public abstract class GenericServiceImpl<T extends BaseModel<PK>, PK extends Serializable, M extends GenericMapper<T, PK>>
         implements GenericService<T, PK> {
 
-    public abstract GenericMapper<T, PK> getGenericMapper();
+    public abstract M getGenericMapper();
 
     public int deleteByPrimaryKey(PK id) {
         return getGenericMapper().deleteByPrimaryKey(id);

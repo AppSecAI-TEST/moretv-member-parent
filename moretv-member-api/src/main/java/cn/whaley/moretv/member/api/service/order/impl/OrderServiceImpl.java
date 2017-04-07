@@ -14,7 +14,6 @@ import cn.whaley.moretv.member.api.service.order.OrderService;
 import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
-import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.mapper.order.OrderMapper;
 import cn.whaley.moretv.member.model.order.Order;
@@ -28,7 +27,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
     
     
     @Override
-    public GenericMapper<Order, Integer> getGenericMapper() {
+    public OrderMapper getGenericMapper() {
         return orderMapper;
     }
 

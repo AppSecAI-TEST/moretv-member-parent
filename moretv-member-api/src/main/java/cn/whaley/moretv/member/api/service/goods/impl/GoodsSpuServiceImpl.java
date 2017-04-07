@@ -31,7 +31,7 @@ import java.util.Map;
 */
 @Service
 @Transactional
-public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer> implements GoodsSpuService {
+public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer, GoodsSpuMapper> implements GoodsSpuService {
 
     @Autowired
     private GoodsSpuMapper goodsSpuMapper;
@@ -58,9 +58,9 @@ public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer> i
         return ResultResponse.success(goodsSpuList);
     }
 
+
     @Override
-    public GenericMapper<GoodsSpu, Integer> getGenericMapper() {
+    public GoodsSpuMapper getGenericMapper() {
         return goodsSpuMapper;
     }
-
 }

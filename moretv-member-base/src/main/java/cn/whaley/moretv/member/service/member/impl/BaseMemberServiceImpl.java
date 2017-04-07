@@ -2,6 +2,7 @@ package cn.whaley.moretv.member.service.member.impl;
 
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
+import cn.whaley.moretv.member.mapper.member.MemberMapper;
 import cn.whaley.moretv.member.model.member.Member;
 import cn.whaley.moretv.member.service.member.BaseMemberService;
 import com.alibaba.fastjson.JSON;
@@ -15,7 +16,7 @@ import java.util.Map;
 /**
  * Created by Bob Jiang on 2017/3/30.
  */
-public abstract class BaseMemberServiceImpl extends GenericServiceImpl<Member, Integer> implements BaseMemberService {
+public abstract class BaseMemberServiceImpl extends GenericServiceImpl<Member, Integer, MemberMapper> implements BaseMemberService {
 
     @Override
     public List<Member> getMemberList() {

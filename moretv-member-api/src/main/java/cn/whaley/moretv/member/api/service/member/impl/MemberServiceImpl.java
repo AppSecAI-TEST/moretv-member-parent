@@ -7,7 +7,6 @@ import cn.whaley.moretv.member.api.service.member.MemberUserAuthorityService;
 import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
-import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.mapper.member.MemberMapper;
 import cn.whaley.moretv.member.model.member.Member;
@@ -118,7 +117,7 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
     }
 
     @Override
-    public GenericMapper<Member, Integer> getGenericMapper() {
+    public MemberMapper getGenericMapper() {
         return memberMapper;
     }
 
