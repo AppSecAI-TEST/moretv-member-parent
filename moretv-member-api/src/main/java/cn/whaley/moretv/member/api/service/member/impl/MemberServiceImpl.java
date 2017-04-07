@@ -36,9 +36,6 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
     private MemberMapper memberMapper;
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-
-    @Autowired
     private MemberUserAuthorityService memberUserAuthorityService;
 
     @Override
@@ -121,8 +118,4 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
         return memberMapper;
     }
 
-    @Override
-    public RedisTemplate getRedisTemplate() {
-        return redisTemplate;
-    }
 }

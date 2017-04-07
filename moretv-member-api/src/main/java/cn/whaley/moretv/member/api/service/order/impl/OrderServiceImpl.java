@@ -22,9 +22,9 @@ import cn.whaley.moretv.member.service.order.impl.BaseOrderServiceImpl;
 @Service
 @Transactional
 public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderService {
+
     @Autowired
     private OrderMapper orderMapper;
-    
     
     @Override
     public OrderMapper getGenericMapper() {

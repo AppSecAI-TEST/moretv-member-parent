@@ -1,12 +1,11 @@
 package cn.whaley.moretv.member.service.goods;
 
-import java.util.List;
+
 
 import org.springframework.data.redis.core.RedisTemplate;
 
 import cn.whaley.moretv.member.base.service.GenericService;
 import cn.whaley.moretv.member.model.goods.Goods;
-import cn.whaley.moretv.member.model.member.Member;
 
 
 /**
@@ -24,7 +23,6 @@ public interface BaseGoodsService extends GenericService<Goods, Integer> {
 	 */
     Goods getGoodsByGoodsNo(String goodsNo);
     
-    RedisTemplate getRedisTemplate();
-    
     Goods checkCanBuyGoods(String goodsNo,int accountId);
+
 }
