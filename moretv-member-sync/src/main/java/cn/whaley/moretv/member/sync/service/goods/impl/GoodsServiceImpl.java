@@ -3,7 +3,6 @@ package cn.whaley.moretv.member.sync.service.goods.impl;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
-import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.util.BeanHandler;
 import cn.whaley.moretv.member.mapper.goods.GoodsMapper;
@@ -66,8 +65,7 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
 
     private void offsheifGoods(GoodsDto goodsDto, HashOperations<String, String, String> opsHash) {
 
-        String key = String.format(CacheKeyConstant.REDIS_KEY_GOODS, goodsDto.getGoodsType());
-        opsHash.delete(key, goodsDto.getGoodsCode());
+        opsHash.delete(CacheKeyConstant.REDIS_KEY_GOODS, goodsDto.getGoodsCode());
         logger.info("syncGoods: 删除商品缓存, goodsCode:{}", goodsDto.getGoodsCode());
 
         Goods goods = new Goods();
@@ -85,9 +83,8 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
         List<GoodsSku> skuList = goodsDto.getGoodsSkuList();
 
         if (skuList != null && skuList.size() == 1) {
-            String key = String.format(CacheKeyConstant.REDIS_KEY_GOODS, goodsDto.getGoodsType());
             String value = JSON.toJSONString(goodsDto);
-            opsHash.put(key, goodsDto.getGoodsCode(), value);
+            opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS, goodsDto.getGoodsCode(), value);
             logger.info("syncGoods: 更新商品缓存, goodsCode:{}", goodsDto.getGoodsCode());
         } else {
             logger.info("syncGoods: 不缓存组合商品, goodsCode:{}", goodsDto.getGoodsCode());
@@ -114,7 +111,7 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     }
 
     @Override
-    public GenericMapper<Goods, Integer> getGenericMapper() {
+    public GoodsMapper getGenericMapper() {
         return goodsMapper;
     }
 }

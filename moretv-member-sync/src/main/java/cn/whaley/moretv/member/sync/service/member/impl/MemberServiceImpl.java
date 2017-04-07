@@ -16,7 +16,6 @@ import com.alibaba.fastjson.JSON;
 
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
-import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.mapper.member.MemberMapper;
 import cn.whaley.moretv.member.mapper.member.MemberPackageRelationMapper;
 import cn.whaley.moretv.member.model.member.Member;
@@ -49,7 +48,7 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
     private MemberPackageRelationMapper memberPackageRelationMapper;
 
     @Override
-    public GenericMapper<Member, Integer> getGenericMapper() {
+    public MemberMapper getGenericMapper() {
         return memberMapper;
     }
 

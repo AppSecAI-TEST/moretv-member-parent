@@ -2,7 +2,6 @@ package cn.whaley.moretv.member.sync.service.member.impl;
 
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
-import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.mapper.member.MemberProgramRelationMapper;
 import cn.whaley.moretv.member.model.member.MemberProgramRelation;
@@ -32,7 +31,7 @@ import com.alibaba.fastjson.JSON;
 */
 @Service
 @Transactional
-public class MemberProgramRelationServiceImpl extends GenericServiceImpl<MemberProgramRelation, Integer> implements MemberProgramRelationService {
+public class MemberProgramRelationServiceImpl extends GenericServiceImpl<MemberProgramRelation, Integer, MemberProgramRelationMapper> implements MemberProgramRelationService {
     private static final Logger logger = LoggerFactory.getLogger(MemberProgramRelationServiceImpl.class);
     
     @Autowired
@@ -42,7 +41,7 @@ public class MemberProgramRelationServiceImpl extends GenericServiceImpl<MemberP
     private MemberProgramRelationMapper memberProgramRelationMapper;
 
     @Override
-    public GenericMapper<MemberProgramRelation, Integer> getGenericMapper() {
+    public MemberProgramRelationMapper getGenericMapper() {
         return memberProgramRelationMapper;
     }
 

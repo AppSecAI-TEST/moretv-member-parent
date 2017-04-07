@@ -4,14 +4,13 @@ import cn.whaley.moretv.member.api.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.api.dto.goods.GoodsResponse;
 import cn.whaley.moretv.member.api.service.goods.GoodsService;
 import cn.whaley.moretv.member.api.service.member.MemberService;
+import cn.whaley.moretv.member.api.service.order.OrderService;
 import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
-import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.mapper.goods.GoodsMapper;
-import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.service.goods.impl.BaseGoodsServiceImpl;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
@@ -49,6 +48,9 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private OrderService orderService;
+
     @Override
     public ResultResponse getGoodsByTag(Integer accountId, String goodsTag) {
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
@@ -62,15 +64,14 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
         logger.info("get_goods_by_tag : accountId:{}, goodsTag:{}, isMember:{}, goodsType:{}",
                 accountId, goodsTag, isMember, goodsType);
 
-        String key = String.format(CacheKeyConstant.REDIS_KEY_GOODS, goodsType);
-        Map<String, String> map = opsHash.entries(key);
+        Map<String, String> map = opsHash.entries(CacheKeyConstant.REDIS_KEY_GOODS);
         if (CollectionUtils.isEmpty(map)) {
             return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
         }
 
-        boolean hasPurchaseOrder = true;
+        boolean hasPurchaseOrder = false;
         if (normalGoods.equals(goodsType)) {
-            //TODO hasPurchaseOrder = baseOrderService.hasPurchaseOrder(accountId);
+            hasPurchaseOrder = orderService.hasPurchaseOrder(accountId);
         }
 
         logger.info("get_goods_by_tag :  accountId:{}, goodsSize:{}, hasPurchaseOrder:{}",
@@ -80,6 +81,9 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
             GoodsDto goodsDto = JSON.parseObject(entry.getValue(), GoodsDto.class);
             Integer goodsClass = goodsDto.getGoodsClass();
 
+            if (!goodsType.equals(goodsDto.getGoodsType())) {
+                continue;
+            }
             if (hasPurchaseOrder && GlobalEnum.GoodsClass.FIRST_GOODS.getCode() == goodsClass.intValue()) {
                 continue;
             } else if (!hasPurchaseOrder && GlobalEnum.GoodsClass.NOT_FIRST_GOODS.getCode() == goodsClass.intValue()){
@@ -93,7 +97,7 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     }
 
     @Override
-    public GenericMapper<Goods, Integer> getGenericMapper() {
+    public GoodsMapper getGenericMapper() {
         return goodsMapper;
     }
 
