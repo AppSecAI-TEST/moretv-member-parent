@@ -1,7 +1,7 @@
 package cn.whaley.moretv.member.api.service.member;
 
-import cn.whaley.moretv.member.api.dto.MemberInfoResponse;
-import cn.whaley.moretv.member.api.dto.MemberStatusResponse;
+import cn.whaley.moretv.member.api.dto.member.MemberInfoResponse;
+import cn.whaley.moretv.member.api.dto.member.MemberStatusResponse;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.service.member.BaseMemberService;
 

@@ -1,10 +1,10 @@
 package cn.whaley.moretv.member.api.util;
 
-import cn.whaley.moretv.member.api.dto.GoodsDto;
-import cn.whaley.moretv.member.api.dto.GoodsResponse;
-import cn.whaley.moretv.member.api.dto.GoodsSpuResponse;
-import cn.whaley.moretv.member.api.dto.OrderDetailDto;
-import cn.whaley.moretv.member.api.dto.OrderListDto;
+import cn.whaley.moretv.member.api.dto.goods.GoodsDto;
+import cn.whaley.moretv.member.api.dto.goods.GoodsResponse;
+import cn.whaley.moretv.member.api.dto.goods.GoodsSpuResponse;
+import cn.whaley.moretv.member.api.dto.order.OrderDetailDto;
+import cn.whaley.moretv.member.api.dto.order.OrderListDto;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
 import cn.whaley.moretv.member.base.util.BeanHandler;
 import cn.whaley.moretv.member.model.goods.GoodsSku;

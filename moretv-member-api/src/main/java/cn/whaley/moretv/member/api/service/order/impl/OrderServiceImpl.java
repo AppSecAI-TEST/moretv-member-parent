@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.whaley.moretv.member.base.dto.request.BaseRequest;
-import cn.whaley.moretv.member.api.dto.OrderDetailDto;
-import cn.whaley.moretv.member.api.dto.OrderListDto;
+import cn.whaley.moretv.member.api.dto.order.OrderDetailDto;
+import cn.whaley.moretv.member.api.dto.order.OrderListDto;
 import cn.whaley.moretv.member.api.service.order.OrderService;
 import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;

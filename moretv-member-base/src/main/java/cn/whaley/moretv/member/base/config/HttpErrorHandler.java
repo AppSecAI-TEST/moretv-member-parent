@@ -1,4 +1,4 @@
-package cn.whaley.moretv.member.api.config;
+package cn.whaley.moretv.member.base.config;
 
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import org.springframework.boot.autoconfigure.web.AbstractErrorController;

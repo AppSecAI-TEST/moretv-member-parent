@@ -1,7 +1,7 @@
 package cn.whaley.moretv.member.api.service.goods.impl;
 
-import cn.whaley.moretv.member.api.dto.GoodsDto;
-import cn.whaley.moretv.member.api.dto.GoodsResponse;
+import cn.whaley.moretv.member.api.dto.goods.GoodsDto;
+import cn.whaley.moretv.member.api.dto.goods.GoodsResponse;
 import cn.whaley.moretv.member.api.service.goods.GoodsService;
 import cn.whaley.moretv.member.api.service.member.MemberService;
 import cn.whaley.moretv.member.api.util.ResponseHandler;

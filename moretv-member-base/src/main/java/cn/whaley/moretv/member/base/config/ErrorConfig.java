@@ -1,4 +1,4 @@
-package cn.whaley.moretv.member.api.config;
+package cn.whaley.moretv.member.base.config;
 
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

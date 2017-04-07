@@ -1,9 +1,9 @@
-package cn.whaley.moretv.member.api.util;
+package cn.whaley.moretv.member.base.util;
 
 
 import cn.whaley.moretv.member.base.annotation.ValidateIgnore;
 import cn.whaley.moretv.member.base.dto.request.BaseRequest;
-import cn.whaley.moretv.member.api.log.LogAspect;
+import cn.whaley.moretv.member.base.log.LogAspect;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import org.slf4j.Logger;

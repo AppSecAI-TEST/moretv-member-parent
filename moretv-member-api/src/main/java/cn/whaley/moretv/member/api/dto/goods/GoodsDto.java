@@ -1,4 +1,4 @@
-package cn.whaley.moretv.member.api.dto;
+package cn.whaley.moretv.member.api.dto.goods;
 
 import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.model.goods.GoodsSku;

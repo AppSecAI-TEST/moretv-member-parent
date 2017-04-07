@@ -1,4 +1,4 @@
-package cn.whaley.moretv.member.api.config;
+package cn.whaley.moretv.member.base.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.cache.CacheManager;

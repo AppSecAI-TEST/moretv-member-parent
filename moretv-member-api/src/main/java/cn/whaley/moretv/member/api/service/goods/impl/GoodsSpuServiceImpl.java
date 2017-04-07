@@ -1,6 +1,6 @@
 package cn.whaley.moretv.member.api.service.goods.impl;
 
-import cn.whaley.moretv.member.api.dto.GoodsSpuResponse;
+import cn.whaley.moretv.member.api.dto.goods.GoodsSpuResponse;
 import cn.whaley.moretv.member.api.service.goods.GoodsSpuService;
 import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;

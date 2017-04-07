@@ -1,4 +1,4 @@
-package cn.whaley.moretv.member.api.dto;
+package cn.whaley.moretv.member.api.dto.goods;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
