@@ -37,9 +37,6 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     private static final Logger logger = LoggerFactory.getLogger(GoodsServiceImpl.class);
 
     @Autowired
-    private RedisTemplate redisTemplate;
-
-    @Autowired
     private GoodsMapper goodsMapper;
 
     @Autowired
@@ -114,4 +111,5 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     public GoodsMapper getGenericMapper() {
         return goodsMapper;
     }
+
 }

@@ -39,9 +39,6 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
     private static final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
     
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-    
-    @Autowired
     private MemberMapper memberMapper;
     
     @Autowired
@@ -182,8 +179,4 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
         return member;
     }
 
-    @Override
-    public RedisTemplate getRedisTemplate() {
-        return redisTemplate;
-    }
 }

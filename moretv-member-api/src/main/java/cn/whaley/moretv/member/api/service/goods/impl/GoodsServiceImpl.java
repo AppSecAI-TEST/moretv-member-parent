@@ -18,11 +18,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,9 +43,6 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     private GoodsMapper goodsMapper;
 
     @Autowired
-    private RedisTemplate redisTemplate;
-
-    @Autowired
     private MemberService memberService;
 
     @Autowired
@@ -56,6 +53,7 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
         List<GoodsResponse> goodsList = Lists.newArrayList();
         Integer normalGoods = GlobalEnum.GoodsType.NORMAL_GOODS.getValue();
+        long now = new Date().getTime();
 
         boolean isMember = memberService.accountIsMember(accountId);
 
@@ -84,8 +82,19 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
             if (!goodsType.equals(goodsDto.getGoodsType())) {
                 continue;
             }
+
+            if (goodsDto.getStartTime() != null && goodsDto.getStartTime().getTime() > now) {
+                continue;
+            }
+
+            if (goodsDto.getEndTime() != null && goodsDto.getEndTime().getTime() < now) {
+                continue;
+            }
+
+            //有购买过商品，过滤掉首次商品
             if (hasPurchaseOrder && GlobalEnum.GoodsClass.FIRST_GOODS.getCode() == goodsClass.intValue()) {
                 continue;
+            //没有购买过商品，过滤掉非首次商品
             } else if (!hasPurchaseOrder && GlobalEnum.GoodsClass.NOT_FIRST_GOODS.getCode() == goodsClass.intValue()){
                 continue;
             }
@@ -100,10 +109,5 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     public GoodsMapper getGenericMapper() {
         return goodsMapper;
     }
-
-	@Override
-	public RedisTemplate getRedisTemplate() {
-		return redisTemplate;
-	}
 
 }

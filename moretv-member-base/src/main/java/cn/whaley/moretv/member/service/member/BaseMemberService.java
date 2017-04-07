@@ -18,6 +18,4 @@ public interface BaseMemberService extends GenericService<Member, Integer> {
      */
     List<Member> getMemberList();
 
-    RedisTemplate getRedisTemplate();
-
 }
