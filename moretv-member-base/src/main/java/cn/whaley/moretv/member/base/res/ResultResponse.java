@@ -16,6 +16,11 @@ public class ResultResponse<V> extends HashMap<String, Object> {
     protected static final String DATA = "data";
     protected String dataKey;
 
+    public ResultResponse(String code, String msg) {
+        put(CODE, code);
+        put(MSG, msg);
+    }
+
     public ResultResponse(ApiCodeEnum apiCodeEnum) {
         put(CODE, apiCodeEnum.getCode());
         put(MSG, apiCodeEnum.getMsg());
@@ -45,6 +50,14 @@ public class ResultResponse<V> extends HashMap<String, Object> {
 
     public static ResultResponse failed() {
         return new ResultResponse(ApiCodeEnum.API_SYS_ERR);
+    }
+
+    public static ResultResponse failed(String msg) {
+        return new ResultResponse(String.valueOf(ApiCodeEnum.API_SYS_ERR.getCode()), msg);
+    }
+
+    public static ResultResponse define(Integer code, String msg) {
+        return new ResultResponse(code.toString(), msg);
     }
 
     public static ResultResponse define(ApiCodeEnum apiCodeEnum) {

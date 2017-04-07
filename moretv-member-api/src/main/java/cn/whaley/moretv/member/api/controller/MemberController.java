@@ -28,11 +28,7 @@ public class MemberController {
      */
     @RequestMapping(value = "/get_all_member_info", method = RequestMethod.POST)
     public ResultResponse getAllMemberInfo(BaseRequest baseRequest) {
-        try {
-            return memberService.getAllMemberInfo(baseRequest.getAccountId());
-        } catch (Exception e) {
-            return ResultResponse.failed();
-        }
+        return memberService.getAllMemberInfo(baseRequest.getAccountId());
     }
 
     /**
@@ -43,10 +39,6 @@ public class MemberController {
      */
     @RequestMapping(value = "/get_member_info", method = RequestMethod.POST)
     public ResultResponse getMemberInfo(BaseRequest baseRequest) {
-        try {
-            return memberService.getMemberInfo(baseRequest.getAccountId());
-        } catch (Exception e) {
-            return ResultResponse.failed();
-        }
+        return memberService.getMemberInfo(baseRequest.getAccountId());
     }
 }

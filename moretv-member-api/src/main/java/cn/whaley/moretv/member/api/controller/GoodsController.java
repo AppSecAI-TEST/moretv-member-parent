@@ -3,8 +3,11 @@ package cn.whaley.moretv.member.api.controller;
 import cn.whaley.moretv.member.api.dto.request.BaseRequest;
 import cn.whaley.moretv.member.api.service.goods.GoodsService;
 import cn.whaley.moretv.member.api.service.goods.GoodsSpuService;
+import cn.whaley.moretv.member.api.util.ValidateIgnore;
+import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.res.ResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -30,12 +33,8 @@ public class GoodsController {
      * @return
      */
     @RequestMapping(value = "/get_goods_spu", method = RequestMethod.POST)
-    public ResultResponse getGoodsSpuList(BaseRequest baseRequest) {
-        try {
-            return goodsSpuService.getGoodsSpuList();
-        } catch (Exception e) {
-            return ResultResponse.failed();
-        }
+    public ResultResponse getGoodsSpuList(@ValidateIgnore BaseRequest baseRequest) {
+         return goodsSpuService.getGoodsSpuList();
     }
 
     /**
@@ -47,10 +46,9 @@ public class GoodsController {
      */
     @RequestMapping(value = "/get_goods_by_tag", method = RequestMethod.POST)
     public ResultResponse getGoodsByTag(BaseRequest baseRequest, String goodsTag) {
-        try {
-            return goodsService.getGoodsByTag(baseRequest.getAccountId(), goodsTag);
-        } catch (Exception e) {
-            return ResultResponse.failed();
+        if (StringUtils.isEmpty(goodsTag)) {
+            return ResultResponse.define(ApiCodeEnum.API_PARAM_GOODS_TAG_ID_NULL);
         }
+        return goodsService.getGoodsByTag(baseRequest.getAccountId(), goodsTag);
     }
 }
