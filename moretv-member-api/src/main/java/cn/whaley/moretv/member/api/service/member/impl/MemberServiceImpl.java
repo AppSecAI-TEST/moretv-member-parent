@@ -1,14 +1,14 @@
 package cn.whaley.moretv.member.api.service.member.impl;
 
-import cn.whaley.moretv.member.api.dto.response.MemberInfoResponse;
-import cn.whaley.moretv.member.api.dto.response.MemberStatusResponse;
+import cn.whaley.moretv.member.api.dto.MemberInfoResponse;
+import cn.whaley.moretv.member.api.dto.MemberStatusResponse;
 import cn.whaley.moretv.member.api.service.member.MemberService;
 import cn.whaley.moretv.member.api.service.member.MemberUserAuthorityService;
 import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
-import cn.whaley.moretv.member.base.res.ResultResponse;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.mapper.member.MemberMapper;
 import cn.whaley.moretv.member.model.member.Member;
 import cn.whaley.moretv.member.model.member.MemberUserAuthority;

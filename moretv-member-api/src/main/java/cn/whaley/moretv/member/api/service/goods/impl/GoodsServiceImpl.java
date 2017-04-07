@@ -1,7 +1,7 @@
 package cn.whaley.moretv.member.api.service.goods.impl;
 
-import cn.whaley.moretv.member.api.dto.response.GoodsDto;
-import cn.whaley.moretv.member.api.dto.response.GoodsResponse;
+import cn.whaley.moretv.member.api.dto.GoodsDto;
+import cn.whaley.moretv.member.api.dto.GoodsResponse;
 import cn.whaley.moretv.member.api.service.goods.GoodsService;
 import cn.whaley.moretv.member.api.service.member.MemberService;
 import cn.whaley.moretv.member.api.util.ResponseHandler;
@@ -9,7 +9,7 @@ import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
-import cn.whaley.moretv.member.base.res.ResultResponse;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.mapper.goods.GoodsMapper;
 import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.service.goods.impl.BaseGoodsServiceImpl;

@@ -1,8 +1,8 @@
 package cn.whaley.moretv.member.api.controller;
 
-import cn.whaley.moretv.member.api.dto.request.BaseRequest;
+import cn.whaley.moretv.member.base.dto.request.BaseRequest;
 import cn.whaley.moretv.member.api.service.member.MemberService;
-import cn.whaley.moretv.member.base.res.ResultResponse;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

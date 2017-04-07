@@ -1,4 +1,4 @@
-package cn.whaley.moretv.member.api.dto.response;
+package cn.whaley.moretv.member.api.dto;
 
 import java.io.Serializable;
 

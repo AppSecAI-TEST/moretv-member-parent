@@ -1,10 +1,11 @@
 package cn.whaley.moretv.member.api.util;
 
 
-import cn.whaley.moretv.member.api.dto.request.BaseRequest;
+import cn.whaley.moretv.member.base.annotation.ValidateIgnore;
+import cn.whaley.moretv.member.base.dto.request.BaseRequest;
 import cn.whaley.moretv.member.api.log.LogAspect;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
-import cn.whaley.moretv.member.base.res.ResultResponse;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;

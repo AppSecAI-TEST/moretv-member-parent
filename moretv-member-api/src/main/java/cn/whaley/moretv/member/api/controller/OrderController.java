@@ -1,9 +1,9 @@
 package cn.whaley.moretv.member.api.controller;
 
-import cn.whaley.moretv.member.api.dto.request.BaseRequest;
+import cn.whaley.moretv.member.base.dto.request.BaseRequest;
 import cn.whaley.moretv.member.api.service.order.OrderService;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
-import cn.whaley.moretv.member.base.res.ResultResponse;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;

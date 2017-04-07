@@ -4,7 +4,7 @@ import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
-import cn.whaley.moretv.member.base.res.ResultResponse;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.mapper.goods.GoodsSpuMapper;
 import cn.whaley.moretv.member.model.goods.GoodsSpu;

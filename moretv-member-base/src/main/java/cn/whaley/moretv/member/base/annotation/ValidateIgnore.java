@@ -1,4 +1,4 @@
-package cn.whaley.moretv.member.api.util;
+package cn.whaley.moretv.member.base.annotation;
 
 import java.lang.annotation.*;
 

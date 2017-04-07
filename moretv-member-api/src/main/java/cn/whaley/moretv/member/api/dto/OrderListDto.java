@@ -1,9 +1,9 @@
-package cn.whaley.moretv.member.api.dto.response;
+package cn.whaley.moretv.member.api.dto;
 
 /**
- * 返回订单详情接口
+ * 返回订单列表接口
  */
-public class OrderDetailDto {
+public class OrderListDto {
     /**
      * 购买时间戳
      */
@@ -112,9 +112,8 @@ public class OrderDetailDto {
 
     @Override
     public String toString() {
-        return "OrderDetailDto [purchaseTime=" + purchaseTime + ", orderCode=" + orderCode + ", goodsName=" + goodsName
+        return "OrderListDto [purchaseTime=" + purchaseTime + ", orderCode=" + orderCode + ", goodsName=" + goodsName
                 + ", goodsCode=" + goodsCode + ", payMethodCode=" + payMethodCode + ", payMethodName=" + payMethodName
                 + ", price=" + price + ", payStatus=" + payStatus + "]";
     }
-    
 }

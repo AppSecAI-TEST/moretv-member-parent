@@ -1,19 +1,17 @@
 package cn.whaley.moretv.member.api.service.goods.impl;
 
-import cn.whaley.moretv.member.api.dto.response.GoodsSpuResponse;
+import cn.whaley.moretv.member.api.dto.GoodsSpuResponse;
 import cn.whaley.moretv.member.api.service.goods.GoodsSpuService;
 import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
-import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
-import cn.whaley.moretv.member.base.res.ResultResponse;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.mapper.goods.GoodsSpuMapper;
 import cn.whaley.moretv.member.model.goods.GoodsSpu;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;

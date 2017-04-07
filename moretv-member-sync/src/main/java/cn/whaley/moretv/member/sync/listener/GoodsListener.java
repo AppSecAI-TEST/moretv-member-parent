@@ -6,7 +6,7 @@ import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
 import cn.whaley.moretv.member.base.constant.GlobalConstant;
 
 import cn.whaley.moretv.member.base.exception.SystemException;
-import cn.whaley.moretv.member.base.res.ResultResponse;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.sync.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.sync.service.goods.GoodsService;
 import com.alibaba.fastjson.JSON;

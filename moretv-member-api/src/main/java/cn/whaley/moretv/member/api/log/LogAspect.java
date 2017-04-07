@@ -1,7 +1,7 @@
 package cn.whaley.moretv.member.api.log;
 
 import cn.whaley.moretv.member.api.util.ValidateHandler;
-import cn.whaley.moretv.member.base.res.ResultResponse;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;

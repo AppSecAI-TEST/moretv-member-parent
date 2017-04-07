@@ -1,4 +1,4 @@
-package cn.whaley.moretv.member.base.res;
+package cn.whaley.moretv.member.base.dto.response;
 
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 

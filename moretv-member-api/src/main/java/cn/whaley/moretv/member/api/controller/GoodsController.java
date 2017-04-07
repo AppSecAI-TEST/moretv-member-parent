@@ -1,11 +1,11 @@
 package cn.whaley.moretv.member.api.controller;
 
-import cn.whaley.moretv.member.api.dto.request.BaseRequest;
+import cn.whaley.moretv.member.base.dto.request.BaseRequest;
 import cn.whaley.moretv.member.api.service.goods.GoodsService;
 import cn.whaley.moretv.member.api.service.goods.GoodsSpuService;
-import cn.whaley.moretv.member.api.util.ValidateIgnore;
+import cn.whaley.moretv.member.base.annotation.ValidateIgnore;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
-import cn.whaley.moretv.member.base.res.ResultResponse;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
 package cn.whaley.moretv.member.sync.service.goods;
 
-import cn.whaley.moretv.member.base.res.ResultResponse;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.service.goods.BaseGoodsService;
 import cn.whaley.moretv.member.sync.dto.goods.GoodsDto;
 

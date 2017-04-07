@@ -1,8 +1,8 @@
 package cn.whaley.moretv.member.api.service.member;
 
-import cn.whaley.moretv.member.api.dto.response.MemberInfoResponse;
-import cn.whaley.moretv.member.api.dto.response.MemberStatusResponse;
-import cn.whaley.moretv.member.base.res.ResultResponse;
+import cn.whaley.moretv.member.api.dto.MemberInfoResponse;
+import cn.whaley.moretv.member.api.dto.MemberStatusResponse;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.service.member.BaseMemberService;
 
 import java.util.List;
