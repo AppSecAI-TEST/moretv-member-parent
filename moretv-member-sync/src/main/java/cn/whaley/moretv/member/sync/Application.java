@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 /**
  * Created by tangzc 2017/02/10.
  */
-@ComponentScan({"cn.whaley.moretv.member.api", "cn.whaley.moretv.member.base.config"})
+@ComponentScan({"cn.whaley.moretv.member.sync", "cn.whaley.moretv.member.base.config"})
 @SpringBootApplication
 public class Application {
 
