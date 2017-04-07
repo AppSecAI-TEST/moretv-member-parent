@@ -114,4 +114,9 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     public GoodsMapper getGenericMapper() {
         return goodsMapper;
     }
+
+	@Override
+	public RedisTemplate getRedisTemplate() {
+		return redisTemplate;
+	}
 }

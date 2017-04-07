@@ -25,4 +25,6 @@ public interface BaseGoodsService extends GenericService<Goods, Integer> {
     Goods getGoodsByGoodsNo(String goodsNo);
     
     RedisTemplate getRedisTemplate();
+    
+    Goods checkCanBuyGoods(String goodsNo,int accountId);
 }
