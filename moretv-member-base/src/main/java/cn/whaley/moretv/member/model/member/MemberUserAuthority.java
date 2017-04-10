@@ -14,9 +14,9 @@ import java.util.Date;
 public class MemberUserAuthority extends BaseModel<Integer> implements Serializable {
     /**
      * 电视猫用户名
-     * username
+     * account_id
      */
-    private String username;
+    private Integer accountId;
 
     /**
      * 会员模型编码
@@ -49,18 +49,6 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
     private Date endTime;
 
     /**
-     * 权益持续月
-     * duration_month
-     */
-    private Short durationMonth;
-
-    /**
-     * 权益持续天,[0-30]
-     * duration_day
-     */
-    private Byte durationDay;
-
-    /**
      * 创建时间
      * create_time
      */
@@ -76,20 +64,20 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
 
     /**
      * 电视猫用户名
-     * username
+     * account_id
      */
-    public String getUsername() {
-        return username;
+    public Integer getAccountId() {
+        return accountId;
     }
 
     /**
      * 电视猫用户名
-     * username
+     * account_id
      *
-     * @param username 电视猫用户名
+     * @param accountId 电视猫用户名
      */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
     }
 
     /**
@@ -183,42 +171,6 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
     }
 
     /**
-     * 权益持续月
-     * duration_month
-     */
-    public Short getDurationMonth() {
-        return durationMonth;
-    }
-
-    /**
-     * 权益持续月
-     * duration_month
-     *
-     * @param durationMonth 权益持续月
-     */
-    public void setDurationMonth(Short durationMonth) {
-        this.durationMonth = durationMonth;
-    }
-
-    /**
-     * 权益持续天,[0-30]
-     * duration_day
-     */
-    public Byte getDurationDay() {
-        return durationDay;
-    }
-
-    /**
-     * 权益持续天,[0-30]
-     * duration_day
-     *
-     * @param durationDay 权益持续天,[0-30]
-     */
-    public void setDurationDay(Byte durationDay) {
-        this.durationDay = durationDay;
-    }
-
-    /**
      * 创建时间
      * create_time
      */
@@ -261,14 +213,12 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", username=").append(username);
+        sb.append(", accountId=").append(accountId);
         sb.append(", memberCode=").append(memberCode);
         sb.append(", memberName=").append(memberName);
         sb.append(", status=").append(status);
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);
-        sb.append(", durationMonth=").append(durationMonth);
-        sb.append(", durationDay=").append(durationDay);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append("]");
