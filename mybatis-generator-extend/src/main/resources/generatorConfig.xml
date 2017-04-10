@@ -86,5 +86,9 @@
         <table tableName="business_order_item" alias="boi" domainObjectName="order.OrderItem">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
+        
+        <table tableName="member_user_cp" alias="muc" domainObjectName="member.MemberUserCp">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
 	</context>
 </generatorConfiguration> 
