@@ -2,8 +2,7 @@ package cn.whaley.moretv.member.service.goods;
 
 
 
-import org.springframework.data.redis.core.RedisTemplate;
-
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.service.GenericService;
 import cn.whaley.moretv.member.model.goods.Goods;
 
@@ -23,6 +22,6 @@ public interface BaseGoodsService extends GenericService<Goods, Integer> {
 	 */
     Goods getGoodsByGoodsNo(String goodsNo);
     
-    Goods checkCanBuyGoods(String goodsNo,int accountId);
+    ResultResponse<Goods> checkCanBuyGoods(String goodsNo,int accountId);
 
 }

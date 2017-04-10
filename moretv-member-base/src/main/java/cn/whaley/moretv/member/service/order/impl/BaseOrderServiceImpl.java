@@ -4,6 +4,7 @@ import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.mapper.order.OrderMapper;
 import cn.whaley.moretv.member.model.order.Order;
 import cn.whaley.moretv.member.service.order.BaseOrderService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Service;
 @Service
 public abstract class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, OrderMapper> implements BaseOrderService {
 
+	@Autowired
+	OrderMapper orderMapper;
+	
     @Autowired
     protected RedisTemplate redisTemplate;
 
@@ -20,4 +24,9 @@ public abstract class BaseOrderServiceImpl extends GenericServiceImpl<Order, Int
         Integer count = getGenericMapper().hasPurchaseOrder(accountId);
         return count > 0 ? true : false;
     }
+    
+	@Override
+	public OrderMapper getGenericMapper() {
+		return orderMapper;
+	}
 }

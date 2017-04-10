@@ -21,6 +21,8 @@ public enum ApiCodeEnum {
     API_DATA_GOODS_STATUS_ERR(ApiCodeInfo.API_DATA_GOODS_STATUS_ERR, "goodsStatus error"),
     API_PARAM_ACCOUNT_ID_NULL(ApiCodeInfo.API_PARAM_ACCOUNT_ID_NULL, "accountId is null"),
     API_PARAM_GOODS_TAG_ID_NULL(ApiCodeInfo.API_PARAM_GOODS_TAG_ID_NULL, "goodsTag is null"),
+    API_DATA_GOODS_NOT_ONLINE(ApiCodeInfo.API_DATA_GOODS_NOT_ONLINE, "goods not online"),
+    API_DATA_GOODS_CAN_NOT_BUY(ApiCodeInfo.API_DATA_GOODS_CAN_NOT_BUY, "goods can not buy"),
     ;
 
     private int code;

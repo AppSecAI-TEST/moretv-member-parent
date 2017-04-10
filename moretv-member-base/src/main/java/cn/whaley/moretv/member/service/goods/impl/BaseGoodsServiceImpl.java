@@ -2,6 +2,8 @@ package cn.whaley.moretv.member.service.goods.impl;
 
 
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -9,6 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
+import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
+import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
+import cn.whaley.moretv.member.base.constant.GlobalEnum;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.mapper.goods.GoodsMapper;
 import cn.whaley.moretv.member.model.goods.Goods;
@@ -45,16 +51,29 @@ public abstract class BaseGoodsServiceImpl extends GenericServiceImpl<Goods, Int
     }
     
     @Override
-	public Goods checkCanBuyGoods(String goodsNo,int accountId){
+	public ResultResponse<Goods> checkCanBuyGoods(String goodsNo,int accountId){
+    	ResultResponse<Goods> response = null;
+    	Date now =new Date();
     	//获取商品
     	Goods goods = getGoodsByGoodsNo(goodsNo);
-    	if(goods != null){
-    		//是否首次购买
-    		if(baseOrderService.hasPurchaseOrder(accountId)){
-    			
+    	if(goods != null && goods.getIsDisplayed()){
+    		//上架时间
+            if(goods.getStartTime()!=null && now.before(goods.getStartTime())){
+            	return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE,goods);
+            }
+            if(goods.getEndTime()!=null && now.after(goods.getEndTime())){
+            	return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE,goods);
+            }
+            
+    		//首次购买
+    		if(GlobalEnum.GoodsClass.FIRST_GOODS.getCode() ==goods.getGoodsClass() && baseOrderService.hasPurchaseOrder(accountId)){
+    			return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_CAN_NOT_BUY,goods);
     		}
+    		
+    	}else{
+    		return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_STATUS_ERR,goods);
     	}
-    	
-		return goods;
+    	response = ResultResponse.success(goods);
+		return response;
     }
 }
