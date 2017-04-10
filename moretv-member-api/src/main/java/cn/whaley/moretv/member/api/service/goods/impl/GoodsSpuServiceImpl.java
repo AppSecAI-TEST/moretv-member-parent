@@ -18,6 +18,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,15 @@ public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer, G
 
     @Override
     public ResultResponse getGoodsSpuList() {
+        return findGoodsSpu(null);
+    }
+
+    @Override
+    public ResultResponse getGoodsSpuListByTag(String goodsTag) {
+        return findGoodsSpu(goodsTag);
+    }
+
+    private ResultResponse findGoodsSpu(String goodsTag) {
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
         List<GoodsSpuResponse> goodsSpuList = Lists.newArrayList();
 
@@ -52,12 +62,16 @@ public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer, G
         for (Map.Entry<String, String> entry : map.entrySet()) {
             GoodsSpu goodsSpu = JSON.parseObject(entry.getValue(), GoodsSpu.class);
             GoodsSpuResponse response = ResponseHandler.converGoodsSpu(goodsSpu);
-            goodsSpuList.add(response);
+
+            if (StringUtils.isEmpty(goodsTag)) {
+                goodsSpuList.add(response);
+            } else if (goodsTag.equals(goodsSpu.getMemberCode())) {
+                goodsSpuList.add(response);
+            }
         }
 
         return ResultResponse.success(goodsSpuList);
     }
-
 
     @Override
     public GoodsSpuMapper getGenericMapper() {

@@ -41,7 +41,7 @@ public class GoodsController {
      * <p>会员商品价格明细列表接口</p>
      *
      * @param baseRequest
-     * @param goodsTag
+     * @param goodsTag 会员编码
      * @return
      */
     @RequestMapping(value = "/get_goods_by_tag", method = RequestMethod.POST)
@@ -50,5 +50,20 @@ public class GoodsController {
             return ResultResponse.define(ApiCodeEnum.API_PARAM_GOODS_TAG_ID_NULL);
         }
         return goodsService.getGoodsByTag(baseRequest.getAccountId(), goodsTag);
+    }
+
+    /**
+     * <p>查询会员对应的商品模型</p>
+     *
+     * @param baseRequest
+     * @param goodsTag 会员编码
+     * @return
+     */
+    @RequestMapping(value = "/get_goods_spu_by_tag", method = RequestMethod.POST)
+    public ResultResponse getGoodsSpuList(BaseRequest baseRequest, String goodsTag) {
+        if (StringUtils.isEmpty(goodsTag)) {
+            return ResultResponse.define(ApiCodeEnum.API_PARAM_GOODS_TAG_ID_NULL);
+        }
+        return goodsSpuService.getGoodsSpuListByTag(goodsTag);
     }
 }

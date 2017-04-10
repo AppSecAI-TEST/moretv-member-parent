@@ -21,4 +21,12 @@ public interface GoodsSpuService extends GenericService<GoodsSpu, Integer> {
      */
     ResultResponse getGoodsSpuList();
 
+    /**
+     * <p>查询会员对应的商品模型</p>
+     *
+     * @param goodsTag 会员编码
+     * @return
+     */
+    ResultResponse getGoodsSpuListByTag(String goodsTag);
+
 }
