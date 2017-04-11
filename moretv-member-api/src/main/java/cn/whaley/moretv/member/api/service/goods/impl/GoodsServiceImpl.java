@@ -79,7 +79,7 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
             GoodsDto goodsDto = JSON.parseObject(entry.getValue(), GoodsDto.class);
             Integer goodsClass = goodsDto.getGoodsClass();
 
-            if (!goodsType.equals(goodsDto.getGoodsType())) {
+            if (!goodsDto.getIsDisplayed() || !goodsType.equals(goodsDto.getGoodsType())) {
                 continue;
             }
 
