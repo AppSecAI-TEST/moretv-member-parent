@@ -42,7 +42,7 @@ public class ExternalManage {
         HttpHelper httpHandle = new HttpHelper();
         httpHandle.setConnectTimeout(5000);
         httpHandle.setReadTimeout(8000);
-        String uri = tencent.getServer() + "/get_token?version=1&format=json&appid=" + tencent.getAppId() + "&appkey=" + tencent.getAppKey();
+        String uri = tencent.getTokenServer() + "&appid=" + tencent.getAppId() + "&appkey=" + tencent.getAppKey();
         LogHelper.getLogger().info("external_uri_request,uri:" + uri);
         String res = httpHandle.doGet(uri);
         LogHelper.getLogger().info("external_uri_response,response:" + res + ",uri:" + uri);

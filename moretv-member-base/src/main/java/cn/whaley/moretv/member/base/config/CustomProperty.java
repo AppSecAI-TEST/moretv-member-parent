@@ -40,6 +40,11 @@ public class CustomProperty {
         private String appId;        //腾讯AppId
         private String appKey;       //腾讯AppKey
 
+        private String tokenServer;
+        private String accountApplicationServer;
+        private String createOrderServer;
+        private String deliveryNoticeServer;
+
         public String getServer() {
             return server;
         }
@@ -62,6 +67,38 @@ public class CustomProperty {
 
         public void setAppKey(String appKey) {
             this.appKey = appKey;
+        }
+
+        public String getTokenServer() {
+            return tokenServer;
+        }
+
+        public void setTokenServer(String tokenServer) {
+            this.tokenServer = tokenServer;
+        }
+
+        public String getAccountApplicationServer() {
+            return accountApplicationServer;
+        }
+
+        public void setAccountApplicationServer(String accountApplicationServer) {
+            this.accountApplicationServer = accountApplicationServer;
+        }
+
+        public String getCreateOrderServer() {
+            return createOrderServer;
+        }
+
+        public void setCreateOrderServer(String createOrderServer) {
+            this.createOrderServer = createOrderServer;
+        }
+
+        public String getDeliveryNoticeServer() {
+            return deliveryNoticeServer;
+        }
+
+        public void setDeliveryNoticeServer(String deliveryNoticeServer) {
+            this.deliveryNoticeServer = deliveryNoticeServer;
         }
     }
 
