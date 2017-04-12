@@ -1,7 +1,9 @@
 package cn.whaley.moretv.member.service.order;
 
 import cn.whaley.moretv.member.base.service.GenericService;
+import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.model.order.Order;
+
 
 
 public interface BaseOrderService extends GenericService<Order, Integer> {
@@ -13,4 +15,10 @@ public interface BaseOrderService extends GenericService<Order, Integer> {
      * @return
      */
     Boolean hasPurchaseOrder(Integer accountId);
+    /**
+     * 创建订单
+     * @param goods
+     * @return
+     */
+    Order createOrderByGoods(Goods goods,Order order);
 }

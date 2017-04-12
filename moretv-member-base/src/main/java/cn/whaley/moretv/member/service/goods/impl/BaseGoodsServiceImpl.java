@@ -9,10 +9,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
-
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
-import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
@@ -21,7 +18,9 @@ import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.service.goods.BaseGoodsService;
 import cn.whaley.moretv.member.service.order.BaseOrderService;
 
+import com.alibaba.fastjson.JSON;
 
+	
 /**
  * Goods Base ServiceImpl
  *
