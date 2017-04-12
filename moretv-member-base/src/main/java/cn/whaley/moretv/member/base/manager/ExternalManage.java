@@ -1,8 +1,8 @@
 package cn.whaley.moretv.member.base.manager;
 
+import cn.whaley.moretv.member.base.config.CustomProperty;
 import cn.whaley.moretv.member.base.util.HttpHelper;
 import cn.whaley.moretv.member.base.util.LogHelper;
-import cn.whaley.moretv.member.base.util.PropertiyHelp;
 
 import java.util.Map;
 
@@ -18,6 +18,12 @@ public class ExternalManage {
 
     protected static String accessToken = null;
     protected static long timestamp = 0;
+
+    private static CustomProperty.Tencent tencent;
+
+    public static void setTencent(CustomProperty.Tencent tencent) {
+        ExternalManage.tencent = tencent;
+    }
 
     public static String getAccessToken() throws Exception {
         if ((System.currentTimeMillis() - timestamp) > (90 * 60 * 1000) || accessToken == null) {
@@ -36,7 +42,7 @@ public class ExternalManage {
         HttpHelper httpHandle = new HttpHelper();
         httpHandle.setConnectTimeout(5000);
         httpHandle.setReadTimeout(8000);
-        String uri = PropertiyHelp.getContextProperty("TENCENT_SERVER") + "/get_token?version=1&format=json&appid=" + PropertiyHelp.getContextProperty("APP_ID") + "&appkey=" + PropertiyHelp.getContextProperty("APP_KEY");
+        String uri = tencent.getServer() + "/get_token?version=1&format=json&appid=" + tencent.getAppId() + "&appkey=" + tencent.getAppKey();
         LogHelper.getLogger().info("external_uri_request,uri:" + uri);
         String res = httpHandle.doGet(uri);
         LogHelper.getLogger().info("external_uri_response,response:" + res + ",uri:" + uri);

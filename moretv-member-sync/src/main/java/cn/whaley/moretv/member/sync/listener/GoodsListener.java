@@ -2,7 +2,6 @@ package cn.whaley.moretv.member.sync.listener;
 
 
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
-import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
 import cn.whaley.moretv.member.base.constant.GlobalConstant;
 
 import cn.whaley.moretv.member.base.exception.SystemException;
@@ -38,7 +37,7 @@ public class GoodsListener {
         GoodsDto goodsDto = convertGoods(goodsStr);
         ResultResponse resBase = goodsService.syncGoods(goodsDto);
 
-        if (resBase.getCode() != ApiCodeInfo.API_OK) {
+        if (!resBase.isSuccess()) {
             throw new SystemException(String.valueOf(resBase.getCode()), resBase.getMsg());
         }
         logger.info("goods_listen: sync Goods success!");
