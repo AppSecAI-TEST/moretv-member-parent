@@ -22,8 +22,11 @@ import com.alibaba.fastjson.JSON;
  * Created by tangzc on 2017/3/16.
  */
 @Service
-public abstract class BaseGoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer, GoodsSpuMapper> implements BaseGoodsSpuService {
-	
+public class BaseGoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer, GoodsSpuMapper> implements BaseGoodsSpuService {
+
+	@Autowired
+	protected GoodsSpuMapper goodsSpuMapper;
+
 	@Autowired
 	protected RedisTemplate redisTemplate;
 	
@@ -39,5 +42,9 @@ public abstract class BaseGoodsSpuServiceImpl extends GenericServiceImpl<GoodsSp
     	}
 		return goodsSpulist;
     }
-    
+
+	@Override
+	public GoodsSpuMapper getGenericMapper() {
+		return goodsSpuMapper;
+	}
 }

@@ -10,7 +10,6 @@ import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
-import cn.whaley.moretv.member.mapper.goods.GoodsMapper;
 import cn.whaley.moretv.member.service.goods.impl.BaseGoodsServiceImpl;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
@@ -38,9 +37,6 @@ import java.util.Map;
 public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsService {
 
     private static final Logger logger = LoggerFactory.getLogger(GoodsServiceImpl.class);
-
-    @Autowired
-    private GoodsMapper goodsMapper;
 
     @Autowired
     private MemberService memberService;
@@ -103,11 +99,6 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
         }
 
         return ResultResponse.success(goodsList);
-    }
-
-    @Override
-    public GoodsMapper getGenericMapper() {
-        return goodsMapper;
     }
 
 }

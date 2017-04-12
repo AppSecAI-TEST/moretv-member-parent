@@ -5,16 +5,12 @@ import cn.whaley.moretv.member.api.service.goods.GoodsSpuService;
 import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
-import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
-import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
-import cn.whaley.moretv.member.mapper.goods.GoodsSpuMapper;
 import cn.whaley.moretv.member.model.goods.GoodsSpu;
+import cn.whaley.moretv.member.service.goods.impl.BaseGoodsSpuServiceImpl;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -32,13 +28,7 @@ import java.util.Map;
 */
 @Service
 @Transactional
-public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer, GoodsSpuMapper> implements GoodsSpuService {
-
-    @Autowired
-    private GoodsSpuMapper goodsSpuMapper;
-
-    @Autowired
-    private RedisTemplate redisTemplate;
+public class GoodsSpuServiceImpl extends BaseGoodsSpuServiceImpl implements GoodsSpuService {
 
     @Override
     public ResultResponse getGoodsSpuList() {
@@ -73,8 +63,4 @@ public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer, G
         return ResultResponse.success(goodsSpuList);
     }
 
-    @Override
-    public GoodsSpuMapper getGenericMapper() {
-        return goodsSpuMapper;
-    }
 }

@@ -20,7 +20,10 @@ import java.util.Map;
  * Created by Bob Jiang on 2017/3/30.
  */
 @Service
-public abstract class BaseMemberServiceImpl extends GenericServiceImpl<Member, Integer, MemberMapper> implements BaseMemberService {
+public class BaseMemberServiceImpl extends GenericServiceImpl<Member, Integer, MemberMapper> implements BaseMemberService {
+
+    @Autowired
+    protected MemberMapper memberMapper;
 
     @Autowired
     protected RedisTemplate redisTemplate;
@@ -43,4 +46,8 @@ public abstract class BaseMemberServiceImpl extends GenericServiceImpl<Member, I
         return members;
     }
 
+    @Override
+    public MemberMapper getGenericMapper() {
+        return memberMapper;
+    }
 }

@@ -4,9 +4,8 @@ import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
-import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
-import cn.whaley.moretv.member.mapper.goods.GoodsSpuMapper;
 import cn.whaley.moretv.member.model.goods.GoodsSpu;
+import cn.whaley.moretv.member.service.goods.impl.BaseGoodsSpuServiceImpl;
 import cn.whaley.moretv.member.sync.service.goods.GoodsSpuService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -26,15 +25,12 @@ import org.springframework.transaction.annotation.Transactional;
 */
 @Service
 @Transactional
-public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer, GoodsSpuMapper> implements GoodsSpuService {
+public class GoodsSpuServiceImpl extends BaseGoodsSpuServiceImpl implements GoodsSpuService {
 
     private static final Logger logger = LoggerFactory.getLogger(GoodsSpuServiceImpl.class);
 
     @Autowired
     private RedisTemplate redisTemplate;
-
-    @Autowired
-    private GoodsSpuMapper goodsSpuMapper;
 
     @Override
     public ResultResponse syncGoodsSpu(GoodsSpu goodsSpu) {
@@ -86,8 +82,4 @@ public class GoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Integer, G
         }
     }
 
-    @Override
-    public GoodsSpuMapper getGenericMapper() {
-        return goodsSpuMapper;
-    }
 }

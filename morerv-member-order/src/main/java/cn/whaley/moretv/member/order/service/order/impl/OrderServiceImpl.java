@@ -20,16 +20,20 @@ import cn.whaley.moretv.member.order.service.order.OrderService;
 import cn.whaley.moretv.member.service.goods.BaseGoodsService;
 import cn.whaley.moretv.member.service.goods.BaseGoodsSpuService;
 import cn.whaley.moretv.member.service.order.impl.BaseOrderServiceImpl;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional
 public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderService {
 
 	private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 	
 	@Autowired
-	BaseGoodsService baseGoodsService;
+	private BaseGoodsService baseGoodsService;
 	
 	@Autowired
-	BaseGoodsSpuService baseGoodsSpuService;
+	private BaseGoodsSpuService baseGoodsSpuService;
 	
 	    
 	@Override

@@ -1,12 +1,10 @@
 package cn.whaley.moretv.member.service.order.impl;
 
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.mapper.order.OrderItemMapper;
 import cn.whaley.moretv.member.model.goods.GoodsSku;
@@ -15,15 +13,14 @@ import cn.whaley.moretv.member.service.order.BaseOrderItemService;
 
 
 @Service
-public abstract class BaseOrderItemServiceImpl extends GenericServiceImpl<OrderItem, Integer, OrderItemMapper> implements BaseOrderItemService {
+public class BaseOrderItemServiceImpl extends GenericServiceImpl<OrderItem, Integer, OrderItemMapper> implements BaseOrderItemService {
 
 	@Autowired
-	OrderItemMapper OrderItemMapper;
+	protected OrderItemMapper OrderItemMapper;
 	
     @Autowired
     protected RedisTemplate redisTemplate;
 
-    
     @Override
     public  OrderItem createOrderItemByGoodsSku(GoodsSku goodsSku,OrderItem orderItem){
 

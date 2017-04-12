@@ -8,13 +8,11 @@ import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
-import cn.whaley.moretv.member.mapper.member.MemberMapper;
 import cn.whaley.moretv.member.model.member.Member;
 import cn.whaley.moretv.member.model.member.MemberUserAuthority;
 import cn.whaley.moretv.member.service.member.impl.BaseMemberServiceImpl;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,9 +29,6 @@ import java.util.List;
 @Service
 @Transactional
 public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberService {
-
-    @Autowired
-    private MemberMapper memberMapper;
 
     @Autowired
     private MemberUserAuthorityService memberUserAuthorityService;
@@ -111,11 +106,6 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
             return true;
         }
         return false;
-    }
-
-    @Override
-    public MemberMapper getGenericMapper() {
-        return memberMapper;
     }
 
 }

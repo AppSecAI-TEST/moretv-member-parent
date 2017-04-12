@@ -5,7 +5,6 @@ import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.util.BeanHandler;
-import cn.whaley.moretv.member.mapper.goods.GoodsMapper;
 import cn.whaley.moretv.member.mapper.goods.GoodsSkuMapper;
 import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.model.goods.GoodsSku;
@@ -34,9 +33,6 @@ import java.util.List;
 public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsService {
 
     private static final Logger logger = LoggerFactory.getLogger(GoodsServiceImpl.class);
-
-    @Autowired
-    private GoodsMapper goodsMapper;
 
     @Autowired
     private GoodsSkuMapper goodsSkuMapper;
@@ -104,11 +100,6 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
                 logger.info("syncGoods: 同步商品SKU数据, goodsCode:{}, skuId:{}", goodsDto.getGoodsCode(), sku.getId());
             }
         }
-    }
-
-    @Override
-    public GoodsMapper getGenericMapper() {
-        return goodsMapper;
     }
 
 }
