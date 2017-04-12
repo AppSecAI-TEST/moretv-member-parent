@@ -26,6 +26,12 @@ public class GoodsSku extends BaseModel<Integer> implements Serializable {
     private String memberCode;
 
     /**
+     * 会员名称
+     * member_name
+     */
+    private String memberName;
+
+    /**
      * 月unit
      * duration_month
      */
@@ -103,6 +109,24 @@ public class GoodsSku extends BaseModel<Integer> implements Serializable {
      */
     public void setMemberCode(String memberCode) {
         this.memberCode = memberCode;
+    }
+
+    /**
+     * 会员名称
+     * member_name
+     */
+    public String getMemberName() {
+        return memberName;
+    }
+
+    /**
+     * 会员名称
+     * member_name
+     *
+     * @param memberName 会员名称
+     */
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
     }
 
     /**
@@ -240,6 +264,7 @@ public class GoodsSku extends BaseModel<Integer> implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", goodsCode=").append(goodsCode);
         sb.append(", memberCode=").append(memberCode);
+        sb.append(", memberName=").append(memberName);
         sb.append(", durationMonth=").append(durationMonth);
         sb.append(", durationDay=").append(durationDay);
         sb.append(", originalPrice=").append(originalPrice);

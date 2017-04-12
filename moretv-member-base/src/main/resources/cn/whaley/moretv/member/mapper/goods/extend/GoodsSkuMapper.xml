@@ -17,6 +17,9 @@
             <if test="memberCode != null" >
                 member_code,
             </if>
+            <if test="memberName != null" >
+                member_name,
+            </if>
             <if test="durationMonth != null" >
                 duration_month,
             </if>
@@ -48,6 +51,9 @@
             </if>
             <if test="memberCode != null" >
                 #{memberCode,jdbcType=VARCHAR},
+            </if>
+            <if test="memberName != null" >
+                #{memberName,jdbcType=VARCHAR},
             </if>
             <if test="durationMonth != null" >
                 #{durationMonth,jdbcType=INTEGER},
