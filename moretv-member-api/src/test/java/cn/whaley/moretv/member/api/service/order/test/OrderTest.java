@@ -15,8 +15,6 @@ import cn.whaley.moretv.member.api.service.order.OrderService;
 import cn.whaley.moretv.member.model.order.Order;
 
 
-/*@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(Application.class)*/
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class OrderTest {

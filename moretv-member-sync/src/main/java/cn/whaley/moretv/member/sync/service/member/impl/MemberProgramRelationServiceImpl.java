@@ -32,6 +32,7 @@ import com.alibaba.fastjson.JSON;
 @Service
 @Transactional
 public class MemberProgramRelationServiceImpl extends GenericServiceImpl<MemberProgramRelation, Integer, MemberProgramRelationMapper> implements MemberProgramRelationService {
+
     private static final Logger logger = LoggerFactory.getLogger(MemberProgramRelationServiceImpl.class);
     
     @Autowired

@@ -9,7 +9,6 @@ import cn.whaley.moretv.member.base.util.HttpHelper;
 import cn.whaley.moretv.member.base.util.JsonHelper;
 import cn.whaley.moretv.member.base.util.LogHelper;
 import cn.whaley.moretv.member.base.util.MD5Util;
-import cn.whaley.moretv.member.base.util.PropertiyHelp;
 
 /**
  * 支付接口
@@ -19,6 +18,24 @@ import cn.whaley.moretv.member.base.util.PropertiyHelp;
  */
 public class PayManage {
 
+	private static String PAY_GATEWAY_SERVER;
+	private static String LOCAL_HOST_SERVER;
+	private static String TEMP_PAY_DISPATCH_URL;
+
+	private static String localNotifyUrl = null;
+
+	public static void setPayGatewayServer(String payGatewayServer) {
+		PAY_GATEWAY_SERVER = payGatewayServer;
+	}
+
+	public static void setLocalHostServer(String localHostServer) {
+		LOCAL_HOST_SERVER = localHostServer;
+	}
+
+	public static void setTempPayDispatchUrl(String tempPayDispatchUrl) {
+		TEMP_PAY_DISPATCH_URL = tempPayDispatchUrl;
+	}
+
 	public static Map<String, Object> preCreateOrder(String payMethod, String orderNo, String amount, String goodsNo)
 			throws Exception {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -27,7 +44,7 @@ public class PayManage {
         HttpHelper httpHandle = new HttpHelper();
         httpHandle.setConnectTimeout(5000);
         httpHandle.setReadTimeout(5000);
-		String uri = PropertiyHelp.getContextProperty("PAY_GATEWAY_SERVER") + "/pay/pre_create_order";
+		String uri = PAY_GATEWAY_SERVER + "/pay/pre_create_order";
         LogHelper.getLogger().info("external_uri_request,uri:" + uri);
         
 		String notifyUrl = getLocalNotifyUrl();
@@ -89,7 +106,7 @@ public class PayManage {
 		httpHandle.setConnectTimeout(5000);
 		httpHandle.setReadTimeout(5000);
 
-		String uri = PropertiyHelp.getContextProperty("PAY_GATEWAY_SERVER") + "/pay/agin_to_pay";
+		String uri = PAY_GATEWAY_SERVER + "/pay/agin_to_pay";
 		LogHelper.getLogger().info("external_uri_request,uri:" + uri);
 
 		Map<String, String> parameterMap = new HashMap<String, String>();
@@ -133,13 +150,11 @@ public class PayManage {
 		return resultMap;
 	}
 
-	private static String localNotifyUrl = null;
-
 	private static String getLocalNotifyUrl() {
 		if (localNotifyUrl == null) {
 			synchronized (PayManage.class) {
 				if (localNotifyUrl == null) {
-					localNotifyUrl = PropertiyHelp.getContextProperty("LOCAL_HOST_SERVER")
+					localNotifyUrl = LOCAL_HOST_SERVER
 							+ "/order/notification_private";
 				}
 			}
@@ -161,7 +176,7 @@ public class PayManage {
         HttpHelper httpHandle = new HttpHelper();
         httpHandle.setConnectTimeout(5000);
         httpHandle.setReadTimeout(5000);
-		String uri = PropertiyHelp.getContextProperty("TEMP_PAY_DISPATCH_URL") + "/update_order_status";
+		String uri = TEMP_PAY_DISPATCH_URL + "/update_order_status";
         LogHelper.getLogger().info("notifyTempServer_request,uri:" + uri);
 
         Map<String,String> parameterMap = new HashMap<String, String>();

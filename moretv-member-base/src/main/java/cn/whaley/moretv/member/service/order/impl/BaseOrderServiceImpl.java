@@ -17,10 +17,10 @@ import cn.whaley.moretv.member.service.order.BaseOrderService;
 
 
 @Service
-public abstract class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, OrderMapper> implements BaseOrderService {
+public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, OrderMapper> implements BaseOrderService {
 
 	@Autowired
-	OrderMapper orderMapper;
+	protected OrderMapper orderMapper;
 	
     @Autowired
     protected RedisTemplate redisTemplate;

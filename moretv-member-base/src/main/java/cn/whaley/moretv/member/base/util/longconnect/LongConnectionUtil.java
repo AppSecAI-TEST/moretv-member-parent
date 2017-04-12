@@ -3,7 +3,7 @@ package cn.whaley.moretv.member.base.util.longconnect;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import cn.whaley.moretv.member.base.config.LongConnectionProperty;
+import cn.whaley.moretv.member.base.config.CustomProperty;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.HttpEntity;
@@ -24,23 +24,19 @@ import com.alibaba.fastjson.JSONObject;
 public class LongConnectionUtil {
     private static Logger logger = LoggerFactory.getLogger(LongConnectionUtil.class);
 
-    private static LongConnectionProperty longConnectionProperty;
+    private static CustomProperty.LongConnection longConnection;
 
-    public static LongConnectionProperty getLongConnectionProperty() {
-        return longConnectionProperty;
+    public static void setLongConnection(CustomProperty.LongConnection longConnection) {
+        LongConnectionUtil.longConnection = longConnection;
     }
 
-    public static void setLongConnectionProperty(LongConnectionProperty longConnectionProperty) {
-        LongConnectionUtil.longConnectionProperty = longConnectionProperty;
-    }
-    
     public static boolean pushForSpecificUsers(LongConnectionMsg msg) {
         CloseableHttpClient httpclient = null;
         CloseableHttpResponse response = null;
         try {
             httpclient = HttpClients.createDefault();
             RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(3000).setConnectTimeout(3000).build();
-            HttpPost httpPost = new HttpPost(longConnectionProperty.getUrl());
+            HttpPost httpPost = new HttpPost(longConnection.getUrl());
             httpPost.setConfig(requestConfig);
             String params = setParam(msg);
             StringEntity stringEntity = new StringEntity(params, ContentType.create("application/x-www-form-urlencoded", "UTF-8"));
@@ -81,13 +77,13 @@ public class LongConnectionUtil {
     private static String setParam(LongConnectionMsg msg) throws UnsupportedEncodingException {
         StringBuffer sb = new StringBuffer();
         String time = String.valueOf(System.currentTimeMillis() / 1000);
-        String sign = DigestUtils.sha1Hex(longConnectionProperty.getAppsecret() + time + time);
+        String sign = DigestUtils.sha1Hex(longConnection.getAppSecret() + time + time);
         String jsonMsg = JSON.toJSONString(msg);
         logger.info("pushForSpecificUsers jsonMsg->{}", jsonMsg);
         String data = URLEncoder.encode(Base64.encodeBase64String(jsonMsg.getBytes()), "UTF-8");
-        sb.append("app_key=").append(longConnectionProperty.getAppkey()).append("&round=").append(time)
+        sb.append("app_key=").append(longConnection.getAppKey()).append("&round=").append(time)
                 .append("&timestamp=").append(time).append("&sign=").append(sign).append("&business_type=")
-                .append(longConnectionProperty.getBusinesstype()).append("&data=").append(data).append("&targets=");
+                .append(longConnection.getBusinessType()).append("&data=").append(data).append("&targets=");
         
         for(Integer userId : msg.getAccoundId()){
             sb.append(userId.toString()).append(",");

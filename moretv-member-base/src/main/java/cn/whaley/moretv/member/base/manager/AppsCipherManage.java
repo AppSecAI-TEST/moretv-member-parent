@@ -11,7 +11,6 @@ import com.alibaba.fastjson.JSONObject;
 import cn.whaley.moretv.member.base.util.Base64Helper;
 import cn.whaley.moretv.member.base.util.HttpHelper;
 import cn.whaley.moretv.member.base.util.LogHelper;
-import cn.whaley.moretv.member.base.util.PropertiyHelp;
 
 
 /**
@@ -21,6 +20,18 @@ import cn.whaley.moretv.member.base.util.PropertiyHelp;
  * 
  */
 public class AppsCipherManage {
+
+	private static String APPS_ENCRYPT_URL;
+	private static String APPS_DECRYPTO_URL;
+
+	public static void setAppsEncryptUrl(String appsEncryptUrl) {
+		APPS_ENCRYPT_URL = appsEncryptUrl;
+	}
+
+	public static void setAppsDecryptoUrl(String appsDecryptoUrl) {
+		APPS_DECRYPTO_URL = appsDecryptoUrl;
+	}
+
 	/**
 	 * apps加密
 	 * 
@@ -34,7 +45,7 @@ public class AppsCipherManage {
 		HttpHelper httpHandle = new HttpHelper();
 		httpHandle.setConnectTimeout(5000);
 		httpHandle.setReadTimeout(5000);
-		String url = PropertiyHelp.getContextProperty("APPS_ENCRYPT_URL");
+		String url = APPS_ENCRYPT_URL;
 		LogHelper.getLogger().info("appsEncrypto_request,uri:" + url);
 
 		String res = null;
@@ -79,7 +90,7 @@ public class AppsCipherManage {
 		String decryptoData = null;
 		JSONObject JsonObject = null;
 		try {
-			String uri = PropertiyHelp.getContextProperty("APPS_DECRYPTO_URL") + "?" + URLDecoder.decode(data, "utf-8");
+			String uri = APPS_DECRYPTO_URL + "?" + URLDecoder.decode(data, "utf-8");
 			LogHelper.getLogger().info("appsDecrypto_request,uri:" + uri);
 			res = httpHandle.doGet(uri);
 			LogHelper.getLogger().info("appsDecrypto_response,response" + res);

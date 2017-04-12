@@ -29,10 +29,13 @@ import com.alibaba.fastjson.JSON;
  * Created by tangzc on 2017/3/16.
  */
 @Service
-public abstract class BaseGoodsServiceImpl extends GenericServiceImpl<Goods, Integer, GoodsMapper> implements BaseGoodsService {
-	
+public class BaseGoodsServiceImpl extends GenericServiceImpl<Goods, Integer, GoodsMapper> implements BaseGoodsService {
+
+    @Autowired
+    protected GoodsMapper goodsMapper;
+
 	@Autowired
-	BaseOrderService baseOrderService;
+    protected BaseOrderService baseOrderService;
 	
 	@Autowired
 	protected RedisTemplate redisTemplate;
@@ -74,5 +77,10 @@ public abstract class BaseGoodsServiceImpl extends GenericServiceImpl<Goods, Int
     	}
     	response = ResultResponse.success(goods);
 		return response;
+    }
+
+    @Override
+    public GoodsMapper getGenericMapper() {
+        return goodsMapper;
     }
 }
