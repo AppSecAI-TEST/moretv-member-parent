@@ -1,4 +1,4 @@
-package cn.whaley.moretv.member.base.util.longconnect;
+package cn.whaley.moretv.member.base.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

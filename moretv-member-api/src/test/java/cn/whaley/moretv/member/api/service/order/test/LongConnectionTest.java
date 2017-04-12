@@ -8,9 +8,9 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.whaley.moretv.member.base.util.longconnect.ApplicationContextProvider;
+import cn.whaley.moretv.member.base.config.ApplicationContextUtil;
 import cn.whaley.moretv.member.base.util.longconnect.LongConnectionMsg;
-import cn.whaley.moretv.member.base.util.longconnect.LongConnectionProperty;
+import cn.whaley.moretv.member.base.config.LongConnectionProperty;
 import cn.whaley.moretv.member.base.util.longconnect.LongConnectionUtil;
 
 
@@ -20,7 +20,7 @@ public class LongConnectionTest {
     
     @Before
     public void setup() {
-        LongConnectionProperty longConnectionProperty = ApplicationContextProvider.getBean("longConnectionProperty",LongConnectionProperty.class);
+        LongConnectionProperty longConnectionProperty = ApplicationContextUtil.getBean(LongConnectionProperty.class);
         LongConnectionUtil.setLongConnectionProperty(longConnectionProperty);
     }
     

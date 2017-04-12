@@ -1,4 +1,4 @@
-package cn.whaley.moretv.member.base.util.longconnect;
+package cn.whaley.moretv.member.base.config;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -6,18 +6,18 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ApplicationContextProvider implements ApplicationContextAware {
+public class ApplicationContextUtil implements ApplicationContextAware {
 
     private static ApplicationContext context;
 
-    private ApplicationContextProvider(){}
+    private ApplicationContextUtil(){}
 
-    public static ApplicationContext getApplicationContext() {
-        return context;
+    public static <T> T getBean(Class<T> clazz){
+        return context.getBean(clazz);
     }
 
-    public static <T> T getBean(String name,Class<T> aClass){
-        return context.getBean(name,aClass);
+    public static Object getBean(String name){
+        return context.getBean(name);
     }
 
     @Override

@@ -3,6 +3,7 @@ package cn.whaley.moretv.member.base.util.longconnect;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import cn.whaley.moretv.member.base.config.LongConnectionProperty;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.HttpEntity;
