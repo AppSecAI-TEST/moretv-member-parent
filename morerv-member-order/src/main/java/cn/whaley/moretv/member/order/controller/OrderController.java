@@ -23,6 +23,6 @@ public class OrderController {
      */
     @RequestMapping(value = "/create_order", method = RequestMethod.POST)
     public ResultResponse create_order(BaseRequest baseRequest) {
-        return orderService.creatOrder(null, null, 1, 1);
+        return orderService.createOrder(null, null, 1, 1);
     }
 }

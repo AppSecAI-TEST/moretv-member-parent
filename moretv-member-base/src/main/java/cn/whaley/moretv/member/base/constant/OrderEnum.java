@@ -209,4 +209,30 @@ public interface OrderEnum {
         }
     }
 
+    /**
+     * CpOrder订单状态
+     */
+    enum CpOrderStatus {
+
+        DELETE(0, "无效"),
+        VALID(1, "有效"),
+        COMPLETE(2, "完成");
+
+        private int code;
+        private String name;
+
+        CpOrderStatus (int code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package cn.whaley.moretv.member.base.util;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by leiwenbin on 15/9/29.
@@ -13,23 +14,23 @@ public class LogHelper {
 
     private static volatile LogHelper instance = null;
 
-    private LogHelper() {
-        this.logger = Logger.getLogger("dolphinLogger");
-        setLogger(logger);
+    private LogHelper(Class clazz) {
+        this.logger = LoggerFactory.getLogger(clazz);
     }
 
-    public static Logger getLogger() {
+    public static Logger getLogger(Class clazz) {
         if(instance == null) {
-            synchronized(LogHelper.class) {
+            synchronized(clazz) {
                 if(instance == null) {
-                    instance = new LogHelper();
+                    instance = new LogHelper(clazz);
                 }
             }
         }
         return instance.logger;
     }
 
-    protected void setLogger(Logger logger) {
-        this.logger = logger;
+    public static Logger getLogger() {
+        return getLogger(LogHelper.class);
     }
+
 }

@@ -2,6 +2,7 @@ package cn.whaley.moretv.member.service.goods;
 
 
 
+import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.service.GenericService;
 import cn.whaley.moretv.member.model.goods.Goods;
@@ -20,8 +21,8 @@ public interface BaseGoodsService extends GenericService<Goods, Integer> {
 	 * 通过商品标号查询商品信息
 	 * @return
 	 */
-    Goods getGoodsByGoodsNo(String goodsNo);
+	GoodsDto getGoodsByGoodsNo(String goodsNo);
     
-    ResultResponse<Goods> checkCanBuyGoods(String goodsNo,int accountId);
+    ResultResponse<GoodsDto> checkCanBuyGoods(String goodsNo,int accountId);
 
 }

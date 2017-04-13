@@ -3,11 +3,12 @@ package cn.whaley.moretv.member.order.service.order.impl;
 import java.util.Date;
 import java.util.List;
 
+import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
+import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
@@ -18,41 +19,35 @@ import cn.whaley.moretv.member.model.order.Order;
 import cn.whaley.moretv.member.model.order.OrderItem;
 import cn.whaley.moretv.member.order.service.order.OrderService;
 import cn.whaley.moretv.member.service.goods.BaseGoodsService;
-import cn.whaley.moretv.member.service.goods.BaseGoodsSkuService;
-import cn.whaley.moretv.member.service.order.BaseOrderItemService;
 import cn.whaley.moretv.member.service.order.impl.BaseOrderServiceImpl;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional
 public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderService {
 
-	private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
-	
 	@Autowired
-	BaseGoodsService baseGoodsService;
-	
-	@Autowired
-	BaseGoodsSkuService baseGoodsSkuService;
-	
-	@Autowired
-	BaseOrderItemService baseOrderItemService;
+	private BaseGoodsService baseGoodsService;
 	
 	@Override
-	public ResultResponse creatOrder(String goodsCode, String payType,
+	public ResultResponse createOrder(String goodsCode, String payType,
 			int payAutoRenew, int accountId) {
 		Goods goods = null;
 		GoodsSku goodsSku = null;
 		Date now = new Date();
 		//检查商品
-	    ResultResponse<Goods> goodCheck= baseGoodsService.checkCanBuyGoods(goodsCode,accountId);
-	    if(goodCheck.isSuccess()){
+	    ResultResponse<GoodsDto> goodCheck= baseGoodsService.checkCanBuyGoods(goodsCode,accountId);
+	    if (!goodCheck.isSuccess()) {
 	    	return goodCheck;
-	    }else{
+	    } else {
 	    	goods = goodCheck.getData();
 	    }
 	    
-	    List<GoodsSku> goodsSkuList = baseGoodsSkuService.getGoodsSkuByGoodsNo(goodsCode);
-	    if(goodsSkuList == null || goodsSkuList.size()>1){
+	    List<GoodsSku> goodsSkuList = goodCheck.getData().getGoodsSkuList();
+	    if (goodsSkuList == null || goodsSkuList.size() > 1) {
 	    	ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE);
-	    }else{
+	    } else {
 	    	goodsSku = goodsSkuList.get(0);
 	    }
 	    
@@ -75,7 +70,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	    OrderItem orderItem = new OrderItem();
 	    orderItem.setOrderCode(orderItem.getOrderCode());
 	    orderItem.setCreateTime(now);
-	    orderItem = baseOrderItemService.createOrderItemByGoodsSku(goodsSku, orderItem);
+	    orderItem = createOrderItemByGoodsSku(goodsSku, orderItem);
 		return null;
 	}
 }

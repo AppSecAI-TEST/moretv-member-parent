@@ -15,6 +15,6 @@ public interface OrderService extends BaseOrderService {
      * @return
      */
     
-    ResultResponse creatOrder(String goodsCode, String payType,int payAutoRenew,int accountId);
+    ResultResponse createOrder(String goodsCode, String payType, int payAutoRenew, int accountId);
     
 }

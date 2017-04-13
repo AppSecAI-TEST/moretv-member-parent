@@ -23,6 +23,10 @@ public interface ApiCodeInfo {
     int API_DATA_ERR = 504;
     int API_SIGN_ERR = 505;
 
+    int API_TENCENT_ACCESS_TOKEN_ERR = 550;
+    int API_TENCENT_REQUEST_ERR = 551;
+    int API_TENCENT_RESULT_ERR = 552;
+
     //business
     int API_DATA_GOODS_STATUS_ERR = 510;
     int API_PARAM_ACCOUNT_ID_NULL = 511;

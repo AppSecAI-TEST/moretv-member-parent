@@ -13,6 +13,7 @@
         <module>moretv-member-sync</module>
         <module>moretv-member-api</module>
         <module>morerv-member-order</module>
+        <module>morerv-member-notify</module>
     </modules>
   
     <properties>

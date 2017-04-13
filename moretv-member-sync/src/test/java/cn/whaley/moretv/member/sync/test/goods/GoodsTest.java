@@ -1,8 +1,8 @@
 package cn.whaley.moretv.member.sync.test.goods;
 
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
+import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.model.goods.Goods;
-import cn.whaley.moretv.member.sync.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.sync.service.goods.GoodsService;
 import cn.whaley.moretv.member.sync.test.base.BaseTest;
 import com.alibaba.fastjson.JSON;

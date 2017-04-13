@@ -18,6 +18,10 @@ public enum ApiCodeEnum {
     API_SIGN_ERR(ApiCodeInfo.API_SIGN_ERR, "sign error"),
     API_DATA_NOT_EXIST(ApiCodeInfo.API_DATA_NOT_EXIST, "data not exist"),
 
+    API_TENCENT_ACCESS_TOKEN_ERR(ApiCodeInfo.API_TENCENT_ACCESS_TOKEN_ERR, "tencent access token error"),
+    API_TENCENT_REQUEST_ERR(ApiCodeInfo.API_TENCENT_REQUEST_ERR, "tencent request error"),
+    API_TENCENT_RESULT_ERR(ApiCodeInfo.API_TENCENT_RESULT_ERR, "tencent result error"),
+
     API_DATA_GOODS_STATUS_ERR(ApiCodeInfo.API_DATA_GOODS_STATUS_ERR, "goodsStatus error"),
     API_PARAM_ACCOUNT_ID_NULL(ApiCodeInfo.API_PARAM_ACCOUNT_ID_NULL, "accountId is null"),
     API_PARAM_GOODS_TAG_ID_NULL(ApiCodeInfo.API_PARAM_GOODS_TAG_ID_NULL, "goodsTag is null"),

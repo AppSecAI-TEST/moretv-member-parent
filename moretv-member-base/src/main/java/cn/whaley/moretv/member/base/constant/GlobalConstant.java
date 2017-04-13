@@ -13,10 +13,9 @@ public interface GlobalConstant {
     
     String WHALEY_SERVICE_ID = "111";
 
-    // 白金会员编码
-    String MORETV_MEMBER_CODE_BASIC = "basic";
-    // 钻石会员编码
-    String MORETV_MEMBER_CODE_DIAMOND = "diamond";
+    String CHARSET_UTF8 = "UTF-8";
+
+    String TENCENT_RESULT_STUTAS_YES = "0";
 
     //商品队列
     String MORETV_PUBLISH_GOODS_QUEUE = "moretv.publish.goods.queue";

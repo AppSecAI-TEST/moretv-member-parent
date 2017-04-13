@@ -1,8 +1,12 @@
 package cn.whaley.moretv.member.service.order.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
+import cn.whaley.moretv.member.mapper.order.OrderItemMapper;
+import cn.whaley.moretv.member.model.goods.GoodsSku;
+import cn.whaley.moretv.member.model.order.OrderItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,8 +23,13 @@ import cn.whaley.moretv.member.service.order.BaseOrderService;
 @Service
 public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, OrderMapper> implements BaseOrderService {
 
+	private static final Logger logger = LoggerFactory.getLogger(BaseOrderService.class);
+
 	@Autowired
 	protected OrderMapper orderMapper;
+
+	@Autowired
+	protected OrderItemMapper orderItemMapper;
 	
     @Autowired
     protected RedisTemplate redisTemplate;
@@ -32,7 +41,7 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
     }
     
     @Override
-    public  Order createOrderByGoods(Goods goods,Order order){
+    public  Order createOrderByGoods(Goods goods, Order order) {
 		UUID uuid = UUID.randomUUID();
 		order.setOrderCode("MT" + uuid.toString().replace("-", ""));
 	    order.setOrderTitle(goods.getGoodsName());
@@ -47,6 +56,19 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
     	
 		return order;
     }
+
+    @Override
+	public OrderItem createOrderItemByGoodsSku(GoodsSku goodsSku, OrderItem orderItem) {
+
+		orderItem.setMemberCode(goodsSku.getMemberCode());
+		orderItem.setMemberName(goodsSku.getMemberName());
+		orderItem.setAmount(1);
+		orderItem.setUnitPrice(goodsSku.getOriginalPrice());
+		orderItem.setRealPrice(goodsSku.getSellingPrice());
+
+		orderItemMapper.insert(orderItem);
+		return orderItem;
+	}
     
     public void checkCanOrderCount(Integer accountId){
 	

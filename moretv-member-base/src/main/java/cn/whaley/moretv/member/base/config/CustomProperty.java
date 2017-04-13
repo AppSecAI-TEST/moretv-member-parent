@@ -1,6 +1,7 @@
 package cn.whaley.moretv.member.base.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
@@ -143,6 +144,7 @@ public class CustomProperty {
         }
     }
 
+    @Bean
     public Tencent getTencent() {
         return tencent;
     }
@@ -151,6 +153,7 @@ public class CustomProperty {
         this.tencent = tencent;
     }
 
+    @Bean
     public LongConnection getLongConnection() {
         return longConnection;
     }

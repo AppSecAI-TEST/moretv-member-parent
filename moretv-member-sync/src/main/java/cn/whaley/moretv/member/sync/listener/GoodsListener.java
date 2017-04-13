@@ -4,9 +4,9 @@ package cn.whaley.moretv.member.sync.listener;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.GlobalConstant;
 
+import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.base.exception.SystemException;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
-import cn.whaley.moretv.member.sync.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.sync.service.goods.GoodsService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;

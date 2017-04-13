@@ -4,7 +4,10 @@ package cn.whaley.moretv.member.service.goods.impl;
 
 import java.util.Date;
 
+import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
+import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -35,29 +38,30 @@ public class BaseGoodsServiceImpl extends GenericServiceImpl<Goods, Integer, Goo
     protected GoodsMapper goodsMapper;
 
 	@Autowired
+    @Qualifier("baseOrderServiceImpl")
     protected BaseOrderService baseOrderService;
 	
 	@Autowired
 	protected RedisTemplate redisTemplate;
 	
     @Override
-	public Goods getGoodsByGoodsNo(String goodsNo){
-    	Goods goods = null;
-    	String goodsKey = "goodsKey";
+	public GoodsDto getGoodsByGoodsNo(String goodsNo) {
+        GoodsDto goods = null;
+    	String goodsKey = CacheKeyConstant.REDIS_KEY_GOODS;
     	HashOperations<String,String,String> ops = redisTemplate.opsForHash();
     	String goodsStr = ops.get(goodsKey, goodsNo);
     	if(goodsStr != null){
-    		goods = JSON.parseObject(goodsStr, Goods.class);
+    		goods = JSON.parseObject(goodsStr, GoodsDto.class);
     	}
 		return goods;
     }
     
     @Override
-	public ResultResponse<Goods> checkCanBuyGoods(String goodsNo,int accountId){
-    	ResultResponse<Goods> response = null;
+	public ResultResponse<GoodsDto> checkCanBuyGoods(String goodsNo,int accountId){
+    	ResultResponse<GoodsDto> response = null;
     	Date now =new Date();
     	//获取商品
-    	Goods goods = getGoodsByGoodsNo(goodsNo);
+        GoodsDto goods = getGoodsByGoodsNo(goodsNo);
     	if(goods != null && goods.getIsDisplayed()){
     		//上架时间
             if(goods.getStartTime()!=null && now.before(goods.getStartTime())){
@@ -67,7 +71,7 @@ public class BaseGoodsServiceImpl extends GenericServiceImpl<Goods, Integer, Goo
             	return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE,goods);
             }
             
-    		//首次购买
+//    		首次购买
     		if(GlobalEnum.GoodsClass.FIRST_GOODS.getCode() ==goods.getGoodsClass() && baseOrderService.hasPurchaseOrder(accountId)){
     			return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_CAN_NOT_BUY,goods);
     		}
