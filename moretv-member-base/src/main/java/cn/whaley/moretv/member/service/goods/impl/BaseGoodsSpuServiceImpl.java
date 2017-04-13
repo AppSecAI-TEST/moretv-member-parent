@@ -30,21 +30,9 @@ public class BaseGoodsSpuServiceImpl extends GenericServiceImpl<GoodsSpu, Intege
 	@Autowired
 	protected RedisTemplate redisTemplate;
 	
-    @Override
-    public List<GoodsSpu> getGoodsSpuByGoodsNo(String goodsNo){
-    	List<GoodsSpu> goodsSpulist = null;
-    	String goodsSpuKey = "goodsKey";
-    	HashOperations<String,String,String> ops = redisTemplate.opsForHash();
-    	String goodsStr = ops.get(goodsSpuKey, goodsNo);
-    	if(goodsStr != null){
-    		GoodsSpu goodsSpu = JSON.parseObject(goodsStr, GoodsSpu.class);
-    		goodsSpulist.add(goodsSpu);
-    	}
-		return goodsSpulist;
-    }
-
 	@Override
 	public GoodsSpuMapper getGenericMapper() {
 		return goodsSpuMapper;
 	}
+
 }

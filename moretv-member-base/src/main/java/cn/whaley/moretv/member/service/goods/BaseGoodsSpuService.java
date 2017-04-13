@@ -5,7 +5,6 @@ package cn.whaley.moretv.member.service.goods;
 import java.util.List;
 
 import cn.whaley.moretv.member.base.service.GenericService;
-import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.model.goods.GoodsSpu;
 
 
@@ -18,12 +17,5 @@ import cn.whaley.moretv.member.model.goods.GoodsSpu;
  * Created by  tangzc on 2017/3/16.
  */
 public interface BaseGoodsSpuService extends GenericService<GoodsSpu, Integer> {
-
-	/**
-	 * 通过商品标号查询对应会员明细
-	 * @param goodsNo
-	 * @return
-	 */
-    List<GoodsSpu> getGoodsSpuByGoodsNo(String goodsNo);
 
 }
