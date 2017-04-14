@@ -17,10 +17,12 @@ import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
 import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
-import cn.whaley.moretv.member.base.dto.pay.PayRequest;
+import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayRequest;
+import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayResponse;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.manager.PayManage;
 import cn.whaley.moretv.member.base.util.DateFormatUtil;
+import cn.whaley.moretv.member.base.util.paygateway.PayGatewayUtil;
 import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.model.goods.GoodsSku;
 import cn.whaley.moretv.member.model.order.Order;
@@ -82,61 +84,51 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	}
 
     @Override
-    public ResultResponse pay(PayRequest payRequest) {
+    public ResultResponse pay(PayGatewayRequest payGatewayRequest) {
         //TODO 1、MD5
         
         //2、验证
         //2.1、验证商品
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
-        String goodsStr = opsHash.get(CacheKeyConstant.REDIS_KEY_GOODS, payRequest.getGoodsCode());
+        String goodsStr = opsHash.get(CacheKeyConstant.REDIS_KEY_GOODS, payGatewayRequest.getGoodsCode());
         if(StringUtils.isEmpty(goodsStr)){
-            logger.error("申请支付, 商品不存在, 订单code->{}", payRequest.toString());
+            logger.error("申请支付, 商品不存在, 请求参数->{}", payGatewayRequest.toString());
             return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE);
         }
         
         //2.2、验证订单
-        Order order = orderMapper.getByOrderCode(payRequest.getOrderCode());
+        Order order = orderMapper.getByOrderCode(payGatewayRequest.getOrderCode());
         if(order == null){
-            logger.error("申请支付, 订单不存在, 订单code->{}", payRequest.getOrderCode());
+            logger.error("申请支付, 订单不存在, 请求参数->{}", payGatewayRequest.toString());
             return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
         }
         
         if(order.getTradeStatus().intValue() != OrderEnum.TradeStatus.TRADE_INIT.getCode()
                 || order.getPayStatus().intValue() != OrderEnum.PayStatus.WAITING_PAY.getCode()){
-            logger.error("申请支付,订单状态错误, 订单->{}", order.toString());
+            logger.error("申请支付,订单状态错误, 订单信息->{}", order.toString());
             return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_STATUS_ERR);
         }
         
         //3、向支付网关支付
-        Map<String, Object> result = null;
-        try {
-            result = PayManage.preCreateOrder(payRequest.getPayType(), payRequest.getOrderCode(),
-                    String.valueOf(payRequest.getFree()), payRequest.getGoodsCode());
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-        OrderPayResponse resOrderPayInfo = new OrderPayResponse();
-        
-        if (Integer.parseInt(result.get("status").toString()) == ApiCodeInfo.API_OK) {
-            resOrderPayInfo.setContent(result.get("content").toString());
-            resOrderPayInfo.setOrderNo(payRequest.getOrderCode());
-            resOrderPayInfo.setPayInfo(result.get("data").toString());
-            resOrderPayInfo.setLoopUrl("");//TODO 
-        } else {
-            logger.error("申请支付, 支付网关错误, 订单->{}", order.toString());
+        PayGatewayResponse payGatewayResponse = PayGatewayUtil.pay(payGatewayRequest);
+        if(payGatewayResponse == null ){
+            logger.error("申请支付, 支付网关http返回非200, 请求参数->{}", payGatewayRequest.toString());
             return ResultResponse.define(ApiCodeEnum.API_DATA_PAY_GATEWAY_ERR);
         }
-            
-        //4、更新订单状态
+        
+        if(payGatewayResponse.getStatus().intValue() != 1){
+            logger.error("申请支付, 支付网关错误, 支付网关返回->{}", payGatewayResponse.toString());
+            return ResultResponse.define(ApiCodeEnum.API_DATA_PAY_GATEWAY_ERR);
+        }
+        
+        //4、更新订单状态, 只会从[待支付]更新到[支付中]
         Map<String, Object> map = new HashMap<>();
         map.put("updateTime", new Date());
         map.put("newPayStatus", OrderEnum.PayStatus.PAYING.getCode());
         map.put("oldPayStatus", order.getPayStatus());
-        map.put("orderCode", payRequest.getOrderCode());
+        map.put("orderCode", payGatewayRequest.getOrderCode());
         orderMapper.updateOrderPayStatus(map);
-        
-        return ResultResponse.success(resOrderPayInfo);
+
+        return ResultResponse.success(new OrderPayResponse(payGatewayResponse.getContent()));
     }
 }

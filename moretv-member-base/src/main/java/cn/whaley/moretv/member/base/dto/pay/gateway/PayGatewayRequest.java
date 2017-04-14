@@ -1,10 +1,10 @@
-package cn.whaley.moretv.member.base.dto.pay;
+package cn.whaley.moretv.member.base.dto.pay.gateway;
 
 import java.io.Serializable;
 
 import cn.whaley.moretv.member.base.dto.request.BaseRequest;
 
-public class PayRequest extends BaseRequest implements Serializable {
+public class PayGatewayRequest extends BaseRequest implements Serializable {
 
     private static final long serialVersionUID = 799228014905820287L;
 
@@ -140,7 +140,7 @@ public class PayRequest extends BaseRequest implements Serializable {
 
     @Override
     public String toString() {
-        return "PayRequest [sessionToken=" + sessionToken + ", cip=" + cip + ", goodsCode=" + goodsCode + ", subject="
+        return super.toString() + "PayRequest [sessionToken=" + sessionToken + ", cip=" + cip + ", goodsCode=" + goodsCode + ", subject="
                 + subject + ", payAutoRenew=" + payAutoRenew + ", payType=" + payType + ", orderCode=" + orderCode
                 + ", free=" + free + ", expireTime=" + expireTime + ", sign=" + sign + "]";
     }
