@@ -23,7 +23,7 @@ import cn.whaley.moretv.member.service.order.BaseOrderService;
 @Service
 public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, OrderMapper> implements BaseOrderService {
 
-	private static final Logger logger = LoggerFactory.getLogger(BaseOrderService.class);
+    protected static final Logger logger = LoggerFactory.getLogger(BaseOrderService.class);
 
 	@Autowired
 	protected OrderMapper orderMapper;

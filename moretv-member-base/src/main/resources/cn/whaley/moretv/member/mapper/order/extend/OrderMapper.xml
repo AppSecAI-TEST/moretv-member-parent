@@ -20,4 +20,11 @@
     from business_order bod
     where bod.order_code = #{orderCode,jdbcType=VARCHAR}
   </select>
+  
+  <update id="updateOrderPayStatus" parameterType="java.util.Map" >
+    update business_order
+    set pay_status = #{newPayStatus,jdbcType=INTEGER},
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where order_code = #{orderCode,jdbcType=VARCHAR} and pay_status = #{oldPayStatus,jdbcType=INTEGER}
+  </update>
 </mapper>

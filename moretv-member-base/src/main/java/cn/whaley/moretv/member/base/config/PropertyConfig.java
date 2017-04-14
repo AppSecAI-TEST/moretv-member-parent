@@ -4,6 +4,8 @@ import cn.whaley.moretv.member.base.manager.AppsCipherManage;
 import cn.whaley.moretv.member.base.manager.ExternalManage;
 import cn.whaley.moretv.member.base.manager.MsdManage;
 import cn.whaley.moretv.member.base.util.longconnect.LongConnectionUtil;
+import cn.whaley.moretv.member.base.util.paygateway.PayGatewayUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,5 +27,6 @@ public class PropertyConfig {
         AppsCipherManage.setAppsEncryptUrl(customProperty.getAppsEncryptUrl());
         AppsCipherManage.setAppsDecryptoUrl(customProperty.getAppsDecryptoUrl());
         MsdManage.setMsdServer(customProperty.getMsdServer());
+        PayGatewayUtil.setCustomProperty(customProperty);
     }
 }
