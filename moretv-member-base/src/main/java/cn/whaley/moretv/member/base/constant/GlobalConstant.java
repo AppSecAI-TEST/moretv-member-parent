@@ -29,4 +29,5 @@ public interface GlobalConstant {
     //片库队列
     String MORETV_PUBLISH_CONTENT_PRODUCT_QUEUE = "moretv.publish.content.product.queue";
 
+    String PROGRAM_SOURCE_CODE_TENCENT = "tencent";
 }
