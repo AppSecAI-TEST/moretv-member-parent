@@ -11,4 +11,13 @@
         from cp_account cpacc
         where cpacc.account_id = #{accountId,jdbcType=INTEGER}
     </select>-->
+
+    <select id="getCpAccount" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from cp_account
+        where account_id = #{accountId, jdbcType=INTEGER}
+        and cp_source = #{cpSource, jdbcType=VARCHAR}
+        and status = 'valid' limit 1
+    </select>
 </mapper>

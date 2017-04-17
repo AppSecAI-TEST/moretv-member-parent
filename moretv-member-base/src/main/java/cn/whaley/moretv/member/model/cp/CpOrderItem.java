@@ -19,10 +19,10 @@ public class CpOrderItem extends BaseModel<Integer> implements Serializable {
     private String cpOrderCode;
 
     /**
-     * CP产品包
-     * cp_product
+     * 会员编码
+     * cp_member_code
      */
-    private String cpProduct;
+    private String cpMemberCode;
 
     /**
      * 有效时长
@@ -87,21 +87,21 @@ public class CpOrderItem extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * CP产品包
-     * cp_product
+     * 会员编码
+     * cp_member_code
      */
-    public String getCpProduct() {
-        return cpProduct;
+    public String getCpMemberCode() {
+        return cpMemberCode;
     }
 
     /**
-     * CP产品包
-     * cp_product
+     * 会员编码
+     * cp_member_code
      *
-     * @param cpProduct CP产品包
+     * @param cpMemberCode 会员编码
      */
-    public void setCpProduct(String cpProduct) {
-        this.cpProduct = cpProduct;
+    public void setCpMemberCode(String cpMemberCode) {
+        this.cpMemberCode = cpMemberCode;
     }
 
     /**
@@ -238,7 +238,7 @@ public class CpOrderItem extends BaseModel<Integer> implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", cpOrderCode=").append(cpOrderCode);
-        sb.append(", cpProduct=").append(cpProduct);
+        sb.append(", cpMemberCode=").append(cpMemberCode);
         sb.append(", durationMonth=").append(durationMonth);
         sb.append(", durationDay=").append(durationDay);
         sb.append(", price=").append(price);
