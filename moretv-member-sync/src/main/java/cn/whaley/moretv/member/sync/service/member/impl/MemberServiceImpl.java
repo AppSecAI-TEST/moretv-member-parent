@@ -116,7 +116,6 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
         }        
     }
     
-
     private void copyCommonProperties(MemberCppr source, MemberPackageRelation target, Member member) {
         target.setMemberName(member.getName());    
         target.setPackageName(source.getPackageName());
