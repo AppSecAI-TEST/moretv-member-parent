@@ -30,4 +30,9 @@ public interface GlobalConstant {
     //片库队列
     String MORETV_PUBLISH_CONTENT_PRODUCT_QUEUE = "moretv.publish.content.product.queue";
 
+    // CP订单队列
+    String MORETV_PUBLISH_CP_EXCHANGE = "moretv.publish.cp";
+    String MORETV_PUBLISH_CP_ORDER_ROUTER_KEY = "moretv.publish.cp.order.router.key";
+    String MORETV_PUBLISH_CP_ORDER_QUEUE = "moretv.publish.cp.order.queue";
+
 }

@@ -3,8 +3,8 @@ package cn.whaley.moretv.member.notify.service.tencent.impl;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalConstant;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
-import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.util.MD5Util;
+import cn.whaley.moretv.member.base.util.MessageProducer;
 import cn.whaley.moretv.member.model.cp.CpAccount;
 import cn.whaley.moretv.member.model.cp.CpOrderItem;
 import cn.whaley.moretv.member.model.member.MemberPackageRelation;
@@ -45,6 +45,9 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private MessageProducer messageProducer;
+
     private ThreadLocal<Date> now = new ThreadLocal<>();
 
     @Override
@@ -57,10 +60,10 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
         if (vipPackage == null) {
             return;
         }
-        String cpAccount  = getCpAccount(order.getAccountId(), true);
+        String cpAccount = getCpAccount(order.getAccountId(), true);
         CpOrderDto cpOrderDto = createOrder(cpAccount, vipPackage, order.getOrderCode(), orderItems);
         tencentConfirmOrder(cpAccount, cpOrderDto.getCpOrderCode());
-        //TODO send cpOrderDto.
+        publishCpOrder(cpOrderDto);
     }
 
     @Override
@@ -286,5 +289,9 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
         return items;
     }
 
+    private void publishCpOrder(CpOrderDto cpOrderDto) {
+        messageProducer.send(GlobalConstant.MORETV_PUBLISH_CP_EXCHANGE,
+                GlobalConstant.MORETV_PUBLISH_CP_ORDER_ROUTER_KEY, JSON.toJSONString(cpOrderDto));
+    }
 
 }
