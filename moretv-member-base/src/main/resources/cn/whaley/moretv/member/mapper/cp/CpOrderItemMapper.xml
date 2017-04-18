@@ -8,7 +8,7 @@
   <resultMap id="BaseResultMap" type="cn.whaley.moretv.member.model.cp.CpOrderItem" >
     <id column="cpori_id" property="id" jdbcType="INTEGER" />
     <result column="cpori_cp_order_code" property="cpOrderCode" jdbcType="VARCHAR" />
-    <result column="cpori_cp_product" property="cpProduct" jdbcType="VARCHAR" />
+    <result column="cpori_cp_member_code" property="cpMemberCode" jdbcType="VARCHAR" />
     <result column="cpori_duration_month" property="durationMonth" jdbcType="INTEGER" />
     <result column="cpori_duration_day" property="durationDay" jdbcType="INTEGER" />
     <result column="cpori_price" property="price" jdbcType="INTEGER" />
@@ -18,7 +18,7 @@
     <result column="cpori_update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    cpori.id as cpori_id, cpori.cp_order_code as cpori_cp_order_code, cpori.cp_product as cpori_cp_product, 
+    cpori.id as cpori_id, cpori.cp_order_code as cpori_cp_order_code, cpori.cp_member_code as cpori_cp_member_code, 
     cpori.duration_month as cpori_duration_month, cpori.duration_day as cpori_duration_day, 
     cpori.price as cpori_price, cpori.total_price as cpori_total_price, cpori.cp_order_status as cpori_cp_order_status, 
     cpori.create_time as cpori_create_time, cpori.update_time as cpori_update_time
@@ -34,11 +34,11 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="cn.whaley.moretv.member.model.cp.CpOrderItem" useGeneratedKeys="true" keyProperty="id" >
-    insert into cp_order_item (cp_order_code, cp_product, duration_month, 
+    insert into cp_order_item (cp_order_code, cp_member_code, duration_month, 
       duration_day, price, total_price, 
       cp_order_status, create_time, update_time
       )
-    values (#{cpOrderCode,jdbcType=VARCHAR}, #{cpProduct,jdbcType=VARCHAR}, #{durationMonth,jdbcType=INTEGER}, 
+    values (#{cpOrderCode,jdbcType=VARCHAR}, #{cpMemberCode,jdbcType=VARCHAR}, #{durationMonth,jdbcType=INTEGER}, 
       #{durationDay,jdbcType=INTEGER}, #{price,jdbcType=INTEGER}, #{totalPrice,jdbcType=INTEGER}, 
       #{cpOrderStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
@@ -49,8 +49,8 @@
       <if test="cpOrderCode != null" >
         cp_order_code,
       </if>
-      <if test="cpProduct != null" >
-        cp_product,
+      <if test="cpMemberCode != null" >
+        cp_member_code,
       </if>
       <if test="durationMonth != null" >
         duration_month,
@@ -78,8 +78,8 @@
       <if test="cpOrderCode != null" >
         #{cpOrderCode,jdbcType=VARCHAR},
       </if>
-      <if test="cpProduct != null" >
-        #{cpProduct,jdbcType=VARCHAR},
+      <if test="cpMemberCode != null" >
+        #{cpMemberCode,jdbcType=VARCHAR},
       </if>
       <if test="durationMonth != null" >
         #{durationMonth,jdbcType=INTEGER},
@@ -110,8 +110,8 @@
       <if test="cpOrderCode != null" >
         cp_order_code = #{cpOrderCode,jdbcType=VARCHAR},
       </if>
-      <if test="cpProduct != null" >
-        cp_product = #{cpProduct,jdbcType=VARCHAR},
+      <if test="cpMemberCode != null" >
+        cp_member_code = #{cpMemberCode,jdbcType=VARCHAR},
       </if>
       <if test="durationMonth != null" >
         duration_month = #{durationMonth,jdbcType=INTEGER},
@@ -140,7 +140,7 @@
   <update id="updateByPrimaryKey" parameterType="cn.whaley.moretv.member.model.cp.CpOrderItem" >
     update cp_order_item
     set cp_order_code = #{cpOrderCode,jdbcType=VARCHAR},
-      cp_product = #{cpProduct,jdbcType=VARCHAR},
+      cp_member_code = #{cpMemberCode,jdbcType=VARCHAR},
       duration_month = #{durationMonth,jdbcType=INTEGER},
       duration_day = #{durationDay,jdbcType=INTEGER},
       price = #{price,jdbcType=INTEGER},

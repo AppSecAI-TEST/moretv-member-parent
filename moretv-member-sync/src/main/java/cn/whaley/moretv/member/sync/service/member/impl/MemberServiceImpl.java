@@ -79,7 +79,7 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
                 }
             }
             
-            if(!isExist && GlobalConstant.PROGRAM_SOURCE_CODE_TENCENT.equals(cpprNew.getProgramSourceCode())){
+            if(!isExist && GlobalConstant.CP_TENCENT.equals(cpprNew.getProgramSourceCode())){
                 //接收的不存在数据库中而且是腾讯的,则新增
                 MemberPackageRelation memberPackageRelation = new MemberPackageRelation();
                 copyCommonProperties(cpprNew, memberPackageRelation, member);

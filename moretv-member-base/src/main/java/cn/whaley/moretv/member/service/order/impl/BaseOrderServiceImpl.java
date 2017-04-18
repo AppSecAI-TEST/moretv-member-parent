@@ -63,7 +63,7 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
 		orderItem.setMemberCode(goodsSku.getMemberCode());
 		orderItem.setMemberName(goodsSku.getMemberName());
 		orderItem.setAmount(1);
-		orderItem.setUnitPrice(goodsSku.getOriginalPrice());
+		orderItem.setTotalPrice(goodsSku.getOriginalPrice());
 		orderItem.setRealPrice(goodsSku.getSellingPrice());
 
 		orderItemMapper.insert(orderItem);
