@@ -21,7 +21,9 @@ public class PayManage {
 	private static String PAY_GATEWAY_SERVER;
 	private static String LOCAL_HOST_SERVER;
 	private static String TEMP_PAY_DISPATCH_URL;
-
+    
+    private static String payParamSignKey; //支付签名常量
+    
 	private static String localNotifyUrl = null;
 
 	public static void setPayGatewayServer(String payGatewayServer) {
@@ -202,5 +204,39 @@ public class PayManage {
 		}
        
 		return payMap;
+    }
+	
+
+	public static String getPayUrl(String sessionToken, String cip,Long timestamp,String goodsCode,String subject,String payAutoRenew,String payType,String orderCode,Long fee,Long expire_time,int accountId){
+		 
+		
+		/*参数body
+		(默认必填)	sessionToken	会话级别标识，由安全中心获取【String】	   
+		 	cip	客户端ip	   
+		 	timestamp	当前时间戳【Long】	   
+		 	version	当前接口版本，默认1.0【String】	   
+		 	goodsCode	商品编码【String】	   
+		 	subject	订单名称【String】	   
+		 	payAutoRenew	是否自动续费【String】	   
+		 	payType              	支付类型，alipay, wechat pay",【String】	   
+		 	orderCode	订单号【String】	   
+		 	fee	支付价格（分）【Long】	   
+		 	expire_time	超时时间【Long】	   
+		 	accountId	账号【int】	   
+		 	sign	数据签名【Long】	*/ 
+
+		StringBuffer payUrl = new StringBuffer();
+		payUrl.append(LOCAL_HOST_SERVER+"/order_api/pay?");
+		payUrl.append("sessionToken="+sessionToken);
+		payUrl.append("&cip="+cip);
+		payUrl.append("&goodsCode="+goodsCode);
+		payUrl.append("&subject="+subject);
+		payUrl.append("&payAutoRenew="+payAutoRenew);
+		payUrl.append("&payType="+payType);
+		payUrl.append("&orderCode="+orderCode);
+		payUrl.append("&fee="+fee);
+		payUrl.append("&accountId="+accountId);
+        payUrl.append(payParamSignKey);
+		return null;
     }
 }

@@ -71,6 +71,25 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	    orderItem.setOrderCode(orderItem.getOrderCode());
 	    orderItem.setCreateTime(now);
 	    orderItem = createOrderItemByGoodsSku(goodsSku, orderItem);
+	    
+	    
+	    	/*sessionToken	会话级别标识，由安全中心获取【String】	   
+	     	cip	客户端ip	   
+	     	timestamp	当前时间戳【Long】	   
+	     	version	当前接口版本，默认1.0【String】	   
+	     	goodsCode	商品编码【String】	   
+	     	subject	订单名称【String】	   
+	     	payAutoRenew	是否自动续费【String】	   
+	     	payType              	支付类型，alipay, wechat pay",【String】	   
+	     	orderCode	订单号【String】	   
+	     	fee	支付价格（分）【Long】	   
+	     	expire_time	超时时间【Long】	   
+	     	accountId	账号【int】	   
+	     	sign	数据签名【Long】	*/ 
+
+	    
+	   
+	    
 		return null;
 	}
 }

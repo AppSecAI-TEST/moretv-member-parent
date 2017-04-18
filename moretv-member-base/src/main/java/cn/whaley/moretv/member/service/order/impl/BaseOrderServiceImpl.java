@@ -71,14 +71,16 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
 	}
     
     public void checkCanOrderCount(Integer accountId){
-	
-    	
     	BoundValueOperations<String,Long> opsValue = redisTemplate.boundValueOps("creteOrder"+accountId);
-    	opsValue.get();
-    	opsValue.expireAt(DateFormatUtil.addDay(1));
+    	Long creteOrderCount =opsValue.get();
+    	if(creteOrderCount==0){
+    		opsValue.expireAt(DateFormatUtil.addDay(1));
+    	}else{
+    		if(creteOrderCount>=20){
+    			
+    		}
+    	}
     	opsValue.increment(1);
-
-    	
     }
     
 	@Override
