@@ -1,6 +1,5 @@
 package cn.whaley.moretv.member.base.util.longconnect;
 
-import cn.whaley.moretv.member.base.constant.GlobalEnum.StatusText;
 
 public class LongConnectionMsg {
     private String title;
@@ -34,7 +33,7 @@ public class LongConnectionMsg {
         }
 
         public static String getNameByCode(String code) {
-            for (StatusText aEnum : StatusText.values()) {
+            for (StatusType aEnum : StatusType.values()) {
                 if (aEnum.getCode().equals(code)) {
                     return aEnum.getName();
                 }
