@@ -4,14 +4,15 @@ package cn.whaley.moretv.member.base.constant;
  * Created by tangzc on 2015/9/18.
  */
 public interface GlobalConstant {
-
-    int CP_ORDERSTUTAS_COMPLETE = 2;
     
     String UNIT_YUAN = "元";
     
     String CP_TENCENT = "tencent"; 
     
     String WHALEY_SERVICE_ID = "111";
+
+    int MAX_DURATION_MONTH = 12;
+    int MAX_DURATION_DAY = 31;
 
     String CHARSET_UTF8 = "UTF-8";
 
@@ -28,5 +29,10 @@ public interface GlobalConstant {
     
     //片库队列
     String MORETV_PUBLISH_CONTENT_PRODUCT_QUEUE = "moretv.publish.content.product.queue";
+
+    // CP订单队列
+    String MORETV_PUBLISH_CP_EXCHANGE = "moretv.publish.cp";
+    String MORETV_PUBLISH_CP_ORDER_ROUTER_KEY = "moretv.publish.cp.order.router.key";
+    String MORETV_PUBLISH_CP_ORDER_QUEUE = "moretv.publish.cp.order.queue";
 
 }

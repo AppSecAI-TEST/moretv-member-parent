@@ -31,16 +31,28 @@ public class OrderItem extends BaseModel<Integer> implements Serializable {
     private String memberName;
 
     /**
+     * 会员时长(月)
+     * duration_month
+     */
+    private Integer durationMonth;
+
+    /**
+     * 会员时长(天)
+     * duration_day
+     */
+    private Integer durationDay;
+
+    /**
      * 数量
      * amount
      */
     private Integer amount;
 
     /**
-     * 单价
-     * unit_price
+     * 总价
+     * total_price
      */
-    private Integer unitPrice;
+    private Integer totalPrice;
 
     /**
      * 实际价格
@@ -123,6 +135,42 @@ public class OrderItem extends BaseModel<Integer> implements Serializable {
     }
 
     /**
+     * 会员时长(月)
+     * duration_month
+     */
+    public Integer getDurationMonth() {
+        return durationMonth;
+    }
+
+    /**
+     * 会员时长(月)
+     * duration_month
+     *
+     * @param durationMonth 会员时长(月)
+     */
+    public void setDurationMonth(Integer durationMonth) {
+        this.durationMonth = durationMonth;
+    }
+
+    /**
+     * 会员时长(天)
+     * duration_day
+     */
+    public Integer getDurationDay() {
+        return durationDay;
+    }
+
+    /**
+     * 会员时长(天)
+     * duration_day
+     *
+     * @param durationDay 会员时长(天)
+     */
+    public void setDurationDay(Integer durationDay) {
+        this.durationDay = durationDay;
+    }
+
+    /**
      * 数量
      * amount
      */
@@ -141,21 +189,21 @@ public class OrderItem extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * 单价
-     * unit_price
+     * 总价
+     * total_price
      */
-    public Integer getUnitPrice() {
-        return unitPrice;
+    public Integer getTotalPrice() {
+        return totalPrice;
     }
 
     /**
-     * 单价
-     * unit_price
+     * 总价
+     * total_price
      *
-     * @param unitPrice 单价
+     * @param totalPrice 总价
      */
-    public void setUnitPrice(Integer unitPrice) {
-        this.unitPrice = unitPrice;
+    public void setTotalPrice(Integer totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     /**
@@ -240,8 +288,10 @@ public class OrderItem extends BaseModel<Integer> implements Serializable {
         sb.append(", orderCode=").append(orderCode);
         sb.append(", memberCode=").append(memberCode);
         sb.append(", memberName=").append(memberName);
+        sb.append(", durationMonth=").append(durationMonth);
+        sb.append(", durationDay=").append(durationDay);
         sb.append(", amount=").append(amount);
-        sb.append(", unitPrice=").append(unitPrice);
+        sb.append(", totalPrice=").append(totalPrice);
         sb.append(", realPrice=").append(realPrice);
         sb.append(", validStatus=").append(validStatus);
         sb.append(", createTime=").append(createTime);

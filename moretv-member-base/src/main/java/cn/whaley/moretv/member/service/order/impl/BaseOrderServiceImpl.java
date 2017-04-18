@@ -23,7 +23,7 @@ import cn.whaley.moretv.member.service.order.BaseOrderService;
 @Service
 public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, OrderMapper> implements BaseOrderService {
 
-	private static final Logger logger = LoggerFactory.getLogger(BaseOrderService.class);
+    protected static final Logger logger = LoggerFactory.getLogger(BaseOrderService.class);
 
 	@Autowired
 	protected OrderMapper orderMapper;
@@ -63,7 +63,7 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
 		orderItem.setMemberCode(goodsSku.getMemberCode());
 		orderItem.setMemberName(goodsSku.getMemberName());
 		orderItem.setAmount(1);
-		orderItem.setUnitPrice(goodsSku.getOriginalPrice());
+		orderItem.setTotalPrice(goodsSku.getOriginalPrice());
 		orderItem.setRealPrice(goodsSku.getSellingPrice());
 
 		orderItemMapper.insert(orderItem);

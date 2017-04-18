@@ -1,5 +1,7 @@
 package cn.whaley.moretv.member.notify.service.cp.impl;
 
+import cn.whaley.moretv.member.base.constant.GlobalConstant;
+import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.mapper.cp.CpAccountMapper;
 import cn.whaley.moretv.member.model.cp.CpAccount;
@@ -7,6 +9,8 @@ import cn.whaley.moretv.member.notify.service.cp.CpAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 /**
 * ServiceImpl: CpAccountServiceImpl
@@ -25,5 +29,24 @@ public class CpAccountServiceImpl extends GenericServiceImpl<CpAccount, Integer,
     @Override
     public CpAccountMapper getGenericMapper() {
         return cpAccountMapper;
+    }
+
+
+    @Override
+    public CpAccount getCpAccount(Integer accountId, String cpSource) {
+        return cpAccountMapper.getCpAccount(accountId, cpSource);
+    }
+
+    @Override
+    public String createCpAccount(String cpAccountId, String cpToken, Integer accountId, Date date) {
+        CpAccount account = new CpAccount();
+        account.setCpAccount(cpAccountId);
+        account.setCpToken(cpToken);
+        account.setAccountId(accountId);
+        account.setCpSource(GlobalConstant.CP_TENCENT);
+        account.setStatus(GlobalEnum.StatusText.VALID.getCode());
+        account.setCreateTime(date);
+        cpAccountMapper.insertSelective(account);
+        return account.getCpAccount();
     }
 }

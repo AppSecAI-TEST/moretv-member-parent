@@ -33,5 +33,6 @@ public interface ApiCodeInfo {
     int API_PARAM_GOODS_TAG_ID_NULL = 512;
     int API_DATA_GOODS_NOT_ONLINE = 513;
     int API_DATA_GOODS_CAN_NOT_BUY = 514;
-
+    int API_DATA_ORDER_STATUS_ERR = 520;
+    int API_DATA_PAY_GATEWAY_ERR = 601;
 }

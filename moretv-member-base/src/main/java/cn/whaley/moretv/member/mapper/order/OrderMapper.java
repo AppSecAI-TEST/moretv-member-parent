@@ -1,6 +1,7 @@
 package cn.whaley.moretv.member.mapper.order;
 
 import java.util.List;
+import java.util.Map;
 
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.model.order.Order;
@@ -22,4 +23,6 @@ public interface OrderMapper extends GenericMapper<Order, Integer> {
     @Select("select count(1) from business_order where account_id = #{accountId} " +
             "and order_type = 1 and valid_status = 1 and trade_status = 3")
     Integer hasPurchaseOrder(Integer accountId);
+
+    void updateOrderPayStatus(Map<String, Object> map);
 }
