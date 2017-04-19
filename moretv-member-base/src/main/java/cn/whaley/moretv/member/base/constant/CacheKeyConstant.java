@@ -24,7 +24,5 @@ public interface CacheKeyConstant {
 
     //会员权益，%s为accountId
     String REDIS_KEY_MEMBER_AUTHORITY = "moretv:member:authority:%s";
-    
-    //cp账号
-    String REDIS_KEY_MEMBER_CP = "moretv:member:cp:%s";
+
 }

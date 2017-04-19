@@ -2,21 +2,14 @@ package cn.whaley.moretv.member.api.service.cp.impl;
 
 import cn.whaley.moretv.member.api.dto.member.MemberCpResponse;
 import cn.whaley.moretv.member.api.service.cp.CpAccountService;
-import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
-import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.dto.request.BaseRequest;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
-import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
-import cn.whaley.moretv.member.mapper.cp.CpAccountMapper;
 import cn.whaley.moretv.member.model.cp.CpAccount;
-import com.alibaba.fastjson.JSON;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
+import cn.whaley.moretv.member.service.cp.impl.BaseCpAccountServiceImpl;
+import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,37 +21,18 @@ import java.util.List;
 */
 @Service
 @Transactional
-public class CpAccountServiceImpl extends GenericServiceImpl<CpAccount, Integer, CpAccountMapper> implements CpAccountService {
-
-    @Autowired
-    private CpAccountMapper cpAccountMapper;
-
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-
-    @Override
-    public CpAccountMapper getGenericMapper() {
-        return cpAccountMapper;
-    }
+public class CpAccountServiceImpl extends BaseCpAccountServiceImpl implements CpAccountService {
 
     @Override
     public ResultResponse getCpAccountInfo(BaseRequest baseRequest) {
-        Integer accountId = baseRequest.getAccountId();
-        String cpInfoRedisKey = String.format(CacheKeyConstant.REDIS_KEY_MEMBER_CP, accountId);
-        List<MemberCpResponse> memberCpResponseList = new ArrayList<>();
+        List<MemberCpResponse> memberCpResponseList = Lists.newArrayList();
+        List<CpAccount> cpAccountList = cpAccountMapper.getCpAccountList(baseRequest.getAccountId());
 
-        //1、从redis查询
-        HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
-        List<String> memberUserCpList = hashOps.values(cpInfoRedisKey);
-
-        //2、过滤状态异常的数据
-        for(String cpInfo : memberUserCpList){
-            CpAccount account = JSON.parseObject(cpInfo, CpAccount.class);
-            if(GlobalEnum.StatusText.VALID.getCode().equals(account.getStatus()))
-                memberCpResponseList.add(new MemberCpResponse(account.getCpAccount(), account.getCpToken(), account.getCpSource()));
+        for (CpAccount account : cpAccountList) {
+            memberCpResponseList.add(new MemberCpResponse(
+                    account.getCpAccount(), account.getCpToken(), account.getCpSource()));
         }
 
-        //3、返回, 没有数据的话返回空数组
         return ResultResponse.success(memberCpResponseList);
     }
 }

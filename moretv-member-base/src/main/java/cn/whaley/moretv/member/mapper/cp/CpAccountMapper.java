@@ -4,6 +4,8 @@ import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.model.cp.CpAccount;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
 * Mapper: CpAccountMapper
 * Model : CpAccount
@@ -13,6 +15,19 @@ import org.apache.ibatis.annotations.Param;
 */
 public interface CpAccountMapper extends GenericMapper<CpAccount, Integer> {
 
+    /**
+     * 通过accountId和cpSource查询CP账号
+     * @param accountId
+     * @param cpSource
+     * @return
+     */
     CpAccount getCpAccount(@Param("accountId") Integer accountId, @Param("cpSource") String cpSource);
+
+    /**
+     * 查询accountId对应的所有CP账号
+     * @param accountId
+     * @return
+     */
+    List<CpAccount> getCpAccountList(Integer accountId);
 
 }

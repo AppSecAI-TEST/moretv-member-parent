@@ -2,11 +2,9 @@ package cn.whaley.moretv.member.notify.service.cp.impl;
 
 import cn.whaley.moretv.member.base.constant.GlobalConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
-import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
-import cn.whaley.moretv.member.mapper.cp.CpAccountMapper;
 import cn.whaley.moretv.member.model.cp.CpAccount;
 import cn.whaley.moretv.member.notify.service.cp.CpAccountService;
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.whaley.moretv.member.service.cp.impl.BaseCpAccountServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +19,7 @@ import java.util.Date;
 */
 @Service
 @Transactional
-public class CpAccountServiceImpl extends GenericServiceImpl<CpAccount, Integer, CpAccountMapper> implements CpAccountService {
-
-    @Autowired
-    private CpAccountMapper cpAccountMapper;
-
-    @Override
-    public CpAccountMapper getGenericMapper() {
-        return cpAccountMapper;
-    }
-
+public class CpAccountServiceImpl extends BaseCpAccountServiceImpl implements CpAccountService {
 
     @Override
     public CpAccount getCpAccount(Integer accountId, String cpSource) {
