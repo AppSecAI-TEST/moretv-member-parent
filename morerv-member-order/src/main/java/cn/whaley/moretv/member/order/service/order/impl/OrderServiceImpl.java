@@ -129,7 +129,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
         }
         
         //3、向支付网关支付
-        PayGatewayResponse payGatewayResponse = PayGatewayUtil.pay(payGatewayRequest);
+        PayGatewayResponse payGatewayResponse = PayGatewayUtil.pay(payGatewayRequest, order);
         if(payGatewayResponse == null ){
             logger.error("申请支付, 支付网关http返回非200, 请求参数->{}", payGatewayRequest.toString());
             return ResultResponse.define(ApiCodeEnum.API_DATA_PAY_GATEWAY_ERR);

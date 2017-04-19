@@ -1,28 +1,22 @@
 package cn.whaley.moretv.member.base.util.paygateway;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 
 import cn.whaley.moretv.member.base.config.CustomProperty;
+import cn.whaley.moretv.member.base.constant.GlobalConstant;
 import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayRequest;
 import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayResponse;
+import cn.whaley.moretv.member.base.util.longconnect.HttpClientUtil;
+import cn.whaley.moretv.member.model.order.Order;
 
 /**
  * 支付网关工具类
  */
 public class PayGatewayUtil {
-    private static Logger logger = LoggerFactory.getLogger(PayGatewayUtil.class);
 
     /**
      * 配置信息
@@ -36,54 +30,31 @@ public class PayGatewayUtil {
     /**
      * 向支付网关申请支付
      */
-    public static PayGatewayResponse pay(PayGatewayRequest payGatewayRequest) {
-        CloseableHttpClient httpclient = null;
-        CloseableHttpResponse response = null;
-        try {
-            httpclient = HttpClients.createDefault();
-            RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(3000).setConnectTimeout(3000).build();
-            HttpPost httpPost = new HttpPost(customProperty.getPayGatewayServer() + "/tvmore/createPayOrder");
-            httpPost.setConfig(requestConfig);
-            String params = setParam(payGatewayRequest);
-            StringEntity stringEntity = new StringEntity(params,
-                    ContentType.create("application/x-www-form-urlencoded", "UTF-8"));
-            httpPost.setEntity(stringEntity);
-            logger.info("payGateway post params {}", params);
-            response = httpclient.execute(httpPost);
-
-            if (response.getStatusLine().getStatusCode() != 200) {
-                logger.error("payGateway response error, http status->{}",
-                        response.getStatusLine().getStatusCode());
-                return null;
-            }
-
-            HttpEntity entity = response.getEntity();
-            String r = EntityUtils.toString(entity);
-            EntityUtils.consume(entity);
-            logger.info("payGateway post response {}", r);
-
-            PayGatewayResponse j = JSON.parseObject(r, PayGatewayResponse.class);
-            return j;
-        } catch (Exception e) {
-            logger.error("payGateway post error", e);
-        } finally {
-            try {
-                if (response != null)
-                    response.close();
-                if (httpclient != null)
-                    httpclient.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
+    public static PayGatewayResponse pay(PayGatewayRequest payGatewayRequest, Order order) {
+        String result = HttpClientUtil.post(customProperty.getPayGatewayServer() + "/tvmore/createPayOrder", setParam(payGatewayRequest, order));
+        if(result == null)
+            return null;
+        else
+            return JSON.parseObject(result, PayGatewayResponse.class);
     }
-
-    private static String setParam(PayGatewayRequest payGatewayRequest) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("businessType").append(payGatewayRequest.getPayType()).append("&orderNo=").append(payGatewayRequest.getOrderCode())
-                .append("&sign=").append(payGatewayRequest.getSign()).append("&accountId=").append(payGatewayRequest.getAccountId());
-
-        return sb.toString();
+    
+    private static String setParam(PayGatewayRequest payGatewayRequest, Order order) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("businessType", GlobalConstant.PAY_GATEWAY_PRODUCT_CODE);
+        map.put("orderNo", payGatewayRequest.getOrderCode());
+        map.put("accountId", payGatewayRequest.getAccountId());
+        map.put("totalAmount", getYuanByFen(payGatewayRequest.getFree()));
+        map.put("subject", order.getGoodsName());
+        map.put("goodsNo", payGatewayRequest.getGoodsCode());
+        map.put("notifyUrl", customProperty.getNotifyUrl());
+        map.put("payMethod", payGatewayRequest.getPayType());
+        map.put("overTime", payGatewayRequest.getExpireTime());
+        
+        return HttpClientUtil.appendParams(map);
     }
+    
+    private static String getYuanByFen(Long fen){
+        return new BigDecimal(fen).divide(new BigDecimal(100), 2, BigDecimal.ROUND_UP).toString();
+    }
+    
 }

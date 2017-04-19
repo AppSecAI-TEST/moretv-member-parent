@@ -35,4 +35,6 @@ public interface GlobalConstant {
     String MORETV_PUBLISH_CP_ORDER_ROUTER_KEY = "moretv.publish.cp.order.router.key";
     String MORETV_PUBLISH_CP_ORDER_QUEUE = "moretv.publish.cp.order.queue";
 
+    //电视猫会员对于支付网关的产品编号
+    String PAY_GATEWAY_PRODUCT_CODE = "tvmore";
 }
