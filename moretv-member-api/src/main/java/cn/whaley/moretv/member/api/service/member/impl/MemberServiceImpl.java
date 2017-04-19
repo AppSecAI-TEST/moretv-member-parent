@@ -84,7 +84,7 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
 
         List<MemberUserAuthority> authorityList = memberUserAuthorityService.getMemberUserAuthority(accountId);
         if (authorityList.isEmpty()) {
-            return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
+            return ResultResponse.define(ApiCodeEnum.API_DATA_MEMBER_AUTH_NOT_EXIST);
         }
 
         for (MemberUserAuthority authority : authorityList) {

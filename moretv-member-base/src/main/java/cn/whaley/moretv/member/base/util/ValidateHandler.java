@@ -36,7 +36,7 @@ public class ValidateHandler {
 
             if (StringUtils.isEmpty(baseRequest.getAccessToken()) && baseRequest.getAccountId() == null
                     && StringUtils.isEmpty(baseRequest.getAppVersion()) && StringUtils.isEmpty(baseRequest.getClientType())
-                    && StringUtils.isEmpty(baseRequest.getDeviceSerial()) && baseRequest.getTimestamp() == null) {
+                    && StringUtils.isEmpty(baseRequest.getDeviceId()) && baseRequest.getTimestamp() == null) {
                 return define(ApiCodeEnum.API_PARAM_NULL, logInfo);
             }
 

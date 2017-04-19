@@ -56,14 +56,14 @@ public class GoodsController {
      * <p>查询会员对应的商品模型</p>
      *
      * @param baseRequest
-     * @param goodsTag 会员编码
+     * @param memberCode 会员编码
      * @return
      */
     @RequestMapping(value = "/get_goods_spu_by_tag", method = RequestMethod.POST)
-    public ResultResponse getGoodsSpuList(BaseRequest baseRequest, String goodsTag) {
-        if (StringUtils.isEmpty(goodsTag)) {
-            return ResultResponse.define(ApiCodeEnum.API_PARAM_GOODS_TAG_ID_NULL);
+    public ResultResponse getGoodsSpuList(BaseRequest baseRequest, String memberCode) {
+        if (StringUtils.isEmpty(memberCode)) {
+            return ResultResponse.define(ApiCodeEnum.API_PARAM_MEMBER_CODE_ID_NULL);
         }
-        return goodsSpuService.getGoodsSpuListByTag(goodsTag);
+        return goodsSpuService.getGoodsSpuListByTag(memberCode);
     }
 }

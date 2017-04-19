@@ -25,12 +25,15 @@ public enum ApiCodeEnum {
     API_DATA_GOODS_STATUS_ERR(ApiCodeInfo.API_DATA_GOODS_STATUS_ERR, "goodsStatus error"),
     API_PARAM_ACCOUNT_ID_NULL(ApiCodeInfo.API_PARAM_ACCOUNT_ID_NULL, "accountId is null"),
     API_PARAM_GOODS_TAG_ID_NULL(ApiCodeInfo.API_PARAM_GOODS_TAG_ID_NULL, "goodsTag is null"),
+    API_PARAM_MEMBER_CODE_ID_NULL(ApiCodeInfo.API_PARAM_MEMBER_CODE_ID_NULL, "memberCode is null"),
     API_DATA_GOODS_NOT_ONLINE(ApiCodeInfo.API_DATA_GOODS_NOT_ONLINE, "goods not online"),
     API_DATA_GOODS_CAN_NOT_BUY(ApiCodeInfo.API_DATA_GOODS_CAN_NOT_BUY, "goods can not buy"),
     
     API_DATA_ORDER_STATUS_ERR(ApiCodeInfo.API_DATA_ORDER_STATUS_ERR, "orderStatus error"),
     
-    API_DATA_PAY_GATEWAY_ERR(ApiCodeInfo.API_DATA_PAY_GATEWAY_ERR, "pay_gateway error")
+    API_DATA_PAY_GATEWAY_ERR(ApiCodeInfo.API_DATA_PAY_GATEWAY_ERR, "pay_gateway error"),
+
+    API_DATA_MEMBER_AUTH_NOT_EXIST(ApiCodeInfo.API_DATA_MEMBER_AUTH_NOT_EXIST, "member not exist"),
     ;
 
     private int code;

@@ -36,11 +36,11 @@ public class GoodsSpuServiceImpl extends BaseGoodsSpuServiceImpl implements Good
     }
 
     @Override
-    public ResultResponse getGoodsSpuListByTag(String goodsTag) {
-        return findGoodsSpu(goodsTag);
+    public ResultResponse getGoodsSpuListByTag(String memberCode) {
+        return findGoodsSpu(memberCode);
     }
 
-    private ResultResponse findGoodsSpu(String goodsTag) {
+    private ResultResponse findGoodsSpu(String memberCode) {
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
         List<GoodsSpuResponse> goodsSpuList = Lists.newArrayList();
 
@@ -53,9 +53,9 @@ public class GoodsSpuServiceImpl extends BaseGoodsSpuServiceImpl implements Good
             GoodsSpu goodsSpu = JSON.parseObject(entry.getValue(), GoodsSpu.class);
             GoodsSpuResponse response = ResponseHandler.converGoodsSpu(goodsSpu);
 
-            if (StringUtils.isEmpty(goodsTag)) {
+            if (StringUtils.isEmpty(memberCode)) {
                 goodsSpuList.add(response);
-            } else if (goodsTag.equals(goodsSpu.getMemberCode())) {
+            } else if (memberCode.equals(goodsSpu.getMemberCode())) {
                 goodsSpuList.add(response);
             }
         }
