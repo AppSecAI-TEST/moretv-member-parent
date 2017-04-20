@@ -164,7 +164,11 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
             logger.info("mq.listen.member->update member->{}",member.toString());
         }   
         
-        opsHash.put(CacheKeyConstant.REDIS_KEY_MEMBER, member.getCode(), JSON.toJSONString(member));
+        if(member.getStatus().equals(GlobalEnum.StatusText.PUBLISHED.getCode()))
+            opsHash.put(CacheKeyConstant.REDIS_KEY_MEMBER, member.getCode(), JSON.toJSONString(member));
+        else
+            opsHash.delete(CacheKeyConstant.REDIS_KEY_MEMBER, member.getCode());
+        
         return member;
     }
 
