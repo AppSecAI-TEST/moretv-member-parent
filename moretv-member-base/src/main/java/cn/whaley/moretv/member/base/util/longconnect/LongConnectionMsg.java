@@ -14,7 +14,7 @@ public class LongConnectionMsg {
     
     public enum StatusType {
         EXPIRED("expired", "会员过期"),
-        BUY("buy", "购买");
+        BUY("opened", "开通");
 
         private String code;
         private String name;

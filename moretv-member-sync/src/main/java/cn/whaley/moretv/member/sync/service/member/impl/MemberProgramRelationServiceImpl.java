@@ -61,24 +61,27 @@ public class MemberProgramRelationServiceImpl extends GenericServiceImpl<MemberP
                 isExist = true;
                 BeanUtils.copyProperties(productDto, mpr, "id","createTime","updateTime","status");
                 mpr.setStatus(productDto.getRelationStatus());
+                
+                opsValue.set(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, mpr.getProgramCode()), JSON.toJSONString(mpr));
             }else{
                 //不是，要删除，因为一个节目只能被一个会员绑定
                 mpr.setStatus(GlobalEnum.Bound.UNBOUND.getCode());
+                redisTemplate.delete(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, mpr.getProgramCode()));
             }
             
             memberProgramRelationMapper.updateByPrimaryKeySelective(mpr);
-            opsValue.set(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION + mpr.getProgramCode() + ":" +  mpr.getMemberCode(), JSON.toJSONString(mpr));
             logger.info("mq.listen.product->update memberProgramRelation->{}",mpr.toString());
         }
         
         if(!isExist){
+            //数据库中不存在，要新增
             MemberProgramRelation mpr = new MemberProgramRelation();
             BeanUtils.copyProperties(productDto, mpr, "id","createTime","updateTime","status");
             mpr.setCreateTime(date);
             mpr.setUpdateTime(date);
             mpr.setStatus(productDto.getRelationStatus());
             memberProgramRelationMapper.insertSelective(mpr);
-            opsValue.set(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION + mpr.getProgramCode() + ":" +  mpr.getMemberCode(), JSON.toJSONString(mpr));
+            opsValue.set(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, mpr.getProgramCode()), JSON.toJSONString(mpr));
             logger.info("mq.listen.product->insert memberProgramRelation->{}",mpr.toString());
         }
     }
