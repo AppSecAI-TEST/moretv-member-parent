@@ -27,6 +27,9 @@ public class LongConnectionUtil {
         LongConnectionUtil.longConnection = longConnection;
     }
 
+    /**
+     * 给单个会员发送
+     */
     public static boolean pushForSpecificUsers(LongConnectionMsg msg) {
         try {
             String result = HttpClientUtil.post(longConnection.getUrl(), setParam(msg));
@@ -49,13 +52,14 @@ public class LongConnectionUtil {
         String time = String.valueOf(System.currentTimeMillis() / 1000);
         String sign = DigestUtils.sha1Hex(longConnection.getAppSecret() + time + time);
         String jsonMsg = JSON.toJSONString(msg);
+        logger.info("longConnect params->{}", jsonMsg);
         String data = URLEncoder.encode(Base64.encodeBase64String(jsonMsg.getBytes()), "UTF-8");
         
-        StringBuffer sb = new StringBuffer();
+/*        StringBuffer sb = new StringBuffer();
         for(Integer userId : msg.getAccoundId()){
             sb.append(userId.toString()).append(",");
         } 
-        sb.delete(sb.length()-1, sb.length());
+        sb.delete(sb.length()-1, sb.length());*/
         
         Map<String, Object> map = new HashMap<>();
         map.put("app_key", longConnection.getAppKey());
@@ -64,7 +68,7 @@ public class LongConnectionUtil {
         map.put("sign", sign);
         map.put("business_type", longConnection.getBusinessType());
         map.put("data", data);
-        map.put("targets", sb);
+        map.put("targets", msg.getData().getAccount());
         
         return HttpClientUtil.appendParams(map);
     }
