@@ -206,37 +206,47 @@ public class PayManage {
 		return payMap;
     }
 	
-
-	public static String getPayUrl(String sessionToken, String cip,Long timestamp,String goodsCode,String subject,String payAutoRenew,String payType,String orderCode,Long fee,Long expire_time,int accountId){
-		 
+	/**
+	 * 支付加密前端加密参数
+	 * @param sessionToken
+	 * @param cip
+	 * @param goodsCode
+	 * @param subject
+	 * @param payAutoRenew
+	 * @param payType
+	 * @param orderCode
+	 * @param fee
+	 * @param accountId
+	 * @return
+	 */
+	public static String getPayUrl(String sessionToken, String cip,Long timestamp,String goodsCode,String subject
+			,int payAutoRenew,String payType,String orderCode,int fee,int accountId){
+		StringBuffer parm = new StringBuffer();
+		//需要作为验签的参数
+		parm.append("orderCode="+orderCode);
+		parm.append("&timestamp="+timestamp);
+		parm.append("&cip="+cip);
+		parm.append("&goodsCode="+goodsCode);
+		parm.append("&subject="+subject);
+		parm.append("&payAutoRenew="+payAutoRenew);
+		parm.append("&payType="+payType);
+		parm.append("&orderCode="+orderCode);
+		parm.append("&fee="+fee);
+		parm.append("&expire_time=120");
+		parm.append("&accountId="+accountId);
+		String sign = getPayUrlSign(parm.toString());
+		//需要作为验签的参数
+		parm.append("&version=1.0");
+		parm.append("&sign="+sign);
+		//域名路径
+		String hostStr = LOCAL_HOST_SERVER+"/order_api/pay?";
 		
-		/*参数body
-		(默认必填)	sessionToken	会话级别标识，由安全中心获取【String】	   
-		 	cip	客户端ip	   
-		 	timestamp	当前时间戳【Long】	   
-		 	version	当前接口版本，默认1.0【String】	   
-		 	goodsCode	商品编码【String】	   
-		 	subject	订单名称【String】	   
-		 	payAutoRenew	是否自动续费【String】	   
-		 	payType              	支付类型，alipay, wechat pay",【String】	   
-		 	orderCode	订单号【String】	   
-		 	fee	支付价格（分）【Long】	   
-		 	expire_time	超时时间【Long】	   
-		 	accountId	账号【int】	   
-		 	sign	数据签名【Long】	*/ 
-
-		StringBuffer payUrl = new StringBuffer();
-		payUrl.append(LOCAL_HOST_SERVER+"/order_api/pay?");
-		payUrl.append("sessionToken="+sessionToken);
-		payUrl.append("&cip="+cip);
-		payUrl.append("&goodsCode="+goodsCode);
-		payUrl.append("&subject="+subject);
-		payUrl.append("&payAutoRenew="+payAutoRenew);
-		payUrl.append("&payType="+payType);
-		payUrl.append("&orderCode="+orderCode);
-		payUrl.append("&fee="+fee);
-		payUrl.append("&accountId="+accountId);
-        payUrl.append(payParamSignKey);
-		return null;
+		return hostStr+parm.toString();
+    }
+	
+	public static String getPayUrlSign(String url){
+		StringBuffer parm = new StringBuffer(url);
+		parm.append(payParamSignKey);
+		return MD5Util.string2MD5(parm.toString());
     }
 }

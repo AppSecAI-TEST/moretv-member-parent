@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
-import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
@@ -20,7 +21,6 @@ import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayRequest;
 import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayResponse;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
-import cn.whaley.moretv.member.base.manager.PayManage;
 import cn.whaley.moretv.member.base.util.DateFormatUtil;
 import cn.whaley.moretv.member.base.util.paygateway.PayGatewayUtil;
 import cn.whaley.moretv.member.model.goods.Goods;
@@ -36,11 +36,13 @@ import cn.whaley.moretv.member.service.order.impl.BaseOrderServiceImpl;
 @Transactional
 public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderService {
 
+	private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+	
 	@Autowired
 	private BaseGoodsService baseGoodsService;
 	
 	@Override
-	public ResultResponse createOrder(String goodsCode, String payType,
+	public ResultResponse<Order> createOrder(String goodsCode, String payType,
 			int payAutoRenew, int accountId) {
 		Goods goods = null;
 		GoodsSku goodsSku = null;
@@ -48,13 +50,15 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 		//检查商品
 	    ResultResponse<GoodsDto> goodCheck= baseGoodsService.checkCanBuyGoods(goodsCode,accountId);
 	    if (!goodCheck.isSuccess()) {
-	    	return goodCheck;
+	    	logger.info("goodsError:"+goodCheck.toString());
+	    	return ResultResponse.define(goodCheck.getCode(),goodCheck.getMsg());
 	    } else {
 	    	goods = goodCheck.getData();
 	    }
 	    
 	    List<GoodsSku> goodsSkuList = goodCheck.getData().getGoodsSkuList();
 	    if (goodsSkuList == null || goodsSkuList.size() > 1) {
+	    	logger.info("goodsSkuError");
 	    	ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE);
 	    } else {
 	    	goodsSku = goodsSkuList.get(0);
@@ -64,9 +68,10 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	    Order order =new Order();
 	    order.setAccountId(accountId);
 	    order.setBusinessType(OrderEnum.BusinessType.PAY.getCode());
-	    order.setOrderChannel(null);
+	    order.setOrderChannel(OrderEnum.OrderChannel.WAP.getCode());
 	    order.setOrderChannelKey(null);
 	    order.setIsAutoRenewal(payAutoRenew);
+	    order.setPayChannel(payType);
 	    order.setOrderType(OrderEnum.OrderType.BUY.getCode());
 	    order.setValidStatus(GlobalEnum.Status.VALID.getCode());
 	    order.setTradeStatus(OrderEnum.TradeStatus.TRADE_INIT.getCode());
@@ -74,34 +79,17 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	    order.setCreateTime(now);
 	    order.setOverTime(DateFormatUtil.addHours(now, 2));
 	    order = createOrderByGoods(goods,order);
-	    
+	    //TODO 同步数据
 	    //创建订单明细
 	    OrderItem orderItem = new OrderItem();
 	    orderItem.setOrderCode(orderItem.getOrderCode());
 	    orderItem.setCreateTime(now);
 	    orderItem = createOrderItemByGoodsSku(goodsSku, orderItem);
-	    
-	    
-	    	/*sessionToken	会话级别标识，由安全中心获取【String】	   
-	     	cip	客户端ip	   
-	     	timestamp	当前时间戳【Long】	   
-	     	version	当前接口版本，默认1.0【String】	   
-	     	goodsCode	商品编码【String】	   
-	     	subject	订单名称【String】	   
-	     	payAutoRenew	是否自动续费【String】	   
-	     	payType              	支付类型，alipay, wechat pay",【String】	   
-	     	orderCode	订单号【String】	   
-	     	fee	支付价格（分）【Long】	   
-	     	expire_time	超时时间【Long】	   
-	     	accountId	账号【int】	   
-	     	sign	数据签名【Long】	*/ 
+	    //TODO 同步数据
 
-	    
-	   
-	    
-		return null;
+		return ResultResponse.success(order);
 	}
-
+	
     @Override
     public ResultResponse pay(PayGatewayRequest payGatewayRequest) {
         //TODO 1、MD5
