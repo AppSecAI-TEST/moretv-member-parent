@@ -2,19 +2,104 @@ package cn.whaley.moretv.member.base.util.longconnect;
 
 
 public class LongConnectionMsg {
-    private String title;
     
-    private Integer[] accoundId;
+    private MsgDate data;
+
+    private String msgType;
     
-    private String content;
-    
-    private String type;
-    
-    private Long time;
+    public class MsgDate {
+        private String title;
+        
+        private String content;
+        
+        private String createTime;
+        
+        private String account;
+        
+        private String displayTime;
+        
+        private String bgPic;
+        
+        private String icon;
+
+        public MsgDate(String title, String content, String createTime, String account, String displayTime,
+                String bgPic, String icon) {
+            this.title = title;
+            this.content = content;
+            this.createTime = createTime;
+            this.account = account;
+            this.displayTime = displayTime;
+            this.bgPic = bgPic;
+            this.icon = icon;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getCreateTime() {
+            return createTime;
+        }
+
+        public void setCreateTime(String createTime) {
+            this.createTime = createTime;
+        }
+
+        public String getAccount() {
+            return account;
+        }
+
+        public void setAccount(String account) {
+            this.account = account;
+        }
+
+        public String getDisplayTime() {
+            return displayTime;
+        }
+
+        public void setDisplayTime(String displayTime) {
+            this.displayTime = displayTime;
+        }
+
+        public String getBgPic() {
+            return bgPic;
+        }
+
+        public void setBgPic(String bgPic) {
+            this.bgPic = bgPic;
+        }
+
+        public String getIcon() {
+            return icon;
+        }
+
+        public void setIcon(String icon) {
+            this.icon = icon;
+        }
+
+        @Override
+        public String toString() {
+            return "MsgDate [title=" + title + ", content=" + content + ", createTime=" + createTime + ", account="
+                    + account + ", displayTime=" + displayTime + ", bgPic=" + bgPic + ", icon=" + icon + "]";
+        }
+        
+    }
     
     public enum StatusType {
         EXPIRED("expired", "会员过期"),
-        BUY("opened", "开通");
+        BUY("opened", "会员开通");
 
         private String code;
         private String name;
@@ -41,62 +126,32 @@ public class LongConnectionMsg {
             return "";
         }
     }
-
     
-    public LongConnectionMsg(String title, Integer[] accoundId, String content, String type, Long time) {
-        this.title = title;
-        this.accoundId = accoundId;
-        this.content = content;
-        this.type = type;
-        this.time = time;
+    @Override
+    public String toString() {
+        return "LongConnectionMsg [data=" + data + ", msgType=" + msgType + "]";
+    }
+
+    public LongConnectionMsg(String msgType) {
+        this.msgType = msgType;
     }
 
     public LongConnectionMsg() {
     }
 
-    @Override
-    public String toString() {
-        return "LongConnectionMsg [title=" + title + ", accoundId=" + accoundId + ", content=" + content + ", type="
-                + type + ", time=" + time + "]";
+    public MsgDate getData() {
+        return data;
     }
 
-    public String getTitle() {
-        return title;
+    public void setData(MsgDate data) {
+        this.data = data;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getMsgType() {
+        return msgType;
     }
 
-    public Integer[] getAccoundId() {
-        return accoundId;
-    }
-
-    public void setAccoundId(Integer[] accoundId) {
-        this.accoundId = accoundId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Long getTime() {
-        return time;
-    }
-
-    public void setTime(Long time) {
-        this.time = time;
+    public void setMsgType(String msgType) {
+        this.msgType = msgType;
     }
 }
