@@ -16,5 +16,5 @@ public interface CpAccountService extends BaseCpAccountService {
 
     CpAccount getCpAccount(Integer accountId, String cpSource);
 
-    String createCpAccount(String cpAccountId, String cpToken, Integer accountId, Date date);
+    CpAccount createCpAccount(String cpAccountId, String cpToken, Integer accountId, Date date);
 }

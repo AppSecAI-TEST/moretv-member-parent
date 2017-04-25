@@ -3,9 +3,11 @@ package cn.whaley.moretv.member.notify.service.tencent.impl;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalConstant;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
+import cn.whaley.moretv.member.base.util.BeanHandler;
 import cn.whaley.moretv.member.base.util.MD5Util;
 import cn.whaley.moretv.member.base.util.MessageProducer;
 import cn.whaley.moretv.member.model.cp.CpAccount;
+import cn.whaley.moretv.member.model.cp.CpOrder;
 import cn.whaley.moretv.member.model.cp.CpOrderItem;
 import cn.whaley.moretv.member.model.member.MemberPackageRelation;
 import cn.whaley.moretv.member.model.order.Order;
@@ -62,6 +64,9 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
         }
         String cpAccount = getCpAccount(order.getAccountId(), true);
         CpOrderDto cpOrderDto = createOrder(cpAccount, vipPackage, order.getOrderCode(), orderItems);
+
+        logger.info("createTencentOrder : createCpOrder : {}", cpOrderDto);
+
         tencentConfirmOrder(cpAccount, cpOrderDto.getCpOrderCode());
         publishCpOrder(cpOrderDto);
     }
@@ -69,6 +74,7 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
     @Override
     public String getCpAccount(Integer accountId, Boolean createAccount) {
         CpAccount cpAccount = cpAccountService.getCpAccount(accountId, GlobalConstant.CP_TENCENT);
+        logger.info("getCpAccount : get cpAccount : {}", cpAccount);
         if (cpAccount != null) {
             return cpAccount.getCpAccount();
         } else if (createAccount) {
@@ -77,8 +83,12 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
             String cpToken = result.getJSONObject("data").getString("vtoken");
 
             Date date = now != null && now.get() != null ? now.get() : new Date();
-            return cpAccountService.createCpAccount(cpAccountId, cpToken, accountId, date);
+            cpAccount = cpAccountService.createCpAccount(cpAccountId, cpToken, accountId, date);
+            logger.info("getCpAccount : create cpAccount : {}", cpAccount);
+            publishCpAccount(cpAccount);
+            return cpAccount.getCpAccount();
         } else {
+            logger.info("getCpAccount : cpAccount is not exist");
             return null;
         }
     }
@@ -290,8 +300,18 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
     }
 
     private void publishCpOrder(CpOrderDto cpOrderDto) {
+        CpOrder cpOrder = BeanHandler.copyProperties(cpOrderDto, CpOrder.class);
         messageProducer.send(GlobalConstant.MORETV_PUBLISH_CP_EXCHANGE,
-                GlobalConstant.MORETV_PUBLISH_CP_ORDER_ROUTER_KEY, JSON.toJSONString(cpOrderDto));
+                GlobalConstant.MORETV_PUBLISH_CP_ORDER_ROUTER_KEY, JSON.toJSONString(cpOrder));
+        for (CpOrderItem item : cpOrderDto.getCpOrderItems()) {
+            messageProducer.send(GlobalConstant.MORETV_PUBLISH_CP_EXCHANGE,
+                    GlobalConstant.MORETV_PUBLISH_CP_ORDER_ITEM_ROUTER_KEY, JSON.toJSONString(item));
+        }
+    }
+
+    private void publishCpAccount(CpAccount cpAccount) {
+        messageProducer.send(GlobalConstant.MORETV_PUBLISH_CP_EXCHANGE,
+                GlobalConstant.MORETV_PUBLISH_CP_ACCOUNT_ROUTER_KEY, JSON.toJSONString(cpAccount));
     }
 
 }

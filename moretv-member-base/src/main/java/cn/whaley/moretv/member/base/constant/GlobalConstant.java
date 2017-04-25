@@ -43,6 +43,10 @@ public interface GlobalConstant {
     // CP订单明细
     String MORETV_PUBLISH_CP_ORDER_ITEM_ROUTER_KEY = "moretv.publish.cp.order.item.router.key";
     String MORETV_PUBLISH_CP_ORDER_ITEM_QUEUE = "moretv.publish.cp.order.item.queue";
+
+    // 电视猫账号队列
+    String MORETV_PUBLISH_CP_ACCOUNT_ROUTER_KEY = "moretv.publish.cp.account.router.key";
+    String MORETV_PUBLISH_CP_ACCOUNT_QUEUE = "moretv.publish.cp.account.queue";
     
     // 电视猫订单队列
     String MORETV_PUBLISH_BUSINESS_EXCHANGE = "moretv.publish.business";
@@ -52,11 +56,6 @@ public interface GlobalConstant {
     //电视猫订单明细
     String MORETV_PUBLISH_BUSINESS_ORDER_ITEM_ROUTER_KEY = "moretv.publish.business.order.item.router.key";
     String MORETV_PUBLISH_BUSINESS_ORDER_ITEM_QUEUE = "moretv.publish.business.order.item.queue";
-    
-    // 电视猫账号队列
-    String MORETV_PUBLISH_CP_ACCOUNT_EXCHANGE = "moretv.publish.cp.account";
-    String MORETV_PUBLISH_CP_ACCOUNT_ROUTER_KEY = "moretv.publish.cp.account.router.key";
-    String MORETV_PUBLISH_CP_ACCOUNT_QUEUE = "moretv.publish.cp.account.queue";
     
     //电视猫会员对于支付网关的产品编号
     String PAY_GATEWAY_PRODUCT_CODE = "tvmore";

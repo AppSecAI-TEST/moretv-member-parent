@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
-    // 会员模型
+    // CP订单
     @Bean
     public Exchange exchangeCP() {
         return new TopicExchange(GlobalConstant.MORETV_PUBLISH_CP_EXCHANGE);
@@ -23,9 +23,31 @@ public class RabbitConfig {
     }
     
     @Bean
-    public Binding bindingExchangeCP() {
+    public Binding bindingCPOrderExchange() {
         return BindingBuilder.bind(queueCpOrder()).to(exchangeCP())
                 .with(GlobalConstant.MORETV_PUBLISH_CP_ORDER_ROUTER_KEY).noargs();
+    }
+
+    @Bean
+    public Queue queueCpOrderItem() {
+        return new Queue(GlobalConstant.MORETV_PUBLISH_CP_ORDER_ITEM_QUEUE, true);
+    }
+
+    @Bean
+    public Binding bindingCPOrderItemExchange() {
+        return BindingBuilder.bind(queueCpOrder()).to(exchangeCP())
+                .with(GlobalConstant.MORETV_PUBLISH_CP_ORDER_ITEM_ROUTER_KEY).noargs();
+    }
+
+    @Bean
+    public Queue queueCpAccount() {
+        return new Queue(GlobalConstant.MORETV_PUBLISH_CP_ACCOUNT_QUEUE, true);
+    }
+
+    @Bean
+    public Binding bindingCPAccountExchange() {
+        return BindingBuilder.bind(queueCpOrder()).to(exchangeCP())
+                .with(GlobalConstant.MORETV_PUBLISH_CP_ACCOUNT_ROUTER_KEY).noargs();
     }
 
 }
