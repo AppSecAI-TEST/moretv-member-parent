@@ -40,6 +40,7 @@ public interface ApiCodeInfo {
     int API_DATA_MEMBER_AUTH_NOT_EXIST = 530;
 
     int API_DATA_PAY_GATEWAY_ERR = 601;
+    int API_PARAM_PAY_NOTIFY_STATUS_ERR = 602;
 
 
 }

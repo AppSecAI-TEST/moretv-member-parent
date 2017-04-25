@@ -6,7 +6,7 @@ import cn.whaley.moretv.member.base.constant.GlobalConstant;
 
 
 /**
- * Created by leiwenbin on 15/9/29. Log Object
+ * Created by tangzc on 15/9/29. Log Object
  */
 
 public class StringHelper {

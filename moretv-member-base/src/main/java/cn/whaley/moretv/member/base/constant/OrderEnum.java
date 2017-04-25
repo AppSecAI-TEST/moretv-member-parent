@@ -141,18 +141,19 @@ public interface OrderEnum {
      * 交易状态
      */
     enum TradeStatus {
-
-        TRADE_INIT(1, "订单创建"),
-        WAITING_SEND(2, "待发货"),
-        TRADE_FINISHED(3, "交易完成"),
-        TRADE_FAILED(4, "交易失败");
+		TRADE_INIT(1, "创建","TRADE_INIT"),
+		WAITING_SEND(2, "待发货","WAITING_SEND"),
+		TRADE_FINISHED(3, "交易完成","TRADE_FINISHED"),
+		TRADE_TIMEOUT(4, "交易超时","TRADE_TIMEOUT");
 
         private int code;
         private String name;
+        private String nameEng;
 
-        TradeStatus (int code, String name) {
+        TradeStatus (int code, String name, String nameEng) {
             this.code = code;
             this.name = name;
+            this.nameEng = nameEng;
         }
 
         public int getCode() {
@@ -162,7 +163,9 @@ public interface OrderEnum {
         public String getName() {
             return name;
         }
-
+        public String getNameEng() {
+            return nameEng;
+        }
         public static String getNameByCode(int code) {
             for (TradeStatus aEnum : TradeStatus.values()) {
                 if (aEnum.getCode() == code) {
@@ -171,24 +174,33 @@ public interface OrderEnum {
             }
             return UNKNOWN;
         }
+        public static String getNameEngByCode(int code) {
+            for (PayStatus aEnum : PayStatus.values()) {
+                if (aEnum.getCode() == code) {
+                    return aEnum.getNameEng();
+                }
+            }
+            return UNKNOWN;
+        }
     }
-
+   
     /**
      * 支付状态
      */
     enum PayStatus {
-
-        WAITING_PAY(1, "待支付"),
-        PAYING(2, "支付中"),
-        DONE(3, "支付完成"),
-        TIMEOUT(4, "支付超时");
-
+        WAITING_PAY(1, "待支付","WAIT_BUYER_PAY"),
+        PAYING(2, "支付中","PAY_IN"),
+        DONE(3, "支付完成","PAY_SUCCESS"),
+        TIMEOUT(4, "支付超时","PAY_TIMEOUT");
+        
         private int code;
         private String name;
+        private String nameEng;
 
-        PayStatus (int code, String name) {
+        PayStatus (int code, String name,String nameEng) {
             this.code = code;
             this.name = name;
+            this.nameEng = nameEng;
         }
 
         public int getCode() {
@@ -197,6 +209,10 @@ public interface OrderEnum {
 
         public String getName() {
             return name;
+        }
+        
+        public String getNameEng() {
+            return nameEng;
         }
 
         public static String getNameByCode(int code) {
@@ -207,7 +223,17 @@ public interface OrderEnum {
             }
             return UNKNOWN;
         }
+        
+        public static String getNameEngByCode(int code) {
+            for (PayStatus aEnum : PayStatus.values()) {
+                if (aEnum.getCode() == code) {
+                    return aEnum.getNameEng();
+                }
+            }
+            return UNKNOWN;
+        }
     }
+
 
     /**
      * CpOrder订单状态

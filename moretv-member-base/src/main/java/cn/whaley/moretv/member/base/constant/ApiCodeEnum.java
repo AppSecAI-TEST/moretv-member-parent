@@ -32,6 +32,7 @@ public enum ApiCodeEnum {
     API_DATA_ORDER_STATUS_ERR(ApiCodeInfo.API_DATA_ORDER_STATUS_ERR, "orderStatus error"),
     
     API_DATA_PAY_GATEWAY_ERR(ApiCodeInfo.API_DATA_PAY_GATEWAY_ERR, "pay_gateway error"),
+    API_PARAM_PAY_NOTIFY_STATUS_ERR(ApiCodeInfo.API_PARAM_PAY_NOTIFY_STATUS_ERR, "pay notify status error"),
 
     API_DATA_MEMBER_AUTH_NOT_EXIST(ApiCodeInfo.API_DATA_MEMBER_AUTH_NOT_EXIST, "member not exist"),
     ;

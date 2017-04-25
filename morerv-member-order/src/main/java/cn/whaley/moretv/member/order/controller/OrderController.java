@@ -12,14 +12,18 @@ import cn.whaley.moretv.member.order.service.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
+import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
 import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayRequest;
 import cn.whaley.moretv.member.base.dto.request.BaseRequest;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.manager.PayManage;
 import cn.whaley.moretv.member.base.util.IpUtil;
+import cn.whaley.moretv.member.base.util.MD5Util;
+import cn.whaley.moretv.member.base.util.StringHelper;
 
 @RestController
 @RequestMapping("/order_api")

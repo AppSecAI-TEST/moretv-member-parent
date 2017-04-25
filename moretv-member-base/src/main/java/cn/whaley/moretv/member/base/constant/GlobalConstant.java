@@ -17,6 +17,10 @@ public interface GlobalConstant {
     String CHARSET_UTF8 = "UTF-8";
 
     String TENCENT_RESULT_STUTAS_YES = "0";
+    
+    // 订单状态常量数组
+ 	public static final String[] ORDER_STATUS_STR_ARRAY = { "UNKNOWN", "WAIT_BUYER_PAY", "WAITING_SEND",
+ 			"TRADE_FINISHED", "TRADE_TIMEOUT" };
 
     //商品队列
     String MORETV_PUBLISH_GOODS_QUEUE = "moretv.publish.goods.queue";

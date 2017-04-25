@@ -19,6 +19,7 @@
     <include refid="Base_Column_List" />
     from business_order bod
     where bod.order_code = #{orderCode,jdbcType=VARCHAR}
+    	  and bod.valid_status = 1
   </select>
   
   <update id="updateOrderPayStatus" parameterType="java.util.Map" >
