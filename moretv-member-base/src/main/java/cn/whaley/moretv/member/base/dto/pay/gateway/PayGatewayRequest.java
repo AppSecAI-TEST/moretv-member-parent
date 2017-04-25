@@ -31,7 +31,7 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
     /**
      * 是否自动续费
      */
-    private String payAutoRenew;
+    private Integer payAutoRenew;
     
     /**
      * 支付类型
@@ -46,7 +46,7 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
     /**
      * 支付价格（分）
      */
-    private Long free;
+    private Integer free;
     
     /**
      * 超时时间
@@ -90,11 +90,11 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
         this.subject = subject;
     }
 
-    public String getPayAutoRenew() {
+    public Integer getPayAutoRenew() {
         return payAutoRenew;
     }
 
-    public void setPayAutoRenew(String payAutoRenew) {
+    public void setPayAutoRenew(Integer payAutoRenew) {
         this.payAutoRenew = payAutoRenew;
     }
 
@@ -114,11 +114,11 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
         this.orderCode = orderCode;
     }
 
-    public Long getFree() {
+    public Integer getFree() {
         return free;
     }
 
-    public void setFree(Long free) {
+    public void setFree(Integer free) {
         this.free = free;
     }
 

@@ -25,6 +25,9 @@ public class CustomProperty {
 
     // 支付网关
     private String payGatewayServer;
+    
+    //请求支付网关md5的key
+    private String payGatewaySignKey;
 
     // 本地服务地址
     private String localHostServer;
@@ -231,4 +234,11 @@ public class CustomProperty {
         this.notifyUrl = notifyUrl;
     }
 
+    public String getPayGatewaySignKey() {
+        return payGatewaySignKey;
+    }
+
+    public void setPayGatewaySignKey(String payGatewaySignKey) {
+        this.payGatewaySignKey = payGatewaySignKey;
+    }
 }

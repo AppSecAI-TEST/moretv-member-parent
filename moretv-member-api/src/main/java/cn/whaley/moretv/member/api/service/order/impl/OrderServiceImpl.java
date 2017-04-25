@@ -38,10 +38,10 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 
 
     @Override
-    public ResultResponse getByOrderCode(String orderCode) {
+    public ResultResponse getByOrderCode(BaseRequest baseRequest, String orderCode) {
         Order order = orderMapper.getByOrderCode(orderCode);
         //只有交易状态为已完成的才返回
-        if(order == null || (order.getTradeStatus().intValue() != OrderEnum.TradeStatus.TRADE_FINISHED.getCode()) )
+        if(order == null || (order.getTradeStatus().intValue() != OrderEnum.TradeStatus.TRADE_FINISHED.getCode()) || (!baseRequest.getAccountId().equals(order.getAccountId())) )
             return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
         
         OrderDetailDto orderDto = new OrderDetailDto();

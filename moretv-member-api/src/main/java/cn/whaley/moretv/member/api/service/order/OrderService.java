@@ -8,6 +8,6 @@ public interface OrderService extends BaseOrderService {
 
     ResultResponse listByAccountId(BaseRequest baseRequest);
 
-    ResultResponse getByOrderCode(String orderCode);
+    ResultResponse getByOrderCode(BaseRequest baseRequest, String orderCode);
 
 }

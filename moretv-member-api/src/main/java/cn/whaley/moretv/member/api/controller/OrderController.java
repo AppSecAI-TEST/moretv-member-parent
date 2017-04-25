@@ -36,6 +36,6 @@ public class OrderController {
         if(StringUtils.isEmpty(orderCode)){
             return ResultResponse.define(ApiCodeEnum.API_PARAM_ERR);
         }
-        return orderService.getByOrderCode(orderCode);
+        return orderService.getByOrderCode(baseRequest, orderCode);
     }
 }

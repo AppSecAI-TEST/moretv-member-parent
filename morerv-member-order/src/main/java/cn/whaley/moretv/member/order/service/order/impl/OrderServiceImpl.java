@@ -21,6 +21,7 @@ import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayRequest;
 import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayResponse;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
+import cn.whaley.moretv.member.base.manager.PayManage;
 import cn.whaley.moretv.member.base.util.DateFormatUtil;
 import cn.whaley.moretv.member.base.util.paygateway.PayGatewayUtil;
 import cn.whaley.moretv.member.model.goods.Goods;
@@ -92,7 +93,11 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	
     @Override
     public ResultResponse pay(PayGatewayRequest payGatewayRequest) {
-        //TODO 1、MD5
+        //1、MD5
+        if(!checkSign(payGatewayRequest)){
+            logger.error("申请支付, md5验证失败, 请求参数->{}", payGatewayRequest.toString());
+            return ResultResponse.define(ApiCodeEnum.API_SIGN_ERR);
+        }
         
         //2、验证
         //2.1、验证商品
@@ -137,5 +142,18 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
         orderMapper.updateOrderPayStatus(map);
 
         return ResultResponse.success(new OrderPayResponse(payGatewayResponse.getContent()));
+    }
+
+    private boolean checkSign(PayGatewayRequest payGatewayRequest) {
+        //拼接MD5的参数
+        String param = PayManage.getParams4Sign(payGatewayRequest.getSessionToken(), payGatewayRequest.getCip(), 
+                payGatewayRequest.getTimestamp(), payGatewayRequest.getGoodsCode(), payGatewayRequest.getSubject(), 
+                payGatewayRequest.getPayAutoRenew(), payGatewayRequest.getPayType(), payGatewayRequest.getOrderCode(),
+                payGatewayRequest.getFree(), payGatewayRequest.getAccountId()).toString();
+        
+        if(PayManage.getPayUrlSign(param).equals(payGatewayRequest.getSign()))
+            return true;
+        
+        return false;
     }
 }
