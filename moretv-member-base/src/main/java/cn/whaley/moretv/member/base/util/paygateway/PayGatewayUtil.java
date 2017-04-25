@@ -58,11 +58,7 @@ public class PayGatewayUtil {
         map.put("goodsNo", payGatewayRequest.getGoodsCode());
         map.put("notifyUrl", customProperty.getNotifyUrl());
         map.put("overTime", payGatewayRequest.getExpireTime());
-        if("alipay".equals(payGatewayRequest.getPayType())){
-            map.put("payMethod", "ali_wappay");
-        }else if("wechat pay".equals(payGatewayRequest.getPayType())){
-            map.put("payMethod", "weixi_wappay");
-        }
+        map.put("payMethod", payGatewayRequest.getPayType());
         
         map.put("sign", getSign(map));
         
