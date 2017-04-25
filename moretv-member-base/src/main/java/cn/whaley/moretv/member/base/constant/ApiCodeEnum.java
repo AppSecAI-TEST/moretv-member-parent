@@ -18,9 +18,13 @@ public enum ApiCodeEnum {
     API_SIGN_ERR(ApiCodeInfo.API_SIGN_ERR, "sign error"),
     API_DATA_NOT_EXIST(ApiCodeInfo.API_DATA_NOT_EXIST, "data not exist"),
 
+    API_SECURITY_ERR_PROGRAM_VIP(ApiCodeInfo.API_SECURITY_ERR_PROGRAM_VIP, "authentication error, program is vip"),
+    API_SECURITY_ERR_MEMBER_NO_AUTH(ApiCodeInfo.API_SECURITY_ERR_MEMBER_NO_AUTH, "authentication error, account is not a member"),
+
     API_TENCENT_ACCESS_TOKEN_ERR(ApiCodeInfo.API_TENCENT_ACCESS_TOKEN_ERR, "tencent access token error"),
     API_TENCENT_REQUEST_ERR(ApiCodeInfo.API_TENCENT_REQUEST_ERR, "tencent request error"),
     API_TENCENT_RESULT_ERR(ApiCodeInfo.API_TENCENT_RESULT_ERR, "tencent result error"),
+    API_MSD_ACCESS_TOKEN_ERR(ApiCodeInfo.API_MSD_ACCESS_TOKEN_ERR, "msd access token error"),
 
     API_DATA_GOODS_STATUS_ERR(ApiCodeInfo.API_DATA_GOODS_STATUS_ERR, "goodsStatus error"),
     API_PARAM_ACCOUNT_ID_NULL(ApiCodeInfo.API_PARAM_ACCOUNT_ID_NULL, "accountId is null"),
@@ -28,6 +32,8 @@ public enum ApiCodeEnum {
     API_PARAM_MEMBER_CODE_ID_NULL(ApiCodeInfo.API_PARAM_MEMBER_CODE_ID_NULL, "memberCode is null"),
     API_DATA_GOODS_NOT_ONLINE(ApiCodeInfo.API_DATA_GOODS_NOT_ONLINE, "goods not online"),
     API_DATA_GOODS_CAN_NOT_BUY(ApiCodeInfo.API_DATA_GOODS_CAN_NOT_BUY, "goods can not buy"),
+    API_PARAM_CP_NULL(ApiCodeInfo.API_PARAM_CP_NULL, "param cp is null"),
+    API_PARAM_VIDEOINFO_NULL(ApiCodeInfo.API_PARAM_VIDEOINFO_NULL, "param videoinfo is null"),
     
     API_DATA_ORDER_STATUS_ERR(ApiCodeInfo.API_DATA_ORDER_STATUS_ERR, "orderStatus error"),
     

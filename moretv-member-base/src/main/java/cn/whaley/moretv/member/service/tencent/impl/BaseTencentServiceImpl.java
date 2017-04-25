@@ -27,22 +27,8 @@ public class BaseTencentServiceImpl implements BaseTencentService {
     @Autowired
     protected CustomProperty.Tencent tencent;
 
-    @Override
     public String getAccessToken() {
-        String accessToken = "";
-        logger.info("获取accessToken");
-        try {
-            accessToken = ExternalManage.getAccessToken();
-        } catch (Exception e) {
-            logger.info("获取accessToken失败", e);
-            throw new SystemException(ApiCodeEnum.API_TENCENT_ACCESS_TOKEN_ERR);
-        }
-
-        if ("".equals(accessToken)) {
-            logger.info("获取accessToken为空");
-            throw new SystemException(ApiCodeEnum.API_TENCENT_ACCESS_TOKEN_ERR);
-        }
-        return accessToken;
+        return ExternalManage.getAccessToken();
     }
 
     public JSONObject getRequest(String url, String logMsg) {

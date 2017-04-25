@@ -1,6 +1,8 @@
 package cn.whaley.moretv.member.base.manager;
 
 import cn.whaley.moretv.member.base.config.CustomProperty;
+import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
+import cn.whaley.moretv.member.base.exception.SystemException;
 import cn.whaley.moretv.member.base.util.HttpHelper;
 import cn.whaley.moretv.member.base.util.LogHelper;
 
@@ -25,12 +27,18 @@ public class ExternalManage {
         ExternalManage.tencent = tencent;
     }
 
-    public static String getAccessToken() throws Exception {
-        if ((System.currentTimeMillis() - timestamp) > (90 * 60 * 1000) || accessToken == null) {
-            if (!ExternalManage.generateAccessToken())
-                return "";
+    public static String getAccessToken() {
+        try {
+            if ((System.currentTimeMillis() - timestamp) > (90 * 60 * 1000) || accessToken == null) {
+                if (!ExternalManage.generateAccessToken()) {
+                    throw new SystemException(ApiCodeEnum.API_TENCENT_ACCESS_TOKEN_ERR);
+                }
+            }
+            return ExternalManage.accessToken;
+        } catch (Exception e) {
+            LogHelper.getLogger().error("获取accessToken失败", e);
+            throw new SystemException(ApiCodeEnum.API_TENCENT_ACCESS_TOKEN_ERR);
         }
-        return ExternalManage.accessToken;
     }
 
     protected static void setAccessToken(String accessToken) {

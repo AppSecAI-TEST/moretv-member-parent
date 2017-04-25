@@ -6,8 +6,13 @@ package cn.whaley.moretv.member.base.constant;
 public interface GlobalConstant {
     
     String UNIT_YUAN = "元";
-    
-    String CP_TENCENT = "tencent"; 
+
+    //CP腾讯
+    String CP_TENCENT = "tencent";
+    //CP蘑菇
+    String CP_MOGUV = "moguv";
+    //CP香菇
+    String CP_XIANGGU = "xiangguv";
     
     String WHALEY_SERVICE_ID = "111";
 

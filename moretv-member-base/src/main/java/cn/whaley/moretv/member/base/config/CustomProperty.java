@@ -34,9 +34,11 @@ public class CustomProperty {
 
     //MSD地址
     private String msdServer;
-    
+
     //提供给支付网关回调支付状态
     private String notifyUrl;
+
+    private String xiangguServer;
 
     public static class Tencent {
 
@@ -213,6 +215,14 @@ public class CustomProperty {
         this.tempPayDispatchUrl = tempPayDispatchUrl;
     }
 
+    public String getXiangguServer() {
+        return xiangguServer;
+    }
+
+    public void setXiangguServer(String xiangguServer) {
+        this.xiangguServer = xiangguServer;
+    }
+
     public String getNotifyUrl() {
         return notifyUrl;
     }
@@ -220,5 +230,5 @@ public class CustomProperty {
     public void setNotifyUrl(String notifyUrl) {
         this.notifyUrl = notifyUrl;
     }
-    
+
 }

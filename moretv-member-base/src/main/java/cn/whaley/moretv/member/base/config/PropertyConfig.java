@@ -28,6 +28,7 @@ public class PropertyConfig {
         AppsCipherManage.setAppsEncryptUrl(customProperty.getAppsEncryptUrl());
         AppsCipherManage.setAppsDecryptoUrl(customProperty.getAppsDecryptoUrl());
         MsdManage.setMsdServer(customProperty.getMsdServer());
+        MsdManage.setXiangguServer(customProperty.getXiangguServer());
         PayManage.setLocalHostServer(customProperty.getLocalHostServer());
         PayManage.setPayGatewayServer(customProperty.getPayGatewayServer());
         PayManage.setTempPayDispatchUrl(customProperty.getTempPayDispatchUrl());

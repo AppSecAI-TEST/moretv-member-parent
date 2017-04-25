@@ -1,6 +1,7 @@
 package cn.whaley.moretv.member.base.log;
 
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
+import cn.whaley.moretv.member.base.exception.SystemException;
 import cn.whaley.moretv.member.base.util.ValidateHandler;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -52,6 +53,9 @@ public class LogAspect {
             result = point.proceed(args);
             logger.info(logInfo.afterLog(result));
             return result;
+        } catch (SystemException e) {
+            logger.error(logInfo.throwLog(e.getCode() + " : " + e.getMessage()));
+            return ResultResponse.define(Integer.valueOf(e.getCode()), e.getMessage());
         } catch (Throwable e) {
             logger.error(logInfo.throwLog(e.getMessage()), e);
             return ResultResponse.failed(e.getMessage());
