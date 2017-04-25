@@ -45,7 +45,7 @@ public class GoodsController {
      * @return
      */
     @RequestMapping(value = "/get_goods_by_tag", method = RequestMethod.POST)
-    public ResultResponse getGoodsByTag(BaseRequest baseRequest, String goodsTag) {
+    public ResultResponse getGoodsByTag(BaseRequest baseRequest, @RequestParam String goodsTag) {
         if (StringUtils.isEmpty(goodsTag)) {
             return ResultResponse.define(ApiCodeEnum.API_PARAM_GOODS_TAG_ID_NULL);
         }
@@ -60,7 +60,7 @@ public class GoodsController {
      * @return
      */
     @RequestMapping(value = "/get_goods_spu_by_tag", method = RequestMethod.POST)
-    public ResultResponse getGoodsSpuList(BaseRequest baseRequest, String memberCode) {
+    public ResultResponse getGoodsSpuList(@ValidateIgnore BaseRequest baseRequest, @RequestParam String memberCode) {
         if (StringUtils.isEmpty(memberCode)) {
             return ResultResponse.define(ApiCodeEnum.API_PARAM_MEMBER_CODE_ID_NULL);
         }

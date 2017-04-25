@@ -21,17 +21,11 @@ public class ValidateHandler {
     private static Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
     public static Object validate(Object[] args, LogAspect.LogInfo logInfo) {
-        if (logInfo.getClazzName().startsWith("HttpErrorHandler")) {
+        if (logInfo.getClazzName().startsWith("HttpErrorHandler") || args == null || args.length == 0) {
             return null;
         }
 
-        if (args == null || args.length == 0) {
-            return define(ApiCodeEnum.API_PARAM_NULL, logInfo);
-        }
-
-        if (args[0].getClass() != BaseRequest.class && args[0].getClass().getSuperclass() != BaseRequest.class) {
-            return define(ApiCodeEnum.API_PARAM_ERR, logInfo);
-        } else {
+        if (args[0] instanceof BaseRequest || BaseRequest.class.isAssignableFrom(args[0].getClass())) {
             BaseRequest baseRequest = (BaseRequest) args[0];
 
             if (StringUtils.isEmpty(baseRequest.getAccessToken()) && baseRequest.getAccountId() == null

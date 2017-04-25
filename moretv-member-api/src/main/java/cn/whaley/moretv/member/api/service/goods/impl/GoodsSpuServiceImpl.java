@@ -17,7 +17,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Map;
 
 /**
 * ServiceImpl: GoodsSpuServiceImpl
@@ -44,13 +43,13 @@ public class GoodsSpuServiceImpl extends BaseGoodsSpuServiceImpl implements Good
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
         List<GoodsSpuResponse> goodsSpuList = Lists.newArrayList();
 
-        Map<String, String> map = opsHash.entries(CacheKeyConstant.REDIS_KEY_GOODS_SPU);
-        if (CollectionUtils.isEmpty(map)) {
+        List<String> list = opsHash.values(CacheKeyConstant.REDIS_KEY_GOODS_SPU);
+        if (CollectionUtils.isEmpty(list)) {
             return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
         }
 
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            GoodsSpu goodsSpu = JSON.parseObject(entry.getValue(), GoodsSpu.class);
+        for (String value : list) {
+            GoodsSpu goodsSpu = JSON.parseObject(value, GoodsSpu.class);
             GoodsSpuResponse response = ResponseHandler.converGoodsSpu(goodsSpu);
 
             if (StringUtils.isEmpty(memberCode)) {
@@ -60,6 +59,9 @@ public class GoodsSpuServiceImpl extends BaseGoodsSpuServiceImpl implements Good
             }
         }
 
+        if (CollectionUtils.isEmpty(goodsSpuList)) {
+            return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
+        }
         return ResultResponse.success(goodsSpuList);
     }
 

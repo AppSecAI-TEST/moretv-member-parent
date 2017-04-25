@@ -37,20 +37,24 @@ public class OrderController {
      * 
      */
     @RequestMapping(value = "/create_order", method = RequestMethod.POST)
-    public ResultResponse create_order(HttpServletRequest request,BaseRequest baseRequest,String sessionToken,String goodsCode,Integer payAutoRenew,String payType) {
+    public ResultResponse create_order(BaseRequest baseRequest, HttpServletRequest request, String sessionToken,
+            String goodsCode, Integer payAutoRenew, String payType) {
     	ResultResponse<Order> result = orderService.createOrder(goodsCode, payType, payAutoRenew, baseRequest.getAccountId());
-    	Order order =result.getData();
-    	
+
     	//设定返回值
-    	Map<String,String> data = new HashMap<String,String>();
-    	if(ApiCodeEnum.API_OK.getCode() == result.getCode()){
-    		String payUrl = PayManage.getPayUrl(sessionToken, IpUtil.getIp2(request), System.currentTimeMillis(), goodsCode, order.getOrderTitle(), payAutoRenew, payType, order.getOrderCode(), order.getPaymentAmount(), order.getAccountId());
+    	if(result.isSuccess()){
+    	    Map<String,String> data = new HashMap<String,String>();
+            Order order = result.getData();
+
+    		String payUrl = PayManage.getPayUrl(sessionToken, IpUtil.getIp2(request), System.currentTimeMillis(),
+                    goodsCode, order.getOrderTitle(), payAutoRenew, payType, order.getOrderCode(),
+                    order.getPaymentAmount(), order.getAccountId());
+
     		data.put("orderCode",order.getOrderCode());
     		data.put("redirectUrl", payUrl);
     		return ResultResponse.success(data);
-    	}else{
-    		return result;
     	}
+        return result;
     }
     
     /**
