@@ -37,10 +37,8 @@ public class PayGatewayUtil {
      * 向支付网关申请支付
      */
     public static PayGatewayResponse pay(PayGatewayRequest payGatewayRequest, Order order) {
-        String tempUrl = null;
-        if(OrderEnum.PayChannel.ALIPAY.getCode().equals(payGatewayRequest.getPayType()))
-            tempUrl = "/aliwappay";
-        else if(OrderEnum.PayChannel.WECHAT.getCode().equals(payGatewayRequest.getPayType()))
+        String tempUrl = "/aliwappay";//默认支付宝
+        if(OrderEnum.PayChannel.WECHAT.getCode().equals(payGatewayRequest.getPayType()))
             tempUrl = "/weixinwappay";
         
         String result = HttpClientUtil.post(customProperty.getPayGatewayServer() + tempUrl, setParam(payGatewayRequest, order));
