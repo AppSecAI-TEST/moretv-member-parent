@@ -76,6 +76,10 @@ public class ResultResponse<V> extends HashMap<String, Object> {
         return new ResultResponse(apiCodeEnum, data);
     }
 
+    public ResultResponse define() {
+        return this;
+    }
+
     public int getCode() {
         return Integer.valueOf(get(CODE).toString()).intValue();
     }
