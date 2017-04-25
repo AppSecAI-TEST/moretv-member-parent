@@ -221,19 +221,7 @@ public class PayManage {
 	 */
 	public static String getPayUrl(String sessionToken, String cip,Long timestamp,String goodsCode,String subject
 			,int payAutoRenew,String payType,String orderCode,int fee,int accountId){
-		StringBuffer parm = new StringBuffer();
-		//需要作为验签的参数
-		parm.append("orderCode="+orderCode);
-		parm.append("&timestamp="+timestamp);
-		parm.append("&cip="+cip);
-		parm.append("&goodsCode="+goodsCode);
-		parm.append("&subject="+subject);
-		parm.append("&payAutoRenew="+payAutoRenew);
-		parm.append("&payType="+payType);
-		parm.append("&orderCode="+orderCode);
-		parm.append("&fee="+fee);
-		parm.append("&expire_time=120");
-		parm.append("&accountId="+accountId);
+		StringBuffer parm = getParams4Sign(sessionToken, cip, timestamp, goodsCode, subject, payAutoRenew, payType, orderCode, fee, accountId);
 		String sign = getPayUrlSign(parm.toString());
 		//需要作为验签的参数
 		parm.append("&version=1.0");
@@ -249,4 +237,22 @@ public class PayManage {
 		parm.append(payParamSignKey);
 		return MD5Util.string2MD5(parm.toString());
     }
+	
+	public static StringBuffer getParams4Sign(String sessionToken, String cip,Long timestamp,String goodsCode,String subject
+            ,int payAutoRenew,String payType,String orderCode,int fee,int accountId){
+	    StringBuffer parm = new StringBuffer();
+        //需要作为验签的参数
+        parm.append("orderCode="+orderCode);
+        parm.append("&timestamp="+timestamp);
+        parm.append("&cip="+cip);
+        parm.append("&goodsCode="+goodsCode);
+        parm.append("&subject="+subject);
+        parm.append("&payAutoRenew="+payAutoRenew);
+        parm.append("&payType="+payType);
+        parm.append("&orderCode="+orderCode);
+        parm.append("&fee="+fee);
+        parm.append("&expire_time=120");
+        parm.append("&accountId="+accountId);
+        return parm;
+	}
 }

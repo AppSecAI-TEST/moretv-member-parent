@@ -1,5 +1,8 @@
 package cn.whaley.moretv.member.base.manager;
 
+import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
+import cn.whaley.moretv.member.base.constant.GlobalConstant;
+import cn.whaley.moretv.member.base.exception.SystemException;
 import cn.whaley.moretv.member.base.util.HttpHelper;
 import cn.whaley.moretv.member.base.util.LogHelper;
 
@@ -13,28 +16,45 @@ import com.alibaba.fastjson.JSONObject;
 public class MsdManage {
 
     public static String MSD_SERVER;
+    public static String XIANGGU_SERVER;
 
     public static void setMsdServer(String msdServer) {
         MSD_SERVER = msdServer;
     }
 
-    public static String getInternalAccessToken(String videoinfo) throws Exception {
-        LogHelper.getLogger().info(videoinfo);
+    public static void setXiangguServer(String xiangguServer) {
+        XIANGGU_SERVER = xiangguServer;
+    }
+
+    public static String getInternalAccessToken(String cp, String videoinfo) {
+
         HttpHelper httpHandle = new HttpHelper();
-        httpHandle.setConnectTimeout(5000);
-        httpHandle.setReadTimeout(5000);
-        String uri = MSD_SERVER + "/getToken?videoinfo=" + videoinfo + "&timestamp=" + System.currentTimeMillis();
-        LogHelper.getLogger().info("external_uri_request,uri:" + uri);
-        String res = httpHandle.doGet(uri);
-        LogHelper.getLogger().info("external_uri_response,response" + res + ",uri:" + uri);
+        String uri = "%s?videoinfo=" + videoinfo + "&timestamp=" + System.currentTimeMillis();
 
- 
-        JSONObject kgcJson = JSONObject.parseObject(res);
-        String status = kgcJson.get("status").toString();
+        if (GlobalConstant.CP_MOGUV.equals(cp)) {
+            uri = String.format(uri, MSD_SERVER);
+        } else if(GlobalConstant.CP_XIANGGU.equals(cp)) {
+            uri = String.format(uri, XIANGGU_SERVER);
+        } else {
+            throw new SystemException(ApiCodeEnum.API_PARAM_ERR);
+        }
 
-        if (!status.equals("200"))
-            return "";
-        String token = kgcJson.get("internal_accesstoken").toString();
-        return token;
+        LogHelper.getLogger().info("external_uri_request,uri:{}", uri);
+
+        try {
+            String res = httpHandle.doGet(uri);
+            LogHelper.getLogger().info("external_uri_response,response:{}", res);
+
+            JSONObject kgcJson = JSONObject.parseObject(res);
+            String status = kgcJson.get("status").toString();
+
+            if (!status.equals("200")) {
+                throw new SystemException(ApiCodeEnum.API_MSD_ACCESS_TOKEN_ERR);
+            }
+            return kgcJson.get("internal_accesstoken").toString();
+        } catch (Exception e) {
+            LogHelper.getLogger().error("external_uri_response,error", e);
+            throw new SystemException(ApiCodeEnum.API_MSD_ACCESS_TOKEN_ERR);
+        }
     }
 }

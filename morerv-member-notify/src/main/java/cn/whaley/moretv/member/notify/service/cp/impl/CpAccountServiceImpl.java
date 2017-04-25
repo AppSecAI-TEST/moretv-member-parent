@@ -27,7 +27,7 @@ public class CpAccountServiceImpl extends BaseCpAccountServiceImpl implements Cp
     }
 
     @Override
-    public String createCpAccount(String cpAccountId, String cpToken, Integer accountId, Date date) {
+    public CpAccount createCpAccount(String cpAccountId, String cpToken, Integer accountId, Date date) {
         CpAccount account = new CpAccount();
         account.setCpAccount(cpAccountId);
         account.setCpToken(cpToken);
@@ -36,6 +36,6 @@ public class CpAccountServiceImpl extends BaseCpAccountServiceImpl implements Cp
         account.setStatus(GlobalEnum.StatusText.VALID.getCode());
         account.setCreateTime(date);
         cpAccountMapper.insertSelective(account);
-        return account.getCpAccount();
+        return account;
     }
 }

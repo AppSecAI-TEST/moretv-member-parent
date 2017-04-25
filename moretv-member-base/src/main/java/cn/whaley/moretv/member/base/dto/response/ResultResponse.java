@@ -16,24 +16,28 @@ public class ResultResponse<V> extends HashMap<String, Object> {
     protected static final String DATA = "data";
     protected String dataKey;
 
-    public ResultResponse(String code, String msg) {
-        put(CODE, code);
-        put(MSG, msg);
+    public ResultResponse(int code, String msg) {
+        setCode(code);
+        setMsg(msg);
     }
 
     public ResultResponse(ApiCodeEnum apiCodeEnum) {
-        put(CODE, apiCodeEnum.getCode());
-        put(MSG, apiCodeEnum.getMsg());
+        setCode(apiCodeEnum.getCode());
+        setMsg(apiCodeEnum.getMsg());
     }
 
     public ResultResponse() {
         this(ApiCodeEnum.API_UNKNOWN);
     }
 
+    public ResultResponse(ApiCodeEnum apiCodeEnum, V data) {
+        this(apiCodeEnum);
+        setData(data);
+    }
+
     public ResultResponse(ApiCodeEnum apiCodeEnum, String dataKey, V data) {
         this(apiCodeEnum);
-        put(dataKey, data);
-        this.dataKey = dataKey;
+        setData(dataKey, data);
     }
 
     public static ResultResponse success() {
@@ -41,7 +45,7 @@ public class ResultResponse<V> extends HashMap<String, Object> {
     }
 
     public static <V> ResultResponse<V> success(V data) {
-        return success(DATA, data);
+        return new ResultResponse(ApiCodeEnum.API_OK, data);
     }
 
     public static <V> ResultResponse<V> success(String key, V data) {
@@ -53,11 +57,11 @@ public class ResultResponse<V> extends HashMap<String, Object> {
     }
 
     public static ResultResponse failed(String msg) {
-        return new ResultResponse(String.valueOf(ApiCodeEnum.API_SYS_ERR.getCode()), msg);
+        return new ResultResponse(ApiCodeEnum.API_SYS_ERR.getCode(), msg);
     }
 
     public static ResultResponse define(Integer code, String msg) {
-        return new ResultResponse(code.toString(), msg);
+        return new ResultResponse(code, msg);
     }
 
     public static ResultResponse define(ApiCodeEnum apiCodeEnum) {
@@ -69,19 +73,36 @@ public class ResultResponse<V> extends HashMap<String, Object> {
     }
 
     public static <V> ResultResponse<V> define(ApiCodeEnum apiCodeEnum, V data) {
-        return define(apiCodeEnum, DATA, data);
+        return new ResultResponse(apiCodeEnum, data);
     }
 
     public int getCode() {
         return Integer.valueOf(get(CODE).toString()).intValue();
     }
 
+    public void setCode(int code) {
+        put(CODE, code);
+    }
+
     public String getMsg() {
         return get(MSG).toString();
     }
 
+    public void setMsg(String msg) {
+        put(MSG, msg);
+    }
+
     public V getData() {
-        return (V) get(dataKey);
+        return get(dataKey) != null ? (V) get(dataKey) : null;
+    }
+
+    public void setData(V data) {
+        setData(DATA, data);
+    }
+
+    public void setData(String dataKey, V data) {
+        this.dataKey = dataKey;
+        put(dataKey, data);
     }
 
     public boolean isSuccess() {

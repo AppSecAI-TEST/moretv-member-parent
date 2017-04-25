@@ -43,4 +43,22 @@ public interface MemberService extends BaseMemberService {
      */
     Boolean accountIsMember(Integer accountId);
 
+    /**
+     * <p>账户是否为指定的会员</p>
+     *
+     * @param accountId
+     * @param memberCode
+     * @return
+     */
+    Boolean accountIsMember(Integer accountId, String memberCode);
+
+
+    /**
+     * <p>查询账户是否为腾讯会员</p>
+     *
+     * @param accountId
+     * @return
+     */
+    Boolean accountIsTencentMember(Integer accountId);
+
 }

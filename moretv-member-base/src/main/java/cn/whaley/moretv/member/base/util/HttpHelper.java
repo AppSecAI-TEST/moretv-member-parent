@@ -14,10 +14,12 @@ import java.util.Map;
 public final class HttpHelper {
 
     private String charset = "utf-8";
-    private Integer connectTimeout = null;
-    private Integer readTimeout = null;
+    private Integer connectTimeout = 5000;
+    private Integer readTimeout = 5000;
     private String proxyHost = null;
     private Integer proxyPort = null;
+
+
 
     /**
      * Get Request
@@ -184,10 +186,8 @@ public final class HttpHelper {
      * @param connection
      */
     private void renderRequest(URLConnection connection) {
-        if (connectTimeout != null)
-            connection.setConnectTimeout(connectTimeout);
-        if (readTimeout != null)
-            connection.setReadTimeout(readTimeout);
+        connection.setConnectTimeout(connectTimeout);
+        connection.setReadTimeout(readTimeout);
     }
 
     /*

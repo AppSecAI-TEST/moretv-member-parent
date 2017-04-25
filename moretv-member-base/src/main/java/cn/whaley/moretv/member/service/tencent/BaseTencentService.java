@@ -5,6 +5,4 @@ package cn.whaley.moretv.member.service.tencent;
  */
 public interface BaseTencentService {
 
-    String getAccessToken();
-
 }

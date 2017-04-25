@@ -6,6 +6,7 @@ import cn.whaley.moretv.member.api.service.member.MemberService;
 import cn.whaley.moretv.member.api.service.member.MemberUserAuthorityService;
 import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
+import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.model.member.Member;
@@ -13,6 +14,7 @@ import cn.whaley.moretv.member.model.member.MemberUserAuthority;
 import cn.whaley.moretv.member.service.member.impl.BaseMemberServiceImpl;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,13 +57,11 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
             GlobalEnum.MemberStatus status = GlobalEnum.MemberStatus.NOT_OPEN;
 
             for (MemberUserAuthority authority : authorityList) {
-                if (authority != null
-                        && GlobalEnum.StatusText.VALID.getCode().equals(authority.getStatus())
-                        && member.getCode().equals(authority.getMemberCode())) {
+                if (member.getCode().equals(authority.getMemberCode())) {
                     memberStatus.setStartTime(authority.getStartTime());
                     memberStatus.setEndTime(authority.getEndTime());
 
-                    if (authority.getEndTime().getTime() - now.getTime() > 1) {
+                    if (authority.getEndTime().after(now)) {
                         status = GlobalEnum.MemberStatus.OPEN;
                     } else {
                         status = GlobalEnum.MemberStatus.EXPIRED;
@@ -89,9 +89,7 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
 
         for (MemberUserAuthority authority : authorityList) {
             //有效会员权益
-            if (authority != null
-                    && GlobalEnum.StatusText.VALID.getCode().equals(authority.getStatus())
-                    && (authority.getEndTime().getTime() - now.getTime() > 1)) {
+            if (authority.getEndTime().after(now)) {
                 MemberInfoResponse response = ResponseHandler.copyProperties(authority, MemberInfoResponse.class);
                 infoResponseList.add(response);
             }
@@ -104,6 +102,38 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
         ResultResponse<List<MemberInfoResponse>> response = getMemberInfo(accountId);
         if (response.isSuccess() && !response.getData().isEmpty()) {
             return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean accountIsMember(Integer accountId, String memberCode) {
+        ResultResponse<List<MemberInfoResponse>> response = getMemberInfo(accountId);
+        if (response.isSuccess()) {
+            List<MemberInfoResponse> responseList = response.getData();
+            for (MemberInfoResponse memberInfo : responseList) {
+                if (memberInfo.getMemberCode().equals(memberCode)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean accountIsTencentMember(Integer accountId) {
+        ResultResponse<List<MemberInfoResponse>> response = getMemberInfo(accountId);
+        if (response.isSuccess()) {
+            HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
+
+            List<MemberInfoResponse> responseList = response.getData();
+            for (MemberInfoResponse memberInfo : responseList) {
+                String key = String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, memberInfo.getMemberCode());
+                Long count = opsHash.size(key);
+                if (count > 0L) {
+                    return true;
+                }
+            }
         }
         return false;
     }

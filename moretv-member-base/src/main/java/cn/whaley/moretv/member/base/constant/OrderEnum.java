@@ -50,8 +50,8 @@ public interface OrderEnum {
      */
     enum PayChannel {
 
-        ALIPAY("alipay", "支付宝"),
-        WECHAT("wechat", "微信");
+        ALIPAY("alipayWapPay", "支付宝"),
+        WECHAT("weixinWapPay", "微信");
 
         private String code;
         private String name;

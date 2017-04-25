@@ -6,8 +6,13 @@ package cn.whaley.moretv.member.base.constant;
 public interface GlobalConstant {
     
     String UNIT_YUAN = "元";
-    
-    String CP_TENCENT = "tencent"; 
+
+    //CP腾讯
+    String CP_TENCENT = "tencent";
+    //CP蘑菇
+    String CP_MOGUV = "moguv";
+    //CP香菇
+    String CP_XIANGGU = "xiangguv";
     
     String WHALEY_SERVICE_ID = "111";
 
@@ -39,6 +44,23 @@ public interface GlobalConstant {
     String MORETV_PUBLISH_CP_ORDER_ROUTER_KEY = "moretv.publish.cp.order.router.key";
     String MORETV_PUBLISH_CP_ORDER_QUEUE = "moretv.publish.cp.order.queue";
 
+    // CP订单明细
+    String MORETV_PUBLISH_CP_ORDER_ITEM_ROUTER_KEY = "moretv.publish.cp.order.item.router.key";
+    String MORETV_PUBLISH_CP_ORDER_ITEM_QUEUE = "moretv.publish.cp.order.item.queue";
+
+    // 电视猫账号队列
+    String MORETV_PUBLISH_CP_ACCOUNT_ROUTER_KEY = "moretv.publish.cp.account.router.key";
+    String MORETV_PUBLISH_CP_ACCOUNT_QUEUE = "moretv.publish.cp.account.queue";
+    
+    // 电视猫订单队列
+    String MORETV_PUBLISH_BUSINESS_EXCHANGE = "moretv.publish.business";
+    String MORETV_PUBLISH_BUSINESS_ORDER_ROUTER_KEY = "moretv.publish.business.order.router.key";
+    String MORETV_PUBLISH_BUSINESS_ORDER_QUEUE = "moretv.publish.business.order.queue";
+    
+    //电视猫订单明细
+    String MORETV_PUBLISH_BUSINESS_ORDER_ITEM_ROUTER_KEY = "moretv.publish.business.order.item.router.key";
+    String MORETV_PUBLISH_BUSINESS_ORDER_ITEM_QUEUE = "moretv.publish.business.order.item.queue";
+    
     //电视猫会员对于支付网关的产品编号
     String PAY_GATEWAY_PRODUCT_CODE = "tvmore";
 }
