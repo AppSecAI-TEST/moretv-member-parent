@@ -19,10 +19,12 @@ import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.model.order.Order;
+import cn.whaley.moretv.member.notify.service.member.MemberOpsService;
 import cn.whaley.moretv.member.notify.service.order.OrderService;
 import cn.whaley.moretv.member.service.goods.BaseGoodsService;
 import cn.whaley.moretv.member.service.order.BaseOrderService;
 import cn.whaley.moretv.member.service.order.impl.BaseOrderServiceImpl;
+import cn.whaley.moretv.member.service.queue.publish.PublishMemberToAdmin;
 
 @Service
 @Transactional
@@ -33,35 +35,60 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	@Autowired
     protected BaseGoodsService baseGoodsService;
 	
+	@Autowired
+    protected MemberOpsService memberOpsService;
+	
+	@Autowired
+	private PublishMemberToAdmin publishMemberToAdmin;
+	
     /**
      * 通知发货
-     * @param orderNo
+     * @param orderNo 订单号
      * @param orderStatus 支付网关状态
+     *  @param fee 价格
      * @return
      */
- 	public ResultResponse delivery(String orderNo, String orderStatus) {
- 		do {
+ 	public ResultResponse delivery(String orderNo, String orderStatus,int fee) {
+ 		
     		Map<String,String> data = new HashMap<String,String>();
-    		
-    		if(!OrderEnum.PayStatus.DONE.getNameEng().equals(orderStatus) || !OrderEnum.PayStatus.TIMEOUT.getNameEng().equals(orderStatus)){
-    			ResultResponse.define(ApiCodeEnum.API_PARAM_PAY_NOTIFY_STATUS_ERR);
+    		data.put("order_no", "");
+			data.put("order_status", "");
+    		if(!OrderEnum.PayStatus.DONE.getNameEng().equals(orderStatus) && !OrderEnum.PayStatus.TIMEOUT.getNameEng().equals(orderStatus)){
+    			return ResultResponse.define(ApiCodeEnum.API_PARAM_PAY_NOTIFY_STATUS_ERR,data);
     		}
     		
  			Order order = orderMapper.getByOrderCode(orderNo);
  			if (order==null) {
  				logger.error("订单{}不存在", orderNo);
- 				return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
+ 				return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST,data);
  			}
  			logger.error("订单{}:{}", orderNo,order.toString());
  			data.put("order_no", orderNo);
- 			if(!OrderEnum.TradeStatus.TRADE_INIT.equals(order.getTradeStatus())){
- 				data.put("order_status", OrderEnum.TradeStatus.getNameEngByCode(order.getTradeStatus()));
+ 			data.put("order_status", OrderEnum.TradeStatus.getNameEngByCode(order.getTradeStatus()));
+ 			if(!OrderEnum.TradeStatus.TRADE_INIT.equals(order.getTradeStatus()) && !OrderEnum.TradeStatus.WAITING_SEND.equals(order.getTradeStatus())){
  				return ResultResponse.define(ApiCodeEnum.API_PARAM_PAY_NOTIFY_STATUS_ERR,data);
  			}
  			
+ 			
  			//修改订单状态
  			if(OrderEnum.PayStatus.DONE.getNameEng().equals(orderStatus)){
+ 				//支付价格判断
+ 	 			if(order.getPaymentAmount()==fee){
+ 	 				return ResultResponse.define(ApiCodeEnum.API_PARAM_PAY_FEE_ERR,data);
+ 	 			}
+ 				
+ 	 			//判定是否是首次购买商品
+ 	 			GoodsDto goods = baseGoodsService.getGoodsByGoodsNo(order.getGoodsCode());
+ 	 			if(GlobalEnum.GoodsClass.FIRST_GOODS.getCode() == goods.getGoodsClass()){
+ 	 				ResultResponse<?> goodsResult =baseGoodsService.checkCanBuyGoods(order.getGoodsCode(), order.getAccountId());
+ 	 				if(!goodsResult.isSuccess()){
+ 	 					goodsResult.put("data", data);
+ 	 					return goodsResult;
+ 	 				}
+ 	 			}
+ 	 			
  				order.setPayStatus(OrderEnum.PayStatus.DONE.getCode());
+ 				order.setTradeStatus(OrderEnum.TradeStatus.WAITING_SEND.getCode());
  				order.setUpdateTime(new Date());
  	 			orderMapper.updateByPrimaryKeySelective(order);
     		}else{
@@ -73,68 +100,19 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
  				return ResultResponse.success(data);
     		}
  			
+ 			publishMemberToAdmin.publishOrder(order);
  			
- 			//判定是否是首次购买商品
- 			GoodsDto goods = baseGoodsService.getGoodsByGoodsNo(order.getGoodsCode());
- 			if(GlobalEnum.GoodsClass.FIRST_GOODS.getCode() == goods.getGoodsClass()){
- 				ResultResponse<GoodsDto> result =baseGoodsService.checkCanBuyGoods(order.getGoodsCode(), order.getAccountId());
- 				if(!result.isSuccess()){
- 					//TODO 返回类型比较复杂
- 					return result;
- 				}
- 			}
- 			
+ 			//TODO
  			//锁定用户，保持一个用户只能同时订购一个会员
  			
  			//订购会员
- 				
- 			/*TempInfo info=new TempInfo();
- 			if (orderStatus.equals(GlobleConstant.ORDER_STATUS_STR_ARRAY[GlobleConstant.ORDER_STATUS_WAITING_PAYED])) {
- 				
- 				LogHelper.getLogger().info("判定是否是升级商品是否可以升级");
- 				CheckUpgradeGoods result = checkUpgradePlan(whaleyOrder.getSn(),whaleyOrder.getWhaleyAccount(),whaleyOrder.getGoodsNo(),whaleyOrder);
- 				if (ApiCodeInfo.API_OK!=result.getStatus()) {
- 					res.setStatus(result.getStatus());
- 					res.setMsg(result.getMsg());
- 					break;
- 				}
- 				
- 				LogHelper.getLogger().info("订单信息状态修改");
- 				updateOrderStatus(whaleyOrder.getId(), orderStatus,res);
- 				if (ApiCodeInfo.API_OK!=res.getStatus()) {
- 					break;
- 				}
- 				
- 				
- 				LogHelper.getLogger().info("订购会员");
- 				res = clubService.orderMember(whaleyOrder.getId(),result.getDesignatedTime());
- 				if (res.getStatus()!=ApiCodeInfo.API_OK) {
- 					info.setOrder_status(GlobleConstant.ORDER_STATUS_STR_ARRAY[GlobleConstant.ORDER_STATUS_TRANSACTION_FINISHED]);
- 				}else {
- 					info.setOrder_status(res.getOrder_status());
- 					info.setProducts(res.getProducts());
- 				}
- 				
- 			}else if (orderStatus.equals(GlobleConstant.ORDER_STATUS_STR_ARRAY[GlobleConstant.ORDER_STATUS_TIMEOUT])) {
- 				LogHelper.getLogger().info("订单信息状态修改");
- 				updateOrderStatus(whaleyOrder.getId(), orderStatus,res);
- 				if (ApiCodeInfo.API_OK!=res.getStatus()) {
- 					break;
- 				}
- 				info.setOrder_status(GlobleConstant.ORDER_STATUS_STR_ARRAY[GlobleConstant.ORDER_STATUS_TIMEOUT]);
- 			}else {
- 				res.setStatus(ApiCodeInfo.API_ORDER_STATUS_ERR);
- 				res.setMsg(ApiCodeInfo.getErrMsg(ApiCodeInfo.API_ORDER_STATUS_ERR));
- 				res.setOrder_status(GlobleConstant.ORDER_STATUS_STR_ARRAY[whaleyOrder.getOrderStatus()]);
- 				break;
+ 			ResultResponse  memberResult = memberOpsService.deliveryMemberByOrderId(order.getId());
+ 			if(!memberResult.isSuccess()){
+ 				memberResult.put("data", data);
+				return memberResult;	
  			}
- 			
- 			LogHelper.getLogger().info("通知临时服务器更改状态");
- 			PayManage.notifyTempServer(orderNo, JSONObject.fromObject(info).toString());*/
- 			
- 		} while (false);
- 		
- 		return null;
+ 			data.put("order_status", OrderEnum.TradeStatus.TRADE_FINISHED.getNameEng());
+ 			return ResultResponse.success(data);
  	}
     
 }

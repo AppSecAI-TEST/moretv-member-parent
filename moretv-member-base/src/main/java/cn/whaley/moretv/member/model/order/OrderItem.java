@@ -19,6 +19,12 @@ public class OrderItem extends BaseModel<Integer> implements Serializable {
     private String orderCode;
 
     /**
+     * 订单明细编号
+     * order_item_code
+     */
+    private String orderItemCode;
+
+    /**
      * 会员编号
      * member_code
      */
@@ -96,6 +102,24 @@ public class OrderItem extends BaseModel<Integer> implements Serializable {
      */
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
+    }
+
+    /**
+     * 订单明细编号
+     * order_item_code
+     */
+    public String getOrderItemCode() {
+        return orderItemCode;
+    }
+
+    /**
+     * 订单明细编号
+     * order_item_code
+     *
+     * @param orderItemCode 订单明细编号
+     */
+    public void setOrderItemCode(String orderItemCode) {
+        this.orderItemCode = orderItemCode;
     }
 
     /**
@@ -286,6 +310,7 @@ public class OrderItem extends BaseModel<Integer> implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", orderCode=").append(orderCode);
+        sb.append(", orderItemCode=").append(orderItemCode);
         sb.append(", memberCode=").append(memberCode);
         sb.append(", memberName=").append(memberName);
         sb.append(", durationMonth=").append(durationMonth);

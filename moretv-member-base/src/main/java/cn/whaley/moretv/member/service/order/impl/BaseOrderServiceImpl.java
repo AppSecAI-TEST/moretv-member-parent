@@ -43,7 +43,7 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
     @Override
     public  Order createOrderByGoods(Goods goods, Order order) {
 		UUID uuid = UUID.randomUUID();
-		order.setOrderCode("MT" + uuid.toString().replace("-", ""));
+		order.setOrderCode("MT" + uuid.toString().replace("-", "")+order.getAccountId()%10000);
 	    order.setOrderTitle(goods.getGoodsName());
 	    order.setOrderDesc(goods.getGoodsDesc());
 	    order.setTotalPrice(goods.getSellingPrice());
@@ -59,7 +59,7 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
 
     @Override
 	public OrderItem createOrderItemByGoodsSku(GoodsSku goodsSku, OrderItem orderItem) {
-
+    	orderItem.setOrderItemCode("DT" + UUID.randomUUID().toString().replace("-", ""));
 		orderItem.setMemberCode(goodsSku.getMemberCode());
 		orderItem.setMemberName(goodsSku.getMemberName());
 		orderItem.setAmount(1);

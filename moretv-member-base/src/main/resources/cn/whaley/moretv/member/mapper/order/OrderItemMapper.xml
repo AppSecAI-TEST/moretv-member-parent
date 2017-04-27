@@ -8,6 +8,7 @@
   <resultMap id="BaseResultMap" type="cn.whaley.moretv.member.model.order.OrderItem" >
     <id column="boi_id" property="id" jdbcType="INTEGER" />
     <result column="boi_order_code" property="orderCode" jdbcType="VARCHAR" />
+    <result column="boi_order_item_code" property="orderItemCode" jdbcType="VARCHAR" />
     <result column="boi_member_code" property="memberCode" jdbcType="VARCHAR" />
     <result column="boi_member_name" property="memberName" jdbcType="VARCHAR" />
     <result column="boi_duration_month" property="durationMonth" jdbcType="INTEGER" />
@@ -20,10 +21,11 @@
     <result column="boi_update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    boi.id as boi_id, boi.order_code as boi_order_code, boi.member_code as boi_member_code, 
-    boi.member_name as boi_member_name, boi.duration_month as boi_duration_month, boi.duration_day as boi_duration_day, 
-    boi.amount as boi_amount, boi.total_price as boi_total_price, boi.real_price as boi_real_price, 
-    boi.valid_status as boi_valid_status, boi.create_time as boi_create_time, boi.update_time as boi_update_time
+    boi.id as boi_id, boi.order_code as boi_order_code, boi.order_item_code as boi_order_item_code, 
+    boi.member_code as boi_member_code, boi.member_name as boi_member_name, boi.duration_month as boi_duration_month, 
+    boi.duration_day as boi_duration_day, boi.amount as boi_amount, boi.total_price as boi_total_price, 
+    boi.real_price as boi_real_price, boi.valid_status as boi_valid_status, boi.create_time as boi_create_time, 
+    boi.update_time as boi_update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -36,20 +38,25 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="cn.whaley.moretv.member.model.order.OrderItem" useGeneratedKeys="true" keyProperty="id" >
-    insert into business_order_item (order_code, member_code, member_name, 
-      duration_month, duration_day, amount, 
-      total_price, real_price, valid_status, 
-      create_time, update_time)
-    values (#{orderCode,jdbcType=VARCHAR}, #{memberCode,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, 
-      #{durationMonth,jdbcType=INTEGER}, #{durationDay,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER}, 
-      #{totalPrice,jdbcType=INTEGER}, #{realPrice,jdbcType=INTEGER}, #{validStatus,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into business_order_item (order_code, order_item_code, member_code, 
+      member_name, duration_month, duration_day, 
+      amount, total_price, real_price, 
+      valid_status, create_time, update_time
+      )
+    values (#{orderCode,jdbcType=VARCHAR}, #{orderItemCode,jdbcType=VARCHAR}, #{memberCode,jdbcType=VARCHAR}, 
+      #{memberName,jdbcType=VARCHAR}, #{durationMonth,jdbcType=INTEGER}, #{durationDay,jdbcType=INTEGER}, 
+      #{amount,jdbcType=INTEGER}, #{totalPrice,jdbcType=INTEGER}, #{realPrice,jdbcType=INTEGER}, 
+      #{validStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.whaley.moretv.member.model.order.OrderItem" useGeneratedKeys="true" keyProperty="id" >
     insert into business_order_item
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orderCode != null" >
         order_code,
+      </if>
+      <if test="orderItemCode != null" >
+        order_item_code,
       </if>
       <if test="memberCode != null" >
         member_code,
@@ -85,6 +92,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderCode != null" >
         #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderItemCode != null" >
+        #{orderItemCode,jdbcType=VARCHAR},
       </if>
       <if test="memberCode != null" >
         #{memberCode,jdbcType=VARCHAR},
@@ -124,6 +134,9 @@
       <if test="orderCode != null" >
         order_code = #{orderCode,jdbcType=VARCHAR},
       </if>
+      <if test="orderItemCode != null" >
+        order_item_code = #{orderItemCode,jdbcType=VARCHAR},
+      </if>
       <if test="memberCode != null" >
         member_code = #{memberCode,jdbcType=VARCHAR},
       </if>
@@ -160,6 +173,7 @@
   <update id="updateByPrimaryKey" parameterType="cn.whaley.moretv.member.model.order.OrderItem" >
     update business_order_item
     set order_code = #{orderCode,jdbcType=VARCHAR},
+      order_item_code = #{orderItemCode,jdbcType=VARCHAR},
       member_code = #{memberCode,jdbcType=VARCHAR},
       member_name = #{memberName,jdbcType=VARCHAR},
       duration_month = #{durationMonth,jdbcType=INTEGER},

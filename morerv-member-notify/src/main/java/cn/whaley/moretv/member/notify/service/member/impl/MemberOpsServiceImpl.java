@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
+import cn.whaley.moretv.member.base.constant.OrderEnum;
 import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.util.BeanHandler;
@@ -29,6 +31,7 @@ import cn.whaley.moretv.member.model.order.Order;
 import cn.whaley.moretv.member.model.order.OrderItem;
 import cn.whaley.moretv.member.notify.service.member.MemberOpsService;
 import cn.whaley.moretv.member.notify.service.tencent.TencentService;
+import cn.whaley.moretv.member.service.queue.publish.PublishMemberToAdmin;
 import cn.whaley.moretv.member.service.tencent.BaseTencentService;
 
 @Service
@@ -42,6 +45,9 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 	@Autowired
 	private OrderItemMapper orderItemMapper;
 	
+	/*@Autowired
+	private DeliveredOrderMapper deliveredOrderMapper;
+	*/
 	@Autowired
 	private MemberUserAuthorityMapper memberUserAuthorityMapper;
 	
@@ -50,14 +56,18 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 	
     @Autowired
     private RedisTemplate redisTemplate;
-	
-	@Override
-	public ResultResponse deliveryMemberByOrderId(String orderId) {
+    
+    @Autowired
+    private PublishMemberToAdmin publishMemberToAdmin;
+    
+    @Transactional
+    @Override
+	public ResultResponse deliveryMemberByOrderId(Integer orderId) {
 		
 		//通过订单id查询订单
 		Order order = orderMapper.getByOrderIdForUpdate(orderId);
 		if (order == null) {
-			ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_STATUS_ERR);
+			ResultResponse.define(ApiCodeEnum.API_DATA_ERR);
 		}
 		
 		List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(order.getOrderCode());
@@ -70,11 +80,14 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 		Integer duration = orderItem.getDurationMonth();
 		Integer durationDay = orderItem.getDurationDay();
 
-		//TODO 会员状态状态
 		MemberUserAuthority userAuthority = memberUserAuthorityMapper.selectByAccountIdAndMemberCode(accountId, memberCode);
 		Date memberStartTime = userAuthority == null ? now:userAuthority.getStartTime();
 		Date memberEndTime = DateFormatUtil.addMonthAndDay(memberStartTime, duration,durationDay);
-	
+		
+		//生成会员发货单
+		
+		
+		//修改会员权益
 		if(userAuthority == null){
 			userAuthority = new MemberUserAuthority();
 			userAuthority.setAccountId(accountId);
@@ -91,10 +104,20 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 		}
 		logger.info("userAuthority : {}", userAuthority);
 		
+		
+		
+		order.setTradeStatus(OrderEnum.TradeStatus.TRADE_FINISHED.getCode());
+		order.setUpdateTime(new Date());
+		orderMapper.updateByPrimaryKeySelective(order);
+			
 		//订购腾讯
 		tencentService.createTencentOrder(order, orderItemList);
 		
 		this.saveMemberAuthorityToRedis(userAuthority);
+		
+		publishMemberToAdmin.publishOrder(order);
+		publishMemberToAdmin.publishOrderItem(orderItem);
+		publishMemberToAdmin.publishMemberUserAuthority(userAuthority);
 		
 		return ResultResponse.success();
 	}

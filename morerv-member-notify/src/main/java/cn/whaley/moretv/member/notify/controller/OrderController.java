@@ -34,25 +34,18 @@ public class OrderController {
 	public ResultResponse notification(@RequestParam(value = "orderCode") String orderCode,
 			@RequestParam(value = "payMethodCode") String payMethodCode,
 			@RequestParam(value = "payMethodName") String payMethodName,
-			@RequestParam(value = "fee") String fee,
+			@RequestParam(value = "fee") Integer fee,
 			@RequestParam(value = "orderStatus") String orderStatus,
 			@RequestParam(value = "sign") String sign) {
 			//参数验证
-			if (StringHelper.strsIsEmpty(orderCode,payMethodCode,payMethodName,fee,orderStatus, sign)) {
+			if (StringHelper.strsIsEmpty(orderCode,payMethodCode,payMethodName,orderStatus, sign) || fee == null) {
 				return ResultResponse.define(ApiCodeEnum.API_PARAM_NULL);
 			}
 			
 			if (!sign.equals(MD5Util.string2MD5(orderCode +payMethodCode+payMethodName+fee+orderStatus + ""))) {
 				return ResultResponse.define(ApiCodeEnum.API_SIGN_ERR);
 			}
-
-/*			ResOrderMemberClubInfo member=orderService.delivery(orderNo, orderStatus);
-			
-			resOrderNotification.setStatus(member.getStatus());
-			resOrderNotification.setMsg(member.getMsg());
-			resOrderNotification.setOrder_no(orderNo);
-			resOrderNotification.setOrder_status(member.getOrder_status());*/
-				
-		return ResultResponse.success("");
+        
+		return orderService.delivery(orderCode, orderStatus, fee);
     }
 }

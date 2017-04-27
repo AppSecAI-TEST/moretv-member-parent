@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.message.MessagePolicy;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.alibaba.fastjson.JSON;
+
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
+import cn.whaley.moretv.member.base.constant.GlobalConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
 import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
@@ -23,7 +28,9 @@ import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayResponse;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.manager.PayManage;
 import cn.whaley.moretv.member.base.util.DateFormatUtil;
+import cn.whaley.moretv.member.base.util.MessageProducer;
 import cn.whaley.moretv.member.base.util.paygateway.PayGatewayUtil;
+import cn.whaley.moretv.member.model.cp.CpAccount;
 import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.model.goods.GoodsSku;
 import cn.whaley.moretv.member.model.order.Order;
@@ -32,9 +39,9 @@ import cn.whaley.moretv.member.order.dto.pay.OrderPayResponse;
 import cn.whaley.moretv.member.order.service.order.OrderService;
 import cn.whaley.moretv.member.service.goods.BaseGoodsService;
 import cn.whaley.moretv.member.service.order.impl.BaseOrderServiceImpl;
+import cn.whaley.moretv.member.service.queue.publish.PublishMemberToAdmin;
 
 @Service
-@Transactional
 public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderService {
 
 	private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
@@ -42,6 +49,10 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	@Autowired
 	private BaseGoodsService baseGoodsService;
 	
+	@Autowired
+	private PublishMemberToAdmin publishMemberToAdmin;
+	
+	@Transactional
 	@Override
 	public ResultResponse<Order> createOrder(String goodsCode, String payType,
 			int payAutoRenew, int accountId) {
@@ -80,15 +91,17 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	    order.setCreateTime(now);
 	    order.setOverTime(DateFormatUtil.addHours(now, 2));
 	    order = createOrderByGoods(goods,order);
-	    //TODO 同步数据
+
 	    //创建订单明细
 	    OrderItem orderItem = new OrderItem();
 	    orderItem.setOrderCode(orderItem.getOrderCode());
 	    orderItem.setCreateTime(now);
 	    orderItem = createOrderItemByGoodsSku(goodsSku, orderItem);
-	    //TODO 同步数据
 
-		return ResultResponse.success(order);
+	    publishMemberToAdmin.publishOrder(order);
+	    publishMemberToAdmin.publishOrderItem(orderItem);
+	    
+	    return ResultResponse.success(order);
 	}
 	
     @Override

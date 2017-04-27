@@ -126,9 +126,9 @@ public class DateFormatUtil {
         * @param value 
         * @return 
         */  
-        public static Date addHours(Date month,int value) {
+        public static Date addHours(Date hours,int value) {
            Calendar calendar = Calendar.getInstance();
-           calendar.setTime(month);
+           calendar.setTime(hours);
        	calendar.add(Calendar.HOUR, value);  
            return calendar.getTime();  
         } 

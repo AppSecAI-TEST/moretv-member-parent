@@ -10,6 +10,7 @@ import cn.whaley.moretv.member.model.order.Order;
 import cn.whaley.moretv.member.order.service.order.OrderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,8 +38,16 @@ public class OrderController {
      * 
      */
     @RequestMapping(value = "/create_order", method = RequestMethod.POST)
-    public ResultResponse create_order(BaseRequest baseRequest, HttpServletRequest request, String sessionToken,
-            String goodsCode, Integer payAutoRenew, String payType) {
+    public ResultResponse create_order(BaseRequest baseRequest, HttpServletRequest request,
+    		@RequestParam(value = "sessionToken") String sessionToken,
+    		@RequestParam(value = "goodsCode") String goodsCode,
+    		@RequestParam(value = "payAutoRenew") Integer payAutoRenew, 
+    		@RequestParam(value = "payType")String payType) {
+    	
+    	if (StringUtils.isEmpty(payType)||StringUtils.isEmpty(goodsCode) || payAutoRenew ==null) {
+	      return ResultResponse.define(ApiCodeEnum.API_PARAM_NULL);
+    	}
+    	
     	ResultResponse<Order> result = orderService.createOrder(goodsCode, payType, payAutoRenew, baseRequest.getAccountId());
 
     	//设定返回值

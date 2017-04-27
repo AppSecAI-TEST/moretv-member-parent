@@ -4,5 +4,5 @@ import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 
 public interface MemberOpsService {
 	
-	ResultResponse deliveryMemberByOrderId(String orderId);
+	ResultResponse deliveryMemberByOrderId(Integer orderId);
 }

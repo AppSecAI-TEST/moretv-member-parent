@@ -25,7 +25,7 @@ public interface OrderMapper extends GenericMapper<Order, Integer> {
     Integer hasPurchaseOrder(Integer accountId);
     
     @Select("select * from business_order where id = #{orderId} and valid_status = 1 and trade_status = 1 for update")
-    Order getByOrderIdForUpdate(String orderId);
+    Order getByOrderIdForUpdate(int orderId);
     
     void updateOrderPayStatus(Map<String, Object> map);
 }
