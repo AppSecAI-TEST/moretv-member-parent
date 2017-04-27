@@ -10,7 +10,7 @@
     <result column="mua_account_id" property="accountId" jdbcType="INTEGER" />
     <result column="mua_member_code" property="memberCode" jdbcType="VARCHAR" />
     <result column="mua_member_name" property="memberName" jdbcType="VARCHAR" />
-    <result column="mua_status" property="status" jdbcType="VARCHAR" />
+    <result column="mua_status" property="status" jdbcType="INTEGER" />
     <result column="mua_start_time" property="startTime" jdbcType="TIMESTAMP" />
     <result column="mua_end_time" property="endTime" jdbcType="TIMESTAMP" />
     <result column="mua_create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -36,7 +36,7 @@
       status, start_time, end_time, 
       create_time, update_time)
     values (#{accountId,jdbcType=INTEGER}, #{memberCode,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, 
-      #{status,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="cn.whaley.moretv.member.model.member.MemberUserAuthority" useGeneratedKeys="true" keyProperty="id" >
@@ -78,7 +78,7 @@
         #{memberName,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
-        #{status,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="startTime != null" >
         #{startTime,jdbcType=TIMESTAMP},
@@ -107,7 +107,7 @@
         member_name = #{memberName,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
-        status = #{status,jdbcType=VARCHAR},
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="startTime != null" >
         start_time = #{startTime,jdbcType=TIMESTAMP},
@@ -129,7 +129,7 @@
     set account_id = #{accountId,jdbcType=INTEGER},
       member_code = #{memberCode,jdbcType=VARCHAR},
       member_name = #{memberName,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},

@@ -78,18 +78,16 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
  			GoodsDto goods = baseGoodsService.getGoodsByGoodsNo(order.getGoodsCode());
  			if(GlobalEnum.GoodsClass.FIRST_GOODS.getCode() == goods.getGoodsClass()){
  				ResultResponse<GoodsDto> result =baseGoodsService.checkCanBuyGoods(order.getGoodsCode(), order.getAccountId());
- 				if(ApiCodeInfo.API_OK !=result.getCode()){
+ 				if(!result.isSuccess()){
  					//TODO 返回类型比较复杂
  					return result;
  				}
  			}
  			
- 	
- 			
- 			//锁定用户，保持一个用户购买单个会员
+ 			//锁定用户，保持一个用户只能同时订购一个会员
  			
  			//订购会员
- 			
+ 				
  			/*TempInfo info=new TempInfo();
  			if (orderStatus.equals(GlobleConstant.ORDER_STATUS_STR_ARRAY[GlobleConstant.ORDER_STATUS_WAITING_PAYED])) {
  				

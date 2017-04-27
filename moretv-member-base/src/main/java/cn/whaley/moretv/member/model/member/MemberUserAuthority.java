@@ -31,10 +31,10 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
     private String memberName;
 
     /**
-     * delete：删除，valid：正常
+     * 0：删除，1：正常
      * status
      */
-    private String status;
+    private Integer status;
 
     /**
      * 权益开始时间
@@ -117,20 +117,20 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
     }
 
     /**
-     * delete：删除，valid：正常
+     * 0：删除，1：正常
      * status
      */
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
     /**
-     * delete：删除，valid：正常
+     * 0：删除，1：正常
      * status
      *
-     * @param status delete：删除，valid：正常
+     * @param status 0：删除，1：正常
      */
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

@@ -18,8 +18,6 @@ import java.lang.reflect.Method;
  */
 public class ValidateHandler {
 
-    private static Logger logger = LoggerFactory.getLogger(LogAspect.class);
-
     public static Object validate(Object[] args, LogAspect.LogInfo logInfo) {
         if (logInfo.getClazzName().startsWith("HttpErrorHandler") || args == null || args.length == 0) {
             return null;
@@ -44,7 +42,7 @@ public class ValidateHandler {
 
     private static Object define(ApiCodeEnum apiCodeEnum, LogAspect.LogInfo logInfo) {
         ResultResponse result = ResultResponse.define(apiCodeEnum);
-        logger.info(logInfo.afterLog(result));
+        logInfo.afterLog(result);
         return result;
     }
 
