@@ -61,6 +61,10 @@ public interface GlobalConstant {
     String MORETV_PUBLISH_BUSINESS_ORDER_ITEM_ROUTER_KEY = "moretv.publish.business.order.item.router.key";
     String MORETV_PUBLISH_BUSINESS_ORDER_ITEM_QUEUE = "moretv.publish.business.order.item.queue";
     
+    //电视猫发货订单
+    String MORETV_PUBLISH_DELIVERED_ORDER_ROUTER_KEY = "moretv.publish.delivered.router.key";
+    String MORETV_PUBLISH_DELIVERED_ORDER_QUEUE = "moretv.publish.delivered.order.queue";
+    
     //电视猫会员权益队列
     String MORETV_PUBLISH_MEMBER_EXCHANGE = "moretv.publish.member";
     String MORETV_PUBLISH_MEMBER_USER_AUTHORITY_ROUTER_KEY = "moretv.publish.member.user.authority.router.key";
