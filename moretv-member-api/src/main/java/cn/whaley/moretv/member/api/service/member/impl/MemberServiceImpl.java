@@ -94,13 +94,16 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
                 infoResponseList.add(response);
             }
         }
+        if (infoResponseList.isEmpty()) {
+            return ResultResponse.define(ApiCodeEnum.API_DATA_MEMBER_AUTH_NOT_EXIST);
+        }
         return ResultResponse.success(infoResponseList);
     }
 
     @Override
     public Boolean accountIsMember(Integer accountId) {
-        ResultResponse<List<MemberInfoResponse>> response = getMemberInfo(accountId);
-        if (response.isSuccess() && !response.getData().isEmpty()) {
+        ResultResponse response = getMemberInfo(accountId);
+        if (response.isSuccess()) {
             return true;
         }
         return false;

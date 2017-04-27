@@ -146,10 +146,10 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 
     private boolean checkSign(PayGatewayRequest payGatewayRequest) {
         //拼接MD5的参数
-        String param = PayManage.getParams4Sign(payGatewayRequest.getSessionToken(), payGatewayRequest.getCip(), 
-                payGatewayRequest.getTimestamp(), payGatewayRequest.getGoodsCode(), payGatewayRequest.getSubject(), 
-                payGatewayRequest.getPayAutoRenew(), payGatewayRequest.getPayType(), payGatewayRequest.getOrderCode(),
-                payGatewayRequest.getFree(), payGatewayRequest.getAccountId()).toString();
+        String param = PayManage.getParams4Sign(payGatewayRequest.getCip(), payGatewayRequest.getTimestamp(), 
+                payGatewayRequest.getGoodsCode(), payGatewayRequest.getSubject(), payGatewayRequest.getPayAutoRenew(), 
+                payGatewayRequest.getPayType(), payGatewayRequest.getOrderCode(), payGatewayRequest.getFree(), 
+                payGatewayRequest.getAccountId()).toString();
         
         if(PayManage.getPayUrlSign(param).equals(payGatewayRequest.getSign()))
             return true;

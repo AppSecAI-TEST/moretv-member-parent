@@ -23,7 +23,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
 * ServiceImpl: GoodsServiceImpl
@@ -58,9 +57,9 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
         logger.info("get_goods_by_tag : accountId:{}, goodsTag:{}, isMember:{}, goodsType:{}",
                 accountId, goodsTag, isMember, goodsType);
 
-        Map<String, String> map = opsHash.entries(CacheKeyConstant.REDIS_KEY_GOODS);
-        if (CollectionUtils.isEmpty(map)) {
-            return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
+        List<String> list = opsHash.values(CacheKeyConstant.REDIS_KEY_GOODS);
+        if (CollectionUtils.isEmpty(list)) {
+            return ResultResponse.success(goodsList);
         }
 
         boolean hasPurchaseOrder = false;
@@ -69,10 +68,10 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
         }
 
         logger.info("get_goods_by_tag :  accountId:{}, goodsSize:{}, hasPurchaseOrder:{}",
-                accountId, map.size(), hasPurchaseOrder);
+                accountId, list.size(), hasPurchaseOrder);
 
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            GoodsDto goodsDto = JSON.parseObject(entry.getValue(), GoodsDto.class);
+        for (String value : list) {
+            GoodsDto goodsDto = JSON.parseObject(value, GoodsDto.class);
             Integer goodsClass = goodsDto.getGoodsClass();
 
             if (!goodsDto.getIsDisplayed() || !goodsType.equals(goodsDto.getGoodsType())) {

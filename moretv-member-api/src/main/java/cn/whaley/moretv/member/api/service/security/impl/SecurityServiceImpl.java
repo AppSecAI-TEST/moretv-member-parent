@@ -75,6 +75,9 @@ public class SecurityServiceImpl implements SecurityService {
             return ResultResponse.define(ApiCodeEnum.API_SECURITY_ERR_PROGRAM_VIP);
         } else {
             // 如果节目是免费的，则根据CP来鉴权，其他CP返回空
+            if (GlobalConstant.CP_TENCENT.equals(cp)) {
+                return ResultResponse.success(new SecurityInternalResponse(cp, ""));
+            }
             return getAccessToken(null, cp, videoInfo);
         }
     }
@@ -114,8 +117,8 @@ public class SecurityServiceImpl implements SecurityService {
         if (GlobalConstant.CP_TENCENT.equals(cp)) {
             if (accountId != null) {
                 accessToken = ExternalManage.getAccessToken();
-                return ResultResponse.success(new SecurityOutSideResponse(cp, 2, "", accessToken));
             }
+            return ResultResponse.success(new SecurityOutSideResponse(cp, 2, "", accessToken));
         } else if (GlobalConstant.CP_MOGUV.equals(cp) || GlobalConstant.CP_XIANGGU.equals(cp)) {
             accessToken = MsdManage.getInternalAccessToken(cp, videoInfo);
             if (accountId != null) {

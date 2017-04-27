@@ -1,8 +1,10 @@
 package cn.whaley.moretv.member.api.controller;
 
+import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
 import cn.whaley.moretv.member.base.dto.request.BaseRequest;
 import cn.whaley.moretv.member.api.service.member.MemberService;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,6 +41,10 @@ public class MemberController {
      */
     @RequestMapping(value = "/get_member_info", method = RequestMethod.POST)
     public ResultResponse getMemberInfo(BaseRequest baseRequest) {
-        return memberService.getMemberInfo(baseRequest.getAccountId());
+        ResultResponse response = memberService.getMemberInfo(baseRequest.getAccountId());
+        if (response.getCode() == ApiCodeInfo.API_DATA_MEMBER_AUTH_NOT_EXIST) {
+            response = ResultResponse.success(Lists.newArrayList());
+        }
+        return response;
     }
 }

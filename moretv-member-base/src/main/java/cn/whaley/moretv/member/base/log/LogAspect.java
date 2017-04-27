@@ -44,12 +44,12 @@ public class LogAspect {
 
         logger.info(logInfo.beforeLog());
 
-        Object result = ValidateHandler.validate(args, logInfo);
-        if (result != null) {
-            return result;
-        }
-
         try {
+            Object result = ValidateHandler.validate(args, logInfo);
+            if (result != null) {
+                return result;
+            }
+
             result = point.proceed(args);
             logger.info(logInfo.afterLog(result));
             return result;

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -32,7 +33,7 @@ public class OrderController {
      * 
      */
     @RequestMapping(value = "/get_order_detail", method = RequestMethod.POST)
-    public ResultResponse getOrderDetail(BaseRequest baseRequest, String orderCode) {
+    public ResultResponse getOrderDetail(BaseRequest baseRequest, @RequestParam String orderCode) {
         if(StringUtils.isEmpty(orderCode)){
             return ResultResponse.define(ApiCodeEnum.API_PARAM_ERR);
         }
