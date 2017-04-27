@@ -46,17 +46,27 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
     /**
      * 支付价格（分）
      */
-    private Integer free;
+    private Integer fee;
     
     /**
-     * 超时时间
+     * 超时时间(分钟)
      */
-    private Long expireTime;
+    private Integer expireTime;
     
     /**
      * 数据签名
      */
     private String sign;
+    
+    private Long createTime;
+
+    public Integer getFee() {
+        return fee;
+    }
+
+    public void setFee(Integer fee) {
+        this.fee = fee;
+    }
 
     public String getSessionToken() {
         return sessionToken;
@@ -114,19 +124,11 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
         this.orderCode = orderCode;
     }
 
-    public Integer getFree() {
-        return free;
-    }
-
-    public void setFree(Integer free) {
-        this.free = free;
-    }
-
-    public Long getExpireTime() {
+    public Integer getExpireTime() {
         return expireTime;
     }
 
-    public void setExpireTime(Long expireTime) {
+    public void setExpireTime(Integer expireTime) {
         this.expireTime = expireTime;
     }
 
@@ -137,11 +139,19 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
     public void setSign(String sign) {
         this.sign = sign;
     }
+    
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
 
     @Override
     public String toString() {
         return super.toString() + "PayRequest [sessionToken=" + sessionToken + ", cip=" + cip + ", goodsCode=" + goodsCode + ", subject="
                 + subject + ", payAutoRenew=" + payAutoRenew + ", payType=" + payType + ", orderCode=" + orderCode
-                + ", free=" + free + ", expireTime=" + expireTime + ", sign=" + sign + "]";
+                + ", fee=" + fee + ", expireTime=" + expireTime + ", sign=" + sign + "]";
     }
 }

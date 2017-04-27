@@ -1,6 +1,9 @@
 package cn.whaley.moretv.member.base.config;
 
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
+import cn.whaley.moretv.member.base.log.LogAspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.AbstractErrorController;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,8 @@ import java.util.Map;
  */
 @RestController
 public class HttpErrorHandler extends AbstractErrorController {
+
+    private static Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
     private static final String ERROR_PATH = "/error";
 
@@ -38,9 +43,15 @@ public class HttpErrorHandler extends AbstractErrorController {
 
         if (status.equals(HttpStatus.BAD_REQUEST)) {
             List<ObjectError> errors = (List<ObjectError>) body.get("errors");
-            message = errors.get(0).getDefaultMessage();
+            if (errors != null && errors.size() > 0) {
+                message = errors.get(0).getDefaultMessage();
+            }
         }
-
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("LOG [Exception][").append(body.get("path")).append("] 出现异常: [");
+        buffer.append(status.value()).append(", ").append(status.getReasonPhrase());
+        buffer.append("] ").append(" 异常信息：").append(message);
+        logger.error(buffer.toString());
         return ResultResponse.define(status.value(), message);
     }
 }

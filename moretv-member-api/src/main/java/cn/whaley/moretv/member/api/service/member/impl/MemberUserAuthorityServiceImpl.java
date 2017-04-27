@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -42,13 +41,13 @@ public class MemberUserAuthorityServiceImpl extends GenericServiceImpl<MemberUse
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
 
         String key = String.format(CacheKeyConstant.REDIS_KEY_MEMBER_AUTHORITY, accountId.toString());
-        Map<String, String> map = opsHash.entries(key);
-        if (CollectionUtils.isEmpty(map)) {
+        List<String> authorityList = opsHash.values(key);
+        if (CollectionUtils.isEmpty(authorityList)) {
             return list;
         }
 
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            MemberUserAuthority authority = JSON.parseObject(entry.getValue(), MemberUserAuthority.class);
+        for (String value : authorityList) {
+            MemberUserAuthority authority = JSON.parseObject(value, MemberUserAuthority.class);
             list.add(authority);
         }
         return list;

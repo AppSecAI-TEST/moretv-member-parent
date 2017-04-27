@@ -36,6 +36,7 @@ public interface ApiCodeInfo {
     int API_PARAM_CP_NULL = 516;
     int API_PARAM_VIDEOINFO_NULL = 517;
     int API_DATA_ORDER_STATUS_ERR = 520;
+    int API_DATA_ORDER_OVER_TIME_ERR = 521;
     int API_DATA_MEMBER_AUTH_NOT_EXIST = 530;
 
     int API_TENCENT_ACCESS_TOKEN_ERR = 550;
@@ -46,6 +47,5 @@ public interface ApiCodeInfo {
 
     int API_DATA_PAY_GATEWAY_ERR = 601;
     int API_PARAM_PAY_NOTIFY_STATUS_ERR = 602;
-    int API_PARAM_PAY_FEE_ERR = 603;
-    
+    int API_PARAM_PAY_FEE_ERR = 603; 
 }

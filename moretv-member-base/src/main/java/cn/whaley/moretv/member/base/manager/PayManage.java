@@ -1,6 +1,7 @@
 package cn.whaley.moretv.member.base.manager;
 
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -242,16 +243,17 @@ public class PayManage {
             ,int payAutoRenew,String payType,String orderCode,int fee,int accountId){
 	    StringBuffer parm = new StringBuffer();
         //需要作为验签的参数
-        parm.append("orderCode="+orderCode);
-        parm.append("&timestamp="+timestamp);
-        parm.append("&cip="+cip);
-        parm.append("&goodsCode="+goodsCode);
-        parm.append("&subject="+subject);
-        parm.append("&payAutoRenew="+payAutoRenew);
-        parm.append("&payType="+payType);
-        parm.append("&fee="+fee);
-        parm.append("&expire_time=120");
-        parm.append("&accountId="+accountId);
+        parm.append("orderCode=" + orderCode);
+        parm.append("&timestamp=" + timestamp);
+        parm.append("&cip=" + cip);
+        parm.append("&goodsCode=" + goodsCode);
+        parm.append("&subject=" + subject);
+        parm.append("&payAutoRenew=" + payAutoRenew);
+        parm.append("&payType=" + payType);
+        parm.append("&fee=" + fee);
+        parm.append("&expireTime=120");
+        parm.append("&accountId=" + accountId);
+        parm.append("&createTime=" + new Date().getTime());
         return parm;
 	}
 }

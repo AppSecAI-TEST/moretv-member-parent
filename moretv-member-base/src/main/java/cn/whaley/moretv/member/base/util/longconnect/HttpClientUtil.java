@@ -2,6 +2,8 @@ package cn.whaley.moretv.member.base.util.longconnect;
 
 import java.util.Map;
 
+import javax.management.RuntimeErrorException;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -44,6 +46,7 @@ public class HttpClientUtil {
             return r;
         } catch (Exception e) {
             logger.error("http post error", e);
+            throw new RuntimeException("http post 异常，事务回滚");
         } finally {
             try {
                 if (response != null)
@@ -54,7 +57,6 @@ public class HttpClientUtil {
                 e.printStackTrace();
             }
         }
-        return null;
     }
 
     public static String appendParams(Map<String, Object> map) {

@@ -4,6 +4,7 @@ import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
+import cn.whaley.moretv.member.base.exception.SystemException;
 import cn.whaley.moretv.member.model.goods.GoodsSpu;
 import cn.whaley.moretv.member.service.goods.impl.BaseGoodsSpuServiceImpl;
 import cn.whaley.moretv.member.sync.service.goods.GoodsSpuService;
@@ -43,8 +44,7 @@ public class GoodsSpuServiceImpl extends BaseGoodsSpuServiceImpl implements Good
         } else if (GlobalEnum.StatusText.PUBLISHED.getCode().equals(status)){
             publishGoodsSpu(goodsSpu, opsHash);
         } else {
-            logger.error("syncGoodsSpu: error: {}", ApiCodeEnum.API_DATA_GOODS_STATUS_ERR.getMsg());
-            return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_STATUS_ERR);
+            throw new SystemException(ApiCodeEnum.API_DATA_GOODS_STATUS_ERR);
         }
 
         return ResultResponse.success();
