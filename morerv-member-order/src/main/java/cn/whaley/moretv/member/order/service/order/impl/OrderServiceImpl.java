@@ -60,7 +60,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	    List<GoodsSku> goodsSkuList = goodCheck.getData().getGoodsSkuList();
 	    if (goodsSkuList == null || goodsSkuList.size() > 1) {
 	    	logger.info("goodsSkuError");
-	    	ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE);
+	    	return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE);
 	    } else {
 	    	goodsSku = goodsSkuList.get(0);
 	    }
