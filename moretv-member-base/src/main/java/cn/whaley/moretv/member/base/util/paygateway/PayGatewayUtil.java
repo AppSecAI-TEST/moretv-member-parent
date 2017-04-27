@@ -53,7 +53,7 @@ public class PayGatewayUtil {
         map.put("businessType", GlobalConstant.PAY_GATEWAY_PRODUCT_CODE);
         map.put("orderNo", payGatewayRequest.getOrderCode());
         map.put("accountId", payGatewayRequest.getAccountId());
-        map.put("totalAmount", getYuanByFen(payGatewayRequest.getFree()));
+        map.put("totalAmount", getYuanByFen(payGatewayRequest.getFee()));
         map.put("subject", order.getGoodsName());
         map.put("goodsNo", payGatewayRequest.getGoodsCode());
         map.put("notifyUrl", customProperty.getNotifyUrl());

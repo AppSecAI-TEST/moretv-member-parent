@@ -86,7 +86,7 @@
         <table tableName="business_order_item" alias="boi" domainObjectName="order.OrderItem">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
-        <table tableName="delivered_order" alias="dlvo">
+        <table tableName="delivered_order" alias="dlvo" domainObjectName="order.DeliveredOrder">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 

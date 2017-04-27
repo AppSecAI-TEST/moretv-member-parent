@@ -46,7 +46,7 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
     /**
      * 支付价格（分）
      */
-    private Integer free;
+    private Integer fee;
     
     /**
      * 超时时间
@@ -57,6 +57,14 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
      * 数据签名
      */
     private String sign;
+
+    public Integer getFee() {
+        return fee;
+    }
+
+    public void setFee(Integer fee) {
+        this.fee = fee;
+    }
 
     public String getSessionToken() {
         return sessionToken;
@@ -114,14 +122,6 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
         this.orderCode = orderCode;
     }
 
-    public Integer getFree() {
-        return free;
-    }
-
-    public void setFree(Integer free) {
-        this.free = free;
-    }
-
     public Long getExpireTime() {
         return expireTime;
     }
@@ -142,6 +142,6 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
     public String toString() {
         return super.toString() + "PayRequest [sessionToken=" + sessionToken + ", cip=" + cip + ", goodsCode=" + goodsCode + ", subject="
                 + subject + ", payAutoRenew=" + payAutoRenew + ", payType=" + payType + ", orderCode=" + orderCode
-                + ", free=" + free + ", expireTime=" + expireTime + ", sign=" + sign + "]";
+                + ", fee=" + fee + ", expireTime=" + expireTime + ", sign=" + sign + "]";
     }
 }

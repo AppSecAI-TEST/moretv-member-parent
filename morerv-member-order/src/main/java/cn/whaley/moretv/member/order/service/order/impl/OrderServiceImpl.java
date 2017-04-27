@@ -94,7 +94,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
     @Override
     public ResultResponse pay(PayGatewayRequest payGatewayRequest) {
         //1、MD5
-        if(!checkSign(payGatewayRequest)){
+/*        if(!checkSign(payGatewayRequest)){
             logger.error("申请支付, md5验证失败, 请求参数->{}", payGatewayRequest.toString());
             return ResultResponse.define(ApiCodeEnum.API_SIGN_ERR);
         }
@@ -106,6 +106,19 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
         if(StringUtils.isEmpty(goodsStr)){
             logger.error("申请支付, 商品不存在, 请求参数->{}", payGatewayRequest.toString());
             return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE);
+        }*/
+        
+        //2.3、更新订单状态为【支付中】，防止并发请求
+        Map<String, Object> map = new HashMap<>();
+        map.put("updateTime", new Date());
+        map.put("newPayStatus", OrderEnum.PayStatus.PAYING.getCode());
+        map.put("oldPayStatus", OrderEnum.PayStatus.WAITING_PAY.getCode());
+        map.put("orderCode", payGatewayRequest.getOrderCode());
+        int result = orderMapper.updateOrderPayStatus(map);//在当前连接事务提交前，其他连接都在这里等待
+        
+        if(result == 0){
+            logger.error("申请支付,订单状态错误, 不是等待支付状态->{}",payGatewayRequest.toString());
+            return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_STATUS_ERR);
         }
         
         //2.2、验证订单
@@ -116,11 +129,11 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
         }
         
         if(order.getTradeStatus().intValue() != OrderEnum.TradeStatus.TRADE_INIT.getCode()
-                || order.getPayStatus().intValue() != OrderEnum.PayStatus.WAITING_PAY.getCode()){
-            logger.error("申请支付,订单状态错误, 订单信息->{}", order.toString());
+                || order.getPayStatus().intValue() != OrderEnum.PayStatus.PAYING.getCode()){
+            logger.error("申请支付,订单状态错误, order订单信息->{}", order.toString());
             return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_STATUS_ERR);
         }
-        
+
         //3、向支付网关支付
         PayGatewayResponse payGatewayResponse = PayGatewayUtil.pay(payGatewayRequest, order);
         if(payGatewayResponse == null ){
@@ -133,14 +146,6 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
             return ResultResponse.define(ApiCodeEnum.API_DATA_PAY_GATEWAY_ERR);
         }
         
-        //4、更新订单状态, 只会从[待支付]更新到[支付中]
-        Map<String, Object> map = new HashMap<>();
-        map.put("updateTime", new Date());
-        map.put("newPayStatus", OrderEnum.PayStatus.PAYING.getCode());
-        map.put("oldPayStatus", order.getPayStatus());
-        map.put("orderCode", payGatewayRequest.getOrderCode());
-        orderMapper.updateOrderPayStatus(map);
-
         return ResultResponse.success(new OrderPayResponse(payGatewayResponse.getContent()));
     }
 
@@ -148,7 +153,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
         //拼接MD5的参数
         String param = PayManage.getParams4Sign(payGatewayRequest.getCip(), payGatewayRequest.getTimestamp(), 
                 payGatewayRequest.getGoodsCode(), payGatewayRequest.getSubject(), payGatewayRequest.getPayAutoRenew(), 
-                payGatewayRequest.getPayType(), payGatewayRequest.getOrderCode(), payGatewayRequest.getFree(), 
+                payGatewayRequest.getPayType(), payGatewayRequest.getOrderCode(), payGatewayRequest.getFee(), 
                 payGatewayRequest.getAccountId()).toString();
         
         if(PayManage.getPayUrlSign(param).equals(payGatewayRequest.getSign()))

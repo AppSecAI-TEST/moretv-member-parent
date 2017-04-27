@@ -1,4 +1,4 @@
-package cn.whaley.moretv.member.model;
+package cn.whaley.moretv.member.model.order;
 
 import cn.whaley.moretv.member.base.model.BaseModel;
 import java.io.Serializable;
