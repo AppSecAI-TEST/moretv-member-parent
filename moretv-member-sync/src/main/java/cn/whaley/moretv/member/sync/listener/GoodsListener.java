@@ -34,28 +34,21 @@ public class GoodsListener {
 
     @RabbitHandler
     public void listen(String goodsStr) {
-        GoodsDto goodsDto = convertGoods(goodsStr);
-        ResultResponse resBase = goodsService.syncGoods(goodsDto);
-
-        if (!resBase.isSuccess()) {
-            throw new SystemException(String.valueOf(resBase.getCode()), resBase.getMsg());
+        try {
+            GoodsDto goodsDto = convertGoods(goodsStr);
+            goodsService.syncGoods(goodsDto);
+            logger.info("goods_listen: sync Goods success!");
+        } catch (Exception e) {
+            logger.error("goods_listen: error: ", e);
         }
-        logger.info("goods_listen: sync Goods success!");
     }
 
     private GoodsDto convertGoods(String goodsStr) {
         if (StringUtils.isEmpty(goodsStr)) {
-            logger.error("goods_listen: param is null");
             throw new SystemException(ApiCodeEnum.API_PARAM_NULL);
         }
 
         logger.info("goods_listen: param: {}", goodsStr);
-
-        try {
-            return JSON.parseObject(goodsStr, GoodsDto.class);
-        } catch (Exception e) {
-            logger.error("goods_listen: param parse to Goods error");
-            throw new SystemException(ApiCodeEnum.API_PARAM_ERR);
-        }
+        return JSON.parseObject(goodsStr, GoodsDto.class);
     }
 }

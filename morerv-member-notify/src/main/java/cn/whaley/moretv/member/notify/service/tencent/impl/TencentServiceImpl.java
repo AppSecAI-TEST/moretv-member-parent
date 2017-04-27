@@ -143,7 +143,8 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
      * @return
      */
     private JSONObject tencentGetVuid(Integer accountId) {
-        String tpUserId = MD5Util.string2MD5(String.valueOf(accountId) + System.currentTimeMillis());
+        String tpUserId = MD5Util.string2MD5(String.valueOf(accountId) + now.get().getTime());
+        logger.info("tencentGetVuid : tpUserId : {}", tpUserId);
         String url = String.format("%s&access_token=%s&tp_userid=%s",
                 tencent.getAccountApplicationServer(), getAccessToken(), tpUserId);
         return getRequest(url, "申请腾讯会员");

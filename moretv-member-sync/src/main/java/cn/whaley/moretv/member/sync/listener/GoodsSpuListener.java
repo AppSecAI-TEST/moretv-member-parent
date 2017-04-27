@@ -33,28 +33,21 @@ public class GoodsSpuListener {
 
     @RabbitHandler
     public void listen(String goodsSpuStr) {
-        GoodsSpu goodsSpu = convertGoodsSpu(goodsSpuStr);
-        ResultResponse resBase = goodsSpuService.syncGoodsSpu(goodsSpu);
-
-        if (!resBase.isSuccess()) {
-            throw new SystemException(String.valueOf(resBase.getCode()), resBase.getMsg());
+        try {
+            GoodsSpu goodsSpu = convertGoodsSpu(goodsSpuStr);
+            goodsSpuService.syncGoodsSpu(goodsSpu);
+            logger.info("goodsSpu_listen: sync GoodsSpu success!");
+        } catch (Exception e) {
+            logger.error("goodsSpu_listen: error: ", e);
         }
-        logger.info("goodsSpu_listen: sync GoodsSpu success!");
     }
 
     private GoodsSpu convertGoodsSpu(String goodsSpuStr) {
         if (StringUtils.isEmpty(goodsSpuStr)) {
-            logger.error("goodsSpu_listen: param is null");
             throw new SystemException(ApiCodeEnum.API_PARAM_NULL);
         }
 
         logger.info("goodsSpu_listen: param: {}", goodsSpuStr);
-
-        try {
-            return JSON.parseObject(goodsSpuStr, GoodsSpu.class);
-        } catch (Exception e) {
-            logger.error("goodsSpu_listen: param parse to GoodsSpu error");
-            throw new SystemException(ApiCodeEnum.API_PARAM_ERR);
-        }
+        return JSON.parseObject(goodsSpuStr, GoodsSpu.class);
     }
 }

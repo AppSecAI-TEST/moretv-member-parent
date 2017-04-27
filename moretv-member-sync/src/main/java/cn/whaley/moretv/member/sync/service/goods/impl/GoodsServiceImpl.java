@@ -5,6 +5,7 @@ import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
+import cn.whaley.moretv.member.base.exception.SystemException;
 import cn.whaley.moretv.member.base.util.BeanHandler;
 import cn.whaley.moretv.member.mapper.goods.GoodsSkuMapper;
 import cn.whaley.moretv.member.model.goods.Goods;
@@ -48,8 +49,7 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
         } else if (GlobalEnum.StatusText.PUBLISHED.getCode().equals(status)){
             publishGoods(goodsDto, opsHash);
         } else {
-            logger.error("syncGoods: error: {}", ApiCodeEnum.API_DATA_GOODS_STATUS_ERR.getMsg());
-            return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_STATUS_ERR);
+            throw new SystemException(ApiCodeEnum.API_DATA_GOODS_STATUS_ERR);
         }
 
         return ResultResponse.success();

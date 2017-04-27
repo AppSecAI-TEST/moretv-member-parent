@@ -53,7 +53,7 @@ public interface GlobalConstant {
     String MORETV_PUBLISH_CP_ACCOUNT_QUEUE = "moretv.publish.cp.account.queue";
     
     // 电视猫订单队列
-    String MORETV_PUBLISH_BUSINESS_EXCHANGE = "moretv.publish.business";
+    String MORETV_PUBLISH_ORDER_EXCHANGE = "moretv.publish.order";
     String MORETV_PUBLISH_BUSINESS_ORDER_ROUTER_KEY = "moretv.publish.business.order.router.key";
     String MORETV_PUBLISH_BUSINESS_ORDER_QUEUE = "moretv.publish.business.order.queue";
     

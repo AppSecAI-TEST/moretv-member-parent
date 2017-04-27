@@ -27,6 +27,8 @@ public class LogAspect {
 
     private static Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
+    private static final String URI_ERROR = "/error";
+
     /**
      * 定义日志切入点
      */
@@ -42,7 +44,7 @@ public class LogAspect {
 
         LogInfo logInfo = new LogInfo(point, request);
 
-        logger.info(logInfo.beforeLog());
+        logInfo.beforeLog();
 
         try {
             Object result = ValidateHandler.validate(args, logInfo);
@@ -51,13 +53,13 @@ public class LogAspect {
             }
 
             result = point.proceed(args);
-            logger.info(logInfo.afterLog(result));
+            logInfo.afterLog(result);
             return result;
         } catch (SystemException e) {
-            logger.error(logInfo.throwLog(e.getCode() + " : " + e.getMessage()));
+            logInfo.throwLog(e.getCode() + " : " + e.getMessage(), e);
             return ResultResponse.define(Integer.valueOf(e.getCode()), e.getMessage());
         } catch (Throwable e) {
-            logger.error(logInfo.throwLog(e.getMessage()), e);
+            logInfo.throwLog(e.getMessage(), e);
             return ResultResponse.failed(e.getMessage());
         }
     }
@@ -152,25 +154,31 @@ public class LogAspect {
             this.costMilliseconds = costMilliseconds;
         }
 
-        public String beforeLog() {
+        public void beforeLog() {
+            if (URI_ERROR.equals(uri)) {
+                return;
+            }
             StringBuffer buffer = new StringBuffer();
             buffer.append("LOG [Request  ][").append(uri).append("][").append(method).append("] ");
             buffer.append(getClazzName()).append(".").append(methodName);
             buffer.append("() 参数:").append(getParams());
-            return buffer.toString();
+            logger.info(buffer.toString());
         }
 
-        public String afterLog(Object result) {
+        public void afterLog(Object result) {
+            if (URI_ERROR.equals(uri)) {
+                return;
+            }
             setResult(result);
             setCostMilliseconds(System.currentTimeMillis() - getBeginTime());
             StringBuffer buffer = new StringBuffer();
             buffer.append("LOG [Response ][").append(uri).append("][").append(method).append("] ");
             buffer.append(getClazzName()).append(".").append(methodName);
             buffer.append("() 响应结果：").append(result).append(" 耗时：").append(costMilliseconds).append("ms");
-            return buffer.toString();
+            logger.info(buffer.toString());
         }
 
-        public String throwLog(String message) {
+        public void throwLog(String message, Throwable e) {
             setCostMilliseconds(System.currentTimeMillis() - getBeginTime());
             StringBuffer buffer = new StringBuffer();
             buffer.append("LOG [Exception][").append(uri).append("][").append(method).append("] ");
@@ -178,7 +186,7 @@ public class LogAspect {
             buffer.append("() 参数:").append(getParams());
             buffer.append(" 耗时：").append(costMilliseconds).append("ms");
             buffer.append(" 异常信息：").append(message);
-            return buffer.toString();
+            logger.error(buffer.toString(), e);
         }
     }
 

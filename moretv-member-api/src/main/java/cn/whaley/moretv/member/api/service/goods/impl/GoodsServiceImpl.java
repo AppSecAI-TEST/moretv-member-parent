@@ -67,12 +67,13 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
             hasPurchaseOrder = orderService.hasPurchaseOrder(accountId);
         }
 
-        logger.info("get_goods_by_tag :  accountId:{}, goodsSize:{}, hasPurchaseOrder:{}",
-                accountId, list.size(), hasPurchaseOrder);
-
         for (String value : list) {
             GoodsDto goodsDto = JSON.parseObject(value, GoodsDto.class);
             Integer goodsClass = goodsDto.getGoodsClass();
+
+            if (!goodsTag.equals(goodsDto.getGoodsBaseCode())) {
+                continue;
+            }
 
             if (!goodsDto.getIsDisplayed() || !goodsType.equals(goodsDto.getGoodsType())) {
                 continue;
@@ -96,6 +97,9 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
             GoodsResponse response = ResponseHandler.converGoods(goodsDto);
             goodsList.add(response);
         }
+
+        logger.info("get_goods_by_tag :  accountId:{}, goodsSize:{}, hasPurchaseOrder:{}",
+                accountId, goodsList.size(), hasPurchaseOrder);
 
         return ResultResponse.success(goodsList);
     }
