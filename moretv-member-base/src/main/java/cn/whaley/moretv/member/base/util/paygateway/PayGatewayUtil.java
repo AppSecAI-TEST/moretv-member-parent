@@ -43,7 +43,7 @@ public class PayGatewayUtil {
         
         String result = HttpClientUtil.post(customProperty.getPayGatewayServer() + tempUrl, setParam(payGatewayRequest, order));
         if(result == null)
-            return null;
+            throw new RuntimeException("向支付网关申请支付失败");
         else
             return JSON.parseObject(result, PayGatewayResponse.class);
     }

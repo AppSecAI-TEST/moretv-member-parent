@@ -93,68 +93,54 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	
     @Override
     public ResultResponse pay(PayGatewayRequest payGatewayRequest) {
-        //1、MD5
-/*        if(!checkSign(payGatewayRequest)){
-            logger.error("申请支付, md5验证失败, 请求参数->{}", payGatewayRequest.toString());
-            return ResultResponse.define(ApiCodeEnum.API_SIGN_ERR);
-        }
-        
-        //2、验证
-        //2.1、验证商品
+        //1、验证
+        //1.1、验证商品是否存在redis中
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
         String goodsStr = opsHash.get(CacheKeyConstant.REDIS_KEY_GOODS, payGatewayRequest.getGoodsCode());
         if(StringUtils.isEmpty(goodsStr)){
             logger.error("申请支付, 商品不存在, 请求参数->{}", payGatewayRequest.toString());
             return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE);
-        }*/
+        }
         
-        //2.3、更新订单状态为【支付中】，防止并发请求
+        //2、更新订单状态为【支付中】，防止并发请求
         Map<String, Object> map = new HashMap<>();
         map.put("updateTime", new Date());
         map.put("newPayStatus", OrderEnum.PayStatus.PAYING.getCode());
         map.put("oldPayStatus", OrderEnum.PayStatus.WAITING_PAY.getCode());
         map.put("orderCode", payGatewayRequest.getOrderCode());
-        int result = orderMapper.updateOrderPayStatus(map);//在当前连接事务提交前，其他连接都在这里等待
+        map.put("tradeStatus", OrderEnum.TradeStatus.TRADE_INIT.getCode());
+        int result = orderMapper.updateOrderPayStatus(map);//在当前连接事务提交前，其他连接都在这里等待;而当前事务提交后，支付状态已经是2了，其他的连接执行的话影响行数必为0
         
         if(result == 0){
-            logger.error("申请支付,订单状态错误, 不是等待支付状态->{}",payGatewayRequest.toString());
-            return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_STATUS_ERR);
+            logger.error("申请支付,订单不存在或订单状态错误！->{}",payGatewayRequest.toString());
+            throw new RuntimeException("申请支付, 订单不存在或订单状态错误！");
         }
         
-        //2.2、验证订单
+        //3、获取订单，上面影响行数为1说明订单肯定存在，状态也是正确的
         Order order = orderMapper.getByOrderCode(payGatewayRequest.getOrderCode());
-        if(order == null){
-            logger.error("申请支付, 订单不存在, 请求参数->{}", payGatewayRequest.toString());
-            return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
+        
+        //4、根据订单的数据去验证请求的MD5
+        if(!checkSign(payGatewayRequest, order)){
+            logger.error("申请支付, md5验证失败, 请求参数->{}", payGatewayRequest.toString());
+            throw new RuntimeException("申请支付, MD5验证失败");
         }
         
-        if(order.getTradeStatus().intValue() != OrderEnum.TradeStatus.TRADE_INIT.getCode()
-                || order.getPayStatus().intValue() != OrderEnum.PayStatus.PAYING.getCode()){
-            logger.error("申请支付,订单状态错误, order订单信息->{}", order.toString());
-            return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_STATUS_ERR);
-        }
-
-        //3、向支付网关支付
+        //5、向支付网关支付
         PayGatewayResponse payGatewayResponse = PayGatewayUtil.pay(payGatewayRequest, order);
-        if(payGatewayResponse == null ){
-            logger.error("申请支付, 支付网关http返回非200, 请求参数->{}", payGatewayRequest.toString());
-            return ResultResponse.define(ApiCodeEnum.API_DATA_PAY_GATEWAY_ERR);
-        }
         
         if(payGatewayResponse.getStatus().intValue() != 1){
             logger.error("申请支付, 支付网关错误, 支付网关返回->{}", payGatewayResponse.toString());
-            return ResultResponse.define(ApiCodeEnum.API_DATA_PAY_GATEWAY_ERR);
+            throw new RuntimeException("向支付网关申请支付失败");
         }
         
         return ResultResponse.success(new OrderPayResponse(payGatewayResponse.getContent()));
     }
 
-    private boolean checkSign(PayGatewayRequest payGatewayRequest) {
+    private boolean checkSign(PayGatewayRequest payGatewayRequest, Order order) {
         //拼接MD5的参数
         String param = PayManage.getParams4Sign(payGatewayRequest.getCip(), payGatewayRequest.getTimestamp(), 
-                payGatewayRequest.getGoodsCode(), payGatewayRequest.getSubject(), payGatewayRequest.getPayAutoRenew(), 
-                payGatewayRequest.getPayType(), payGatewayRequest.getOrderCode(), payGatewayRequest.getFee(), 
-                payGatewayRequest.getAccountId()).toString();
+                order.getGoodsCode(), order.getOrderTitle(), order.getIsAutoRenewal(), order.getPayChannel(), 
+                order.getOrderCode(), order.getRealPrice(), order.getAccountId()).toString();
         
         if(PayManage.getPayUrlSign(param).equals(payGatewayRequest.getSign()))
             return true;
