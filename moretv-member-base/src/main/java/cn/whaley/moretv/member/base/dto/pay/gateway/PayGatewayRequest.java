@@ -49,14 +49,16 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
     private Integer fee;
     
     /**
-     * 超时时间
+     * 超时时间(分钟)
      */
-    private Long expireTime;
+    private Integer expireTime;
     
     /**
      * 数据签名
      */
     private String sign;
+    
+    private Long createTime;
 
     public Integer getFee() {
         return fee;
@@ -122,11 +124,11 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
         this.orderCode = orderCode;
     }
 
-    public Long getExpireTime() {
+    public Integer getExpireTime() {
         return expireTime;
     }
 
-    public void setExpireTime(Long expireTime) {
+    public void setExpireTime(Integer expireTime) {
         this.expireTime = expireTime;
     }
 
@@ -136,6 +138,14 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
 
     public void setSign(String sign) {
         this.sign = sign;
+    }
+    
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
     }
 
     @Override

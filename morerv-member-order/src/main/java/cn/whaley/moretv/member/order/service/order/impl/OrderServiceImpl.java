@@ -93,8 +93,21 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	
     @Override
     public ResultResponse pay(PayGatewayRequest payGatewayRequest) {
-        //1、验证
-        //1.1、验证商品是否存在redis中
+        Date now = new Date();
+        //1、验证MD5
+        if(!checkSign(payGatewayRequest)){
+            logger.error("申请支付, md5验证失败, 请求参数->{}", payGatewayRequest.toString());
+            return ResultResponse.define(ApiCodeEnum.API_SIGN_ERR);
+        }
+        
+        //2、验证订单超时时间
+        long overtime = payGatewayRequest.getCreateTime().longValue() + (payGatewayRequest.getExpireTime().longValue() * 60 * 1000);
+        if(overtime > now.getTime()){
+            logger.error("申请支付, 订单已超时, 请求参数->{}", payGatewayRequest.toString());
+            return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_OVER_TIME_ERR);
+        }
+        
+        //3、验证商品是否存在redis中
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
         String goodsStr = opsHash.get(CacheKeyConstant.REDIS_KEY_GOODS, payGatewayRequest.getGoodsCode());
         if(StringUtils.isEmpty(goodsStr)){
@@ -102,9 +115,9 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
             return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE);
         }
         
-        //2、更新订单状态为【支付中】，防止并发请求
+        //4、更新订单状态为【支付中】，防止并发请求
         Map<String, Object> map = new HashMap<>();
-        map.put("updateTime", new Date());
+        map.put("updateTime", now);
         map.put("newPayStatus", OrderEnum.PayStatus.PAYING.getCode());
         map.put("oldPayStatus", OrderEnum.PayStatus.WAITING_PAY.getCode());
         map.put("orderCode", payGatewayRequest.getOrderCode());
@@ -116,17 +129,8 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
             throw new RuntimeException("申请支付, 订单不存在或订单状态错误！");
         }
         
-        //3、获取订单，上面影响行数为1说明订单肯定存在，状态也是正确的
-        Order order = orderMapper.getByOrderCode(payGatewayRequest.getOrderCode());
-        
-        //4、根据订单的数据去验证请求的MD5
-        if(!checkSign(payGatewayRequest, order)){
-            logger.error("申请支付, md5验证失败, 请求参数->{}", payGatewayRequest.toString());
-            throw new RuntimeException("申请支付, MD5验证失败");
-        }
-        
         //5、向支付网关支付
-        PayGatewayResponse payGatewayResponse = PayGatewayUtil.pay(payGatewayRequest, order);
+        PayGatewayResponse payGatewayResponse = PayGatewayUtil.pay(payGatewayRequest);
         
         if(payGatewayResponse.getStatus().intValue() != 1){
             logger.error("申请支付, 支付网关错误, 支付网关返回->{}", payGatewayResponse.toString());
@@ -136,11 +140,11 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
         return ResultResponse.success(new OrderPayResponse(payGatewayResponse.getContent()));
     }
 
-    private boolean checkSign(PayGatewayRequest payGatewayRequest, Order order) {
+    private boolean checkSign(PayGatewayRequest payGatewayRequest) {
         //拼接MD5的参数
         String param = PayManage.getParams4Sign(payGatewayRequest.getCip(), payGatewayRequest.getTimestamp(), 
-                order.getGoodsCode(), order.getOrderTitle(), order.getIsAutoRenewal(), order.getPayChannel(), 
-                order.getOrderCode(), order.getRealPrice(), order.getAccountId()).toString();
+                payGatewayRequest.getGoodsCode(), payGatewayRequest.getSubject(), payGatewayRequest.getPayAutoRenew(), 
+                payGatewayRequest.getPayType(), payGatewayRequest.getOrderCode(), payGatewayRequest.getFee(), payGatewayRequest.getAccountId()).toString();
         
         if(PayManage.getPayUrlSign(param).equals(payGatewayRequest.getSign()))
             return true;

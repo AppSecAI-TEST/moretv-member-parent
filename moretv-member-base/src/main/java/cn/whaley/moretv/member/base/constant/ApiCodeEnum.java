@@ -36,6 +36,7 @@ public enum ApiCodeEnum {
     API_PARAM_VIDEOINFO_NULL(ApiCodeInfo.API_PARAM_VIDEOINFO_NULL, "param videoinfo is null"),
     
     API_DATA_ORDER_STATUS_ERR(ApiCodeInfo.API_DATA_ORDER_STATUS_ERR, "orderStatus error"),
+    API_DATA_ORDER_OVER_TIME_ERR(ApiCodeInfo.API_DATA_ORDER_OVER_TIME_ERR, "order over time error"),
     
     API_DATA_PAY_GATEWAY_ERR(ApiCodeInfo.API_DATA_PAY_GATEWAY_ERR, "pay_gateway error"),
     API_PARAM_PAY_NOTIFY_STATUS_ERR(ApiCodeInfo.API_PARAM_PAY_NOTIFY_STATUS_ERR, "pay notify status error"),

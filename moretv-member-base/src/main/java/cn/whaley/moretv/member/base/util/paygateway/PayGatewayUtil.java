@@ -17,7 +17,6 @@ import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayRequest;
 import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayResponse;
 import cn.whaley.moretv.member.base.util.MD5Util;
 import cn.whaley.moretv.member.base.util.longconnect.HttpClientUtil;
-import cn.whaley.moretv.member.model.order.Order;
 
 /**
  * 支付网关工具类
@@ -36,25 +35,25 @@ public class PayGatewayUtil {
     /**
      * 向支付网关申请支付
      */
-    public static PayGatewayResponse pay(PayGatewayRequest payGatewayRequest, Order order) {
+    public static PayGatewayResponse pay(PayGatewayRequest payGatewayRequest) {
         String tempUrl = "/aliwappay";//默认支付宝
         if(OrderEnum.PayChannel.WECHAT.getCode().equals(payGatewayRequest.getPayType()))
             tempUrl = "/weixinwappay";
         
-        String result = HttpClientUtil.post(customProperty.getPayGatewayServer() + tempUrl, setParam(payGatewayRequest, order));
+        String result = HttpClientUtil.post(customProperty.getPayGatewayServer() + tempUrl, setParam(payGatewayRequest));
         if(result == null)
             throw new RuntimeException("向支付网关申请支付失败");
         else
             return JSON.parseObject(result, PayGatewayResponse.class);
     }
     
-    private static String setParam(PayGatewayRequest payGatewayRequest, Order order) {
+    private static String setParam(PayGatewayRequest payGatewayRequest) {
         Map<String, Object> map = new HashMap<>();
         map.put("businessType", GlobalConstant.PAY_GATEWAY_PRODUCT_CODE);
         map.put("orderNo", payGatewayRequest.getOrderCode());
         map.put("accountId", payGatewayRequest.getAccountId());
         map.put("totalAmount", getYuanByFen(payGatewayRequest.getFee()));
-        map.put("subject", order.getGoodsName());
+        map.put("subject", payGatewayRequest.getSubject());
         map.put("goodsNo", payGatewayRequest.getGoodsCode());
         map.put("notifyUrl", customProperty.getNotifyUrl());
         map.put("overTime", payGatewayRequest.getExpireTime());
