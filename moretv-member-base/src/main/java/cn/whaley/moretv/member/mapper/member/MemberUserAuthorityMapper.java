@@ -15,6 +15,5 @@ import cn.whaley.moretv.member.model.member.MemberUserAuthority;
 */
 public interface MemberUserAuthorityMapper extends GenericMapper<MemberUserAuthority, Integer> {
 	
-	@Select("select * from member_user_authority where accountId = #{accountId} and memberCode = #{memberCode} and status = 1 ")
 	MemberUserAuthority selectByAccountIdAndMemberCode(Integer accountId,String memberCode);
 }

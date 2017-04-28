@@ -17,6 +17,5 @@ import cn.whaley.moretv.member.model.order.OrderItem;
 */
 public interface OrderItemMapper extends GenericMapper<OrderItem, Integer> {
 	
-	@Select("select * from business_order_item where orderNo = #{orderNo}")
-	List<OrderItem> getByOrderNo(String orderNo);
+	List<OrderItem> getByOrderNo(String orderCode);
 }

@@ -67,7 +67,7 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 		//通过订单id查询订单
 		Order order = orderMapper.getByOrderIdForUpdate(orderId);
 		if (order == null) {
-			ResultResponse.define(ApiCodeEnum.API_DATA_ERR);
+			return ResultResponse.define(ApiCodeEnum.API_DATA_ERR);
 		}
 		
 		List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(order.getOrderCode());
@@ -95,10 +95,12 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 			userAuthority.setMemberName(memberName);
 			userAuthority.setStartTime(memberStartTime);
 			userAuthority.setEndTime(memberEndTime);
+			userAuthority.setCreateTime(now);
 			userAuthority.setStatus(GlobalEnum.Status.VALID.getCode());
 			memberUserAuthorityMapper.insert(userAuthority);
 		}else{
 			userAuthority.setEndTime(memberEndTime);
+			userAuthority.setUpdateTime(now);
 			userAuthority.setStatus(GlobalEnum.Status.VALID.getCode());
 			memberUserAuthorityMapper.updateByPrimaryKey(userAuthority);
 		}

@@ -94,7 +94,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 
 	    //创建订单明细
 	    OrderItem orderItem = new OrderItem();
-	    orderItem.setOrderCode(orderItem.getOrderCode());
+	    orderItem.setOrderCode(order.getOrderCode());
 	    orderItem.setCreateTime(now);
 	    orderItem = createOrderItemByGoodsSku(goodsSku, orderItem);
 

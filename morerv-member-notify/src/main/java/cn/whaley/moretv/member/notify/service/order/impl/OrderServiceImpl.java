@@ -65,7 +65,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
  			logger.error("订单{}:{}", orderNo,order.toString());
  			data.put("order_no", orderNo);
  			data.put("order_status", OrderEnum.TradeStatus.getNameEngByCode(order.getTradeStatus()));
- 			if(!OrderEnum.TradeStatus.TRADE_INIT.equals(order.getTradeStatus()) && !OrderEnum.TradeStatus.WAITING_SEND.equals(order.getTradeStatus())){
+ 			if(OrderEnum.TradeStatus.TRADE_INIT.getCode() !=order.getTradeStatus() && OrderEnum.TradeStatus.WAITING_SEND.getCode()!=order.getTradeStatus()){
  				return ResultResponse.define(ApiCodeEnum.API_PARAM_PAY_NOTIFY_STATUS_ERR,data);
  			}
  			
@@ -73,7 +73,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
  			//修改订单状态
  			if(OrderEnum.PayStatus.DONE.getNameEng().equals(orderStatus)){
  				//支付价格判断
- 	 			if(order.getPaymentAmount()==fee){
+ 	 			if(order.getPaymentAmount()!=fee){
  	 				return ResultResponse.define(ApiCodeEnum.API_PARAM_PAY_FEE_ERR,data);
  	 			}
  				

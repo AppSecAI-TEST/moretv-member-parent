@@ -5,6 +5,7 @@ import java.util.UUID;
 import cn.whaley.moretv.member.mapper.order.OrderItemMapper;
 import cn.whaley.moretv.member.model.goods.GoodsSku;
 import cn.whaley.moretv.member.model.order.OrderItem;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.base.util.DateFormatUtil;
 import cn.whaley.moretv.member.mapper.order.OrderMapper;
@@ -61,8 +63,12 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
 	public OrderItem createOrderItemByGoodsSku(GoodsSku goodsSku, OrderItem orderItem) {
     	orderItem.setOrderItemCode("DT" + UUID.randomUUID().toString().replace("-", ""));
 		orderItem.setMemberCode(goodsSku.getMemberCode());
-		orderItem.setMemberName(goodsSku.getMemberName());
+		//TODO
+		orderItem.setMemberName("需要修改");
 		orderItem.setAmount(1);
+		orderItem.setValidStatus(GlobalEnum.Status.VALID.getCode());
+		orderItem.setDurationDay(goodsSku.getDurationDay());
+		orderItem.setDurationMonth(goodsSku.getDurationMonth());
 		orderItem.setTotalPrice(goodsSku.getOriginalPrice());
 		orderItem.setRealPrice(goodsSku.getSellingPrice());
 

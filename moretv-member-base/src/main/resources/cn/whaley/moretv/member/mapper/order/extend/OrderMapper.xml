@@ -22,6 +22,15 @@
     	  and bod.valid_status = 1
   </select>
   
+  <select id="getByOrderIdForUpdate" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from business_order bod
+    where bod.id = #{orderId,jdbcType=INTEGER}
+    	  and bod.valid_status = 1 for update
+  </select>
+
+  
   <update id="updateOrderPayStatus" parameterType="java.util.Map" >
     update business_order
     set pay_status = #{newPayStatus,jdbcType=INTEGER},

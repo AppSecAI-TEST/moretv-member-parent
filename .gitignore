@@ -11,3 +11,5 @@
 /**/rebel.xml
 */coverage-report/*
 *.log
+morerv-member-notify/tmp/*
+morerv-member-order/

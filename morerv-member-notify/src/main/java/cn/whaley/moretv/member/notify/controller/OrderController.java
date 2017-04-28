@@ -37,14 +37,16 @@ public class OrderController {
 			@RequestParam(value = "fee") Integer fee,
 			@RequestParam(value = "orderStatus") String orderStatus,
 			@RequestParam(value = "sign") String sign) {
-			//参数验证
+    		//TODO 暂时注销check
+    	
+			/*//参数验证
 			if (StringHelper.strsIsEmpty(orderCode,payMethodCode,payMethodName,orderStatus, sign) || fee == null) {
 				return ResultResponse.define(ApiCodeEnum.API_PARAM_NULL);
 			}
 			
 			if (!sign.equals(MD5Util.string2MD5(orderCode +payMethodCode+payMethodName+fee+orderStatus + ""))) {
 				return ResultResponse.define(ApiCodeEnum.API_SIGN_ERR);
-			}
+			}*/
         
 		return orderService.delivery(orderCode, orderStatus, fee);
     }
