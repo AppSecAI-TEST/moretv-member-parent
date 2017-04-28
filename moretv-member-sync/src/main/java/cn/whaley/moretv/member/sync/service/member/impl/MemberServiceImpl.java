@@ -3,7 +3,6 @@ package cn.whaley.moretv.member.sync.service.member.impl;
 import java.util.Date;
 import java.util.List;
 
-import cn.whaley.moretv.member.service.member.impl.BaseMemberServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.mapper.member.MemberPackageRelationMapper;
 import cn.whaley.moretv.member.model.member.Member;
 import cn.whaley.moretv.member.model.member.MemberPackageRelation;
+import cn.whaley.moretv.member.service.member.impl.BaseMemberServiceImpl;
 import cn.whaley.moretv.member.sync.dto.goods.MemberCppr;
 import cn.whaley.moretv.member.sync.dto.goods.MemberDto;
 import cn.whaley.moretv.member.sync.dto.goods.MemberMpr;
@@ -74,12 +74,16 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
                     isExist = true;
                     logger.info("mq.listen.member->update memberPackageRelation->{}",mpprOld.toString());
                     
-                    opsHash.put(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, mpprOld.getMemberCode()),  
-                                                 mpprOld.getPackageCode(), JSON.toJSONString(mpprOld));
+                    if(GlobalConstant.CP_TENCENT.equals(mpprOld.getProgramSourceCode()) ){
+                        opsHash.put(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, mpprOld.getMemberCode()),  
+                                mpprOld.getPackageCode(), JSON.toJSONString(mpprOld));
+                    }else{
+                        opsHash.delete(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, mpprOld.getMemberCode()), mpprOld.getPackageCode());
+                    }
                 }
             }
             
-            if(!isExist && GlobalConstant.CP_TENCENT.equals(cpprNew.getProgramSourceCode())){
+            if(!isExist){
                 //接收的不存在数据库中而且是腾讯的,则新增
                 MemberPackageRelation memberPackageRelation = new MemberPackageRelation();
                 copyCommonProperties(cpprNew, memberPackageRelation, member);
@@ -90,8 +94,10 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
                 memberPackageRelationMapper.insertSelective(memberPackageRelation);
                 logger.info("mq.listen.member->insert memberPackageRelation->{}",memberPackageRelation.toString());
                 
-                opsHash.put(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, memberPackageRelation.getMemberCode()),  
-                        memberPackageRelation.getPackageCode(), JSON.toJSONString(memberPackageRelation));
+                if(GlobalConstant.CP_TENCENT.equals(cpprNew.getProgramSourceCode()) ){
+                    opsHash.put(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, memberPackageRelation.getMemberCode()),  
+                            memberPackageRelation.getPackageCode(), JSON.toJSONString(memberPackageRelation));
+                }
             }
         }
         
