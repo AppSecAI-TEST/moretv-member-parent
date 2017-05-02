@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 public class HttpClientUtil {
     private static Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
-    public static String post(String url, String params) {
+    public static String post(String url, String params, ContentType contentType ) {
         CloseableHttpClient httpclient = null;
         CloseableHttpResponse response = null;
         try {
@@ -27,8 +27,7 @@ public class HttpClientUtil {
             RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(3000).setConnectTimeout(3000).build();
             HttpPost httpPost = new HttpPost(url);
             httpPost.setConfig(requestConfig);
-            StringEntity stringEntity = new StringEntity(params,
-                    ContentType.create("application/x-www-form-urlencoded", "UTF-8"));
+            StringEntity stringEntity = new StringEntity(params, contentType);
             httpPost.setEntity(stringEntity);
             logger.info("http post params {}", params);
             response = httpclient.execute(httpPost);

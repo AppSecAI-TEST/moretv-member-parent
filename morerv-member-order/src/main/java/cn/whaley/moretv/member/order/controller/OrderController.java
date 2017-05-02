@@ -78,7 +78,7 @@ public class OrderController {
      * 请求支付 
      * @throws Exception 
      */
-    @RequestMapping(value = "/pay", method = RequestMethod.POST)
+    @RequestMapping(value = "/pay")
     public ResultResponse pay(PayGatewayRequest payRequest) {
         return orderService.pay(payRequest);
     }

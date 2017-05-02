@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.http.entity.ContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,8 @@ public class LongConnectionUtil {
      */
     public static boolean pushForSpecificUsers(LongConnectionMsg msg) {
         try {
-            String result = HttpClientUtil.post(longConnection.getUrl(), setParam(msg));
+            String result = HttpClientUtil.post(longConnection.getUrl(), setParam(msg),
+                    ContentType.create("application/x-www-form-urlencoded", "UTF-8"));
             if(result == null)
                 return false;
             

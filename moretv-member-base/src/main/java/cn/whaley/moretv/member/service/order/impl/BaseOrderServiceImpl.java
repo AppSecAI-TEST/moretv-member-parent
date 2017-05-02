@@ -38,7 +38,7 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
 	
     @Autowired
     protected RedisTemplate redisTemplate;
-	
+    
     @Override
     public Boolean hasPurchaseOrder(Integer accountId) {
         Integer count = getGenericMapper().hasPurchaseOrder(accountId);
@@ -87,12 +87,12 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
      */
     @Override
     public ResultResponse checkCanOrderCount(String scene,Integer accountId){
-    	BoundValueOperations<String,Long> opsValue = redisTemplate.boundValueOps(scene+accountId);
-    	Long creteOrderCount =opsValue.get();
-    	if(creteOrderCount==0){
+    	BoundValueOperations<String,String> opsValue = redisTemplate.boundValueOps(scene+accountId);
+    	String creteOrderCount = opsValue.get();
+    	if(creteOrderCount == null){
     		opsValue.expireAt(DateFormatUtil.addDay(1));
     	}else{
-    		if(creteOrderCount>=50){
+    		if(Long.parseLong(creteOrderCount) >= 50){
     			return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_REQUEST_OVER_FIFTY);
     		}
     	}

@@ -222,7 +222,8 @@ public class PayManage {
 	 */
 	public static String getPayUrl(String sessionToken, String cip,Long timestamp,String goodsCode,String subject
 			,int payAutoRenew,String payType,String orderCode,int fee,int accountId){
-		StringBuffer parm = getParams4Sign(cip, timestamp, goodsCode, subject, payAutoRenew, payType, orderCode, fee, accountId);
+	    long createTime = new Date().getTime();
+		StringBuffer parm = getParams4Sign(cip, timestamp, goodsCode, subject, payAutoRenew, payType, orderCode, fee, accountId, createTime);
 		String sign = getPayUrlSign(parm.toString());
 		//需要作为验签的参数
 		parm.append("&version=1.0");
@@ -240,7 +241,7 @@ public class PayManage {
     }
 	
 	public static StringBuffer getParams4Sign(String cip,Long timestamp,String goodsCode,String subject
-            ,int payAutoRenew,String payType,String orderCode,int fee,int accountId){
+            ,int payAutoRenew,String payType,String orderCode,int fee,int accountId, long createTime){
 	    StringBuffer parm = new StringBuffer();
         //需要作为验签的参数
         parm.append("orderCode=" + orderCode);
@@ -253,7 +254,7 @@ public class PayManage {
         parm.append("&fee=" + fee);
         parm.append("&expireTime=120");
         parm.append("&accountId=" + accountId);
-        parm.append("&createTime=" + new Date().getTime());
+        parm.append("&createTime=" + createTime);
         return parm;
 	}
 }

@@ -102,6 +102,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	}
 	
     @Override
+    @Transactional
     public ResultResponse pay(PayGatewayRequest payGatewayRequest) {
         Date now = new Date();
         //1、验证MD5
@@ -112,7 +113,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
         
         //2、验证订单超时时间
         long overtime = payGatewayRequest.getCreateTime().longValue() + (payGatewayRequest.getExpireTime().longValue() * 60 * 1000);
-        if(overtime > now.getTime()){
+        if(overtime < now.getTime()){
             logger.error("申请支付, 订单已超时, 请求参数->{}", payGatewayRequest.toString());
             return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_OVER_TIME_ERR);
         }
@@ -154,7 +155,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
         //拼接MD5的参数
         String param = PayManage.getParams4Sign(payGatewayRequest.getCip(), payGatewayRequest.getTimestamp(), 
                 payGatewayRequest.getGoodsCode(), payGatewayRequest.getSubject(), payGatewayRequest.getPayAutoRenew(), 
-                payGatewayRequest.getPayType(), payGatewayRequest.getOrderCode(), payGatewayRequest.getFee(), payGatewayRequest.getAccountId()).toString();
+                payGatewayRequest.getPayType(), payGatewayRequest.getOrderCode(), payGatewayRequest.getFee(), payGatewayRequest.getAccountId(), payGatewayRequest.getCreateTime()).toString();
         
         if(PayManage.getPayUrlSign(param).equals(payGatewayRequest.getSign()))
             return true;
