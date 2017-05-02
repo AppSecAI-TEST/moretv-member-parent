@@ -5,7 +5,6 @@ import cn.whaley.moretv.member.base.constant.GlobalConstant;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
 import cn.whaley.moretv.member.base.util.BeanHandler;
 import cn.whaley.moretv.member.base.util.MD5Util;
-import cn.whaley.moretv.member.base.util.MessageProducer;
 import cn.whaley.moretv.member.model.cp.CpAccount;
 import cn.whaley.moretv.member.model.cp.CpOrder;
 import cn.whaley.moretv.member.model.cp.CpOrderItem;
@@ -16,6 +15,7 @@ import cn.whaley.moretv.member.notify.dto.cp.CpOrderDto;
 import cn.whaley.moretv.member.notify.service.cp.CpAccountService;
 import cn.whaley.moretv.member.notify.service.cp.CpOrderService;
 import cn.whaley.moretv.member.notify.service.tencent.TencentService;
+import cn.whaley.moretv.member.service.queue.publish.PublishMemberToAdmin;
 import cn.whaley.moretv.member.service.tencent.impl.BaseTencentServiceImpl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -48,7 +48,7 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
     private RedisTemplate redisTemplate;
 
     @Autowired
-    private MessageProducer messageProducer;
+    private PublishMemberToAdmin publishMemberToAdmin;
 
     private ThreadLocal<Date> now = new ThreadLocal<>();
 
@@ -85,7 +85,7 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
             Date date = now != null && now.get() != null ? now.get() : new Date();
             cpAccount = cpAccountService.createCpAccount(cpAccountId, cpToken, accountId, date);
             logger.info("getCpAccount : create cpAccount : {}", cpAccount);
-            publishCpAccount(cpAccount);
+            publishMemberToAdmin.publishCpAccount(cpAccount);
             return cpAccount.getCpAccount();
         } else {
             logger.info("getCpAccount : cpAccount is not exist");
@@ -302,17 +302,8 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
 
     private void publishCpOrder(CpOrderDto cpOrderDto) {
         CpOrder cpOrder = BeanHandler.copyProperties(cpOrderDto, CpOrder.class);
-        messageProducer.send(GlobalConstant.MORETV_PUBLISH_CP_EXCHANGE,
-                GlobalConstant.MORETV_PUBLISH_CP_ORDER_ROUTER_KEY, JSON.toJSONString(cpOrder));
-        for (CpOrderItem item : cpOrderDto.getCpOrderItems()) {
-            messageProducer.send(GlobalConstant.MORETV_PUBLISH_CP_EXCHANGE,
-                    GlobalConstant.MORETV_PUBLISH_CP_ORDER_ITEM_ROUTER_KEY, JSON.toJSONString(item));
-        }
-    }
-
-    private void publishCpAccount(CpAccount cpAccount) {
-        messageProducer.send(GlobalConstant.MORETV_PUBLISH_CP_EXCHANGE,
-                GlobalConstant.MORETV_PUBLISH_CP_ACCOUNT_ROUTER_KEY, JSON.toJSONString(cpAccount));
+        publishMemberToAdmin.publishCpOrder(cpOrder);
+        publishMemberToAdmin.publishCpOrderItem(cpOrderDto.getCpOrderItems());
     }
 
 }
