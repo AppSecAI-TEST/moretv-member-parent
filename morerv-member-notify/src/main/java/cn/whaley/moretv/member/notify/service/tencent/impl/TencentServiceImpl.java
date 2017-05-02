@@ -2,6 +2,7 @@ package cn.whaley.moretv.member.notify.service.tencent.impl;
 
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalConstant;
+import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
 import cn.whaley.moretv.member.base.util.BeanHandler;
 import cn.whaley.moretv.member.base.util.MD5Util;
@@ -269,7 +270,7 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
         orderDto.setCpOrderCode(cpOrderCode);
         orderDto.setCpAccount(cpAccount);
         orderDto.setBusinessOrderCode(orderCode);
-        orderDto.setCpOrderStatus(OrderEnum.CpOrderStatus.COMPLETE.getCode());
+        orderDto.setCpOrderStatus(OrderEnum.CpOrderStatus.VALID.getCode());
         orderDto.setCreateTime(now.get());
 
         List<CpOrderItem> items = parseCpOrderItem(cpOrderCode, orderItems);
@@ -294,6 +295,7 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
             item.setDurationDay(orderItem.getDurationDay());
             item.setPrice(orderItem.getRealPrice());
             item.setTotalPrice(orderItem.getTotalPrice());
+            item.setCpOrderStatus(OrderEnum.CpOrderStatus.VALID.getCode());
             item.setCreateTime(now.get());
             items.add(item);
         }
