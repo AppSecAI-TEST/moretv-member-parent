@@ -13,7 +13,10 @@ import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
+import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
 import cn.whaley.moretv.member.base.util.DateFormatUtil;
 import cn.whaley.moretv.member.mapper.order.OrderMapper;
@@ -76,17 +79,26 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
 		return orderItem;
 	}
     
-    public void checkCanOrderCount(Integer accountId){
-    	BoundValueOperations<String,Long> opsValue = redisTemplate.boundValueOps("creteOrder"+accountId);
+    /**
+     * 检验下单次数
+     * @param scene
+     * @param accountId
+     * @return
+     */
+    @Override
+    public ResultResponse checkCanOrderCount(String scene,Integer accountId){
+    	BoundValueOperations<String,Long> opsValue = redisTemplate.boundValueOps(scene+accountId);
     	Long creteOrderCount =opsValue.get();
     	if(creteOrderCount==0){
     		opsValue.expireAt(DateFormatUtil.addDay(1));
     	}else{
-    		if(creteOrderCount>=20){
-    			
+    		if(creteOrderCount>=50){
+    			return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_REQUEST_OVER_FIFTY);
     		}
     	}
     	opsValue.increment(1);
+    	
+    	return ResultResponse.success();
     }
     
 	@Override

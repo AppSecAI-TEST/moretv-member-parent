@@ -1,5 +1,6 @@
 package cn.whaley.moretv.member.service.order;
 
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.service.GenericService;
 import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.model.goods.GoodsSku;
@@ -33,4 +34,10 @@ public interface BaseOrderService extends GenericService<Order, Integer> {
      * @return
      */
     OrderItem createOrderItemByGoodsSku(GoodsSku goodsSku, OrderItem orderItem);
+    /**
+     * 
+     * @param accountId
+     * @return
+     */
+    ResultResponse checkCanOrderCount(String scene,Integer accountId);
 }

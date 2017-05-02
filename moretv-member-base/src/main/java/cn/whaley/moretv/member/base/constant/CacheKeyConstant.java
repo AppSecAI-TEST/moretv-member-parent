@@ -59,5 +59,13 @@ public interface CacheKeyConstant {
      * 存储规则：存储账户有效的会员权益，会包含已过期的权益。
      */
     String REDIS_KEY_MEMBER_AUTHORITY = "moretv:member:authority:%s";
+    
+    /**
+     * 下单场景次数
+     * field : accountId
+     *
+     * 存储规则：场景KEY加上用户id
+     */
+    String REDIS_KEY_CREAT_ORDER = "creatOrder";
 
 }

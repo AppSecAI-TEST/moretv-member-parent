@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
+import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayRequest;
 import cn.whaley.moretv.member.base.dto.request.BaseRequest;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
@@ -47,6 +48,13 @@ public class OrderController {
     	if (StringUtils.isEmpty(payType)||StringUtils.isEmpty(goodsCode) || payAutoRenew ==null) {
 	      return ResultResponse.define(ApiCodeEnum.API_PARAM_NULL);
     	}
+    	
+    	//
+    	ResultResponse checkOrderCount = orderService.checkCanOrderCount(CacheKeyConstant.REDIS_KEY_CREAT_ORDER,baseRequest.getAccountId());
+    	if(!checkOrderCount.isSuccess()){
+    		return checkOrderCount.define();
+    	}
+    	
     	
     	ResultResponse<Order> result = orderService.createOrder(goodsCode, payType, payAutoRenew, baseRequest.getAccountId());
 
