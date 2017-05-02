@@ -59,10 +59,8 @@ public class SecurityServiceImpl implements SecurityService {
                 if (!isMember) {
                     accountId = null;
                 }
-                return getAccessToken(accountId, cp, videoInfo);
-            } else {
-                return getAccessToken(null, cp, videoInfo);
             }
+            return getAccessToken(accountId, cp, videoInfo);
         }
     }
 
@@ -88,7 +86,7 @@ public class SecurityServiceImpl implements SecurityService {
      * @return
      */
     private ResultResponse<MemberProgramRelation> isProgramVIP(String videoInfo) {
-        ResultResponse<MemberProgramRelation> response = ResultResponse.failed();
+        ResultResponse<MemberProgramRelation> response = ResultResponse.failed("program is not vip");
         ValueOperations<String, String> opsValue = redisTemplate.opsForValue();
 
         String key = String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, videoInfo);
@@ -124,6 +122,10 @@ public class SecurityServiceImpl implements SecurityService {
             if (accountId != null) {
                 return ResultResponse.success(new SecurityOutSideResponse(cp, 1, accessToken, ""));
             }
+        }
+
+        if (accountId != null) {
+            return ResultResponse.success(new SecurityOutSideResponse(cp, 0, "", ""));
         }
 
         return ResultResponse.success(new SecurityInternalResponse(cp, accessToken));

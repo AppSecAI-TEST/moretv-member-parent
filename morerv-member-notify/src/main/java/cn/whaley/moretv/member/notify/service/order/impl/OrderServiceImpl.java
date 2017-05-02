@@ -48,41 +48,38 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
      *  @param fee 价格
      * @return
      */
- 	public ResultResponse delivery(String orderNo, String orderStatus,int fee) {
- 		
-    		Map<String,String> data = new HashMap<String,String>();
-    		data.put("order_no", "");
-			data.put("order_status", "");
-    		if(!OrderEnum.PayStatus.DONE.getNameEng().equals(orderStatus) && !OrderEnum.PayStatus.TIMEOUT.getNameEng().equals(orderStatus)){
-    			return ResultResponse.define(ApiCodeEnum.API_PARAM_PAY_NOTIFY_STATUS_ERR,data);
+ 	public ResultResponse delivery(String orderNo, String orderStatus, int fee) {
+
+    		if (!OrderEnum.PayStatus.DONE.getNameEng().equals(orderStatus)
+					&& !OrderEnum.PayStatus.TIMEOUT.getNameEng().equals(orderStatus)){
+    			return ResultResponse.define(ApiCodeEnum.API_PARAM_PAY_NOTIFY_STATUS_ERR);
     		}
     		
  			Order order = orderMapper.getByOrderCode(orderNo);
- 			if (order==null) {
+ 			if (order == null) {
  				logger.error("订单{}不存在", orderNo);
- 				return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST,data);
+ 				return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
  			}
- 			logger.error("订单{}:{}", orderNo,order.toString());
- 			data.put("order_no", orderNo);
- 			data.put("order_status", OrderEnum.TradeStatus.getNameEngByCode(order.getTradeStatus()));
- 			if(OrderEnum.TradeStatus.TRADE_INIT.getCode() !=order.getTradeStatus() && OrderEnum.TradeStatus.WAITING_SEND.getCode()!=order.getTradeStatus()){
- 				return ResultResponse.define(ApiCodeEnum.API_PARAM_PAY_NOTIFY_STATUS_ERR,data);
+
+ 			logger.error("订单{}:{}", orderNo, order.toString());
+			if (OrderEnum.TradeStatus.TRADE_INIT.getCode() != order.getTradeStatus()
+					&& OrderEnum.TradeStatus.WAITING_SEND.getCode() != order.getTradeStatus()) {
+ 				return ResultResponse.define(ApiCodeEnum.API_PARAM_PAY_NOTIFY_STATUS_ERR);
  			}
  			
  			
  			//修改订单状态
- 			if(OrderEnum.PayStatus.DONE.getNameEng().equals(orderStatus)){
+ 			if (OrderEnum.PayStatus.DONE.getNameEng().equals(orderStatus)) {
  				//支付价格判断
- 	 			if(order.getPaymentAmount()!=fee){
- 	 				return ResultResponse.define(ApiCodeEnum.API_PARAM_PAY_FEE_ERR,data);
+ 	 			if (order.getPaymentAmount() != fee) {
+ 	 				return ResultResponse.define(ApiCodeEnum.API_PARAM_PAY_FEE_ERR);
  	 			}
  				
  	 			//判定是否是首次购买商品
  	 			GoodsDto goods = baseGoodsService.getGoodsByGoodsNo(order.getGoodsCode());
- 	 			if(GlobalEnum.GoodsClass.FIRST_GOODS.getCode() == goods.getGoodsClass()){
- 	 				ResultResponse<?> goodsResult =baseGoodsService.checkCanBuyGoods(order.getGoodsCode(), order.getAccountId());
+ 	 			if (GlobalEnum.GoodsClass.FIRST_GOODS.getCode() == goods.getGoodsClass()) {
+ 	 				ResultResponse goodsResult = baseGoodsService.checkCanBuyGoods(order.getGoodsCode(), order.getAccountId());
  	 				if(!goodsResult.isSuccess()){
- 	 					goodsResult.put("data", data);
  	 					return goodsResult;
  	 				}
  	 			}
@@ -91,13 +88,12 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
  				order.setTradeStatus(OrderEnum.TradeStatus.WAITING_SEND.getCode());
  				order.setUpdateTime(new Date());
  	 			orderMapper.updateByPrimaryKeySelective(order);
-    		}else{
+    		} else {
     			order.setPayStatus(OrderEnum.PayStatus.TIMEOUT.getCode());
     			order.setTradeStatus(OrderEnum.TradeStatus.TRADE_TIMEOUT.getCode());
     			order.setUpdateTime(new Date());
      			orderMapper.updateByPrimaryKeySelective(order);
- 				data.put("order_status", OrderEnum.TradeStatus.getNameEngByCode(order.getTradeStatus()));
- 				return ResultResponse.success(data);
+ 				return ResultResponse.success();
     		}
  			
  			publishMemberToAdmin.publishOrder(order);
@@ -107,12 +103,10 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
  			
  			//订购会员
  			ResultResponse  memberResult = memberOpsService.deliveryMemberByOrderId(order.getId());
- 			if(!memberResult.isSuccess()){
- 				memberResult.put("data", data);
-				return memberResult;	
+ 			if (!memberResult.isSuccess()) {
+				return memberResult;
  			}
- 			data.put("order_status", OrderEnum.TradeStatus.TRADE_FINISHED.getNameEng());
- 			return ResultResponse.success(data);
+ 			return ResultResponse.success();
  	}
     
 }
