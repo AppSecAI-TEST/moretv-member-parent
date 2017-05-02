@@ -241,8 +241,7 @@ public interface OrderEnum {
     enum CpOrderStatus {
 
         DELETE(0, "无效"),
-        VALID(1, "有效"),
-        COMPLETE(2, "完成");
+        VALID(1, "有效");
 
         private int code;
         private String name;

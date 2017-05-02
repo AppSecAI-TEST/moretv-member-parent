@@ -32,7 +32,7 @@ public class MemberStatusResponse extends MemberInfoResponse implements Serializ
     public String toString() {
         return "{" +
                 "memberCode='" + getMemberCode() + '\'' +
-                ", memberName='" + getMemberCode() + '\'' +
+                ", memberName='" + getMemberName() + '\'' +
                 ", startTime=" + getStartTime() +
                 ", endTime=" + getEndTime() +
                 ", memberStatus='" + memberStatus + '\'' +

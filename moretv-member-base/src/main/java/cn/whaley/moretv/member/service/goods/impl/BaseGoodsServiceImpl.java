@@ -59,25 +59,25 @@ public class BaseGoodsServiceImpl extends GenericServiceImpl<Goods, Integer, Goo
     @Override
 	public ResultResponse<GoodsDto> checkCanBuyGoods(String goodsNo,int accountId){
     	ResultResponse<GoodsDto> response = null;
-    	Date now =new Date();
+    	Date now = new Date();
     	//获取商品
         GoodsDto goods = getGoodsByGoodsNo(goodsNo);
     	if(goods != null && goods.getIsDisplayed()){
     		//上架时间
             if(goods.getStartTime()!=null && now.before(goods.getStartTime())){
-            	return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE,goods);
+            	return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE);
             }
             if(goods.getEndTime()!=null && now.after(goods.getEndTime())){
-            	return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE,goods);
+            	return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE);
             }
             
 //    		首次购买
     		if(GlobalEnum.GoodsClass.FIRST_GOODS.getCode() ==goods.getGoodsClass() && baseOrderService.hasPurchaseOrder(accountId)){
-    			return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_CAN_NOT_BUY,goods);
+    			return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_CAN_NOT_BUY);
     		}
     		
     	}else{
-    		return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_STATUS_ERR,goods);
+    		return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_STATUS_ERR);
     	}
     	response = ResultResponse.success(goods);
 		return response;

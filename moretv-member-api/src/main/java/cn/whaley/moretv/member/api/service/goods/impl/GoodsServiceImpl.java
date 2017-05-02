@@ -62,10 +62,7 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
             return ResultResponse.success(goodsList);
         }
 
-        boolean hasPurchaseOrder = false;
-        if (normalGoods.equals(goodsType)) {
-            hasPurchaseOrder = orderService.hasPurchaseOrder(accountId);
-        }
+        boolean hasPurchaseOrder = orderService.hasPurchaseOrder(accountId);
 
         for (String value : list) {
             GoodsDto goodsDto = JSON.parseObject(value, GoodsDto.class);

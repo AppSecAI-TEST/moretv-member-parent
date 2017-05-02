@@ -154,14 +154,12 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 	 * @param memberAuthority
 	 */
 	private void saveMemberAuthorityToRedis(MemberUserAuthority memberAuthority) {
-
 		try {
-				HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
-				opsHash.put(CacheKeyConstant.REDIS_KEY_MEMBER_AUTHORITY, memberAuthority.getMemberCode(), JSON.toJSONString(memberAuthority));
+			HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
+			String key = String.format(CacheKeyConstant.REDIS_KEY_MEMBER_AUTHORITY, memberAuthority.getAccountId());
+			opsHash.put(key, memberAuthority.getMemberCode(), JSON.toJSONString(memberAuthority));
 		} catch (Exception e) {
 			logger.info("saveMemberAuthorityToRedis error:{}",memberAuthority.toString());
 		}
-		
-		
     }
 }

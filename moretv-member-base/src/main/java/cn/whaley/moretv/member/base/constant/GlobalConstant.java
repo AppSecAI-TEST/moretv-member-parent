@@ -74,5 +74,5 @@ public interface GlobalConstant {
     String MORETV_PUBLISH_MEMBER_USER_AUTHORITY_QUEUE = "moretv.publish.member.user.authority.queue";
     
     //电视猫会员对于支付网关的产品编号
-    String PAY_GATEWAY_PRODUCT_CODE = "tvmore";
+    String PAY_GATEWAY_PRODUCT_CODE = "moretv";
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.http.entity.ContentType;
 import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -40,14 +41,15 @@ public class PayGatewayUtil {
         if(OrderEnum.PayChannel.WECHAT.getCode().equals(payGatewayRequest.getPayType()))
             tempUrl = "/weixinwappay";
         
-        String result = HttpClientUtil.post(customProperty.getPayGatewayServer() + tempUrl, setParam(payGatewayRequest));
+        String result = HttpClientUtil.post(customProperty.getPayGatewayServer() + tempUrl, JSON.toJSONString(setParam(payGatewayRequest)),
+                            ContentType.create("application/json", "UTF-8"));
         if(result == null)
             throw new RuntimeException("向支付网关申请支付失败");
         else
             return JSON.parseObject(result, PayGatewayResponse.class);
     }
     
-    private static String setParam(PayGatewayRequest payGatewayRequest) {
+    private static Map<String, Object> setParam(PayGatewayRequest payGatewayRequest) {
         Map<String, Object> map = new HashMap<>();
         map.put("businessType", GlobalConstant.PAY_GATEWAY_PRODUCT_CODE);
         map.put("orderNo", payGatewayRequest.getOrderCode());
@@ -61,7 +63,7 @@ public class PayGatewayUtil {
         
         map.put("sign", getSign(map));
         
-        return HttpClientUtil.appendParams(map);
+        return map;
     }
     
     /**
