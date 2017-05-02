@@ -66,8 +66,7 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
 	public OrderItem createOrderItemByGoodsSku(GoodsSku goodsSku, OrderItem orderItem) {
     	orderItem.setOrderItemCode("DT" + UUID.randomUUID().toString().replace("-", ""));
 		orderItem.setMemberCode(goodsSku.getMemberCode());
-		//TODO
-		orderItem.setMemberName("需要修改");
+		orderItem.setMemberName(goodsSku.getMemberName());
 		orderItem.setAmount(1);
 		orderItem.setValidStatus(GlobalEnum.Status.VALID.getCode());
 		orderItem.setDurationDay(goodsSku.getDurationDay());
