@@ -22,7 +22,6 @@ public class MemberDto implements Serializable {
     private Date updateTime;
     private String updateTimeStr;
     private List<MemberMpr> mprList;
-    private List<MemberCppr> cpprList;
     
     public Integer getId() {
         return id;
@@ -126,14 +125,6 @@ public class MemberDto implements Serializable {
 
     public void setMprList(List<MemberMpr> mprList) {
         this.mprList = mprList;
-    }
-
-    public List<MemberCppr> getCpprList() {
-        return cpprList;
-    }
-
-    public void setCpprList(List<MemberCppr> cpprList) {
-        this.cpprList = cpprList;
     }
     
 }

@@ -37,8 +37,6 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
 
     private static final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
 
-    @Autowired
-    private MemberPackageRelationMapper memberPackageRelationMapper;
 
     @Override
     public void sync(MemberDto memberDto) {
@@ -48,90 +46,9 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
         Member member = memberMapper.selectByCode(memberDto.getMemberCode());
         member = dealWithMember(member, memberDto, opsHash);
         
-        //2、处理 会员模型-节目包
-        dealWithMemberPackage(member,memberDto, opsHash);
-        
     }
 
-    /**
-     * 处理会员模型-节目包
-     * @param member
-     * @param memberDto
-     */
-    private void dealWithMemberPackage(Member member, MemberDto memberDto, HashOperations<String, String, String> opsHash) {
-        List<MemberCppr> cpprListNew = memberDto.getCpprList();
-        List<MemberPackageRelation> mpprListOld = memberPackageRelationMapper.listByMemberCode(member.getCode());
-        boolean isExist = false;
-        
-        for(MemberCppr cpprNew : cpprListNew){
-            //遍历新的
-            isExist = false;
-            for(MemberPackageRelation mpprOld : mpprListOld){
-                if(cpprNew.getPackageCode().equals(mpprOld.getPackageCode())){
-                    //新的在数据库里已经存在了,更新数据库中的
-                    copyCommonProperties(cpprNew, mpprOld, member);
-                    memberPackageRelationMapper.updateByPrimaryKeySelective(mpprOld);
-                    isExist = true;
-                    logger.info("mq.listen.member->update memberPackageRelation->{}",mpprOld.toString());
-                    
-                    if(GlobalConstant.CP_TENCENT.equals(mpprOld.getProgramSourceCode()) ){
-                        opsHash.put(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, mpprOld.getMemberCode()),  
-                                mpprOld.getPackageCode(), JSON.toJSONString(mpprOld));
-                    }else{
-                        opsHash.delete(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, mpprOld.getMemberCode()), mpprOld.getPackageCode());
-                    }
-                }
-            }
-            
-            if(!isExist){
-                //接收的不存在数据库中而且是腾讯的,则新增
-                MemberPackageRelation memberPackageRelation = new MemberPackageRelation();
-                copyCommonProperties(cpprNew, memberPackageRelation, member);
-                memberPackageRelation.setMemberCode(member.getCode());
-                memberPackageRelation.setPackageCode(cpprNew.getPackageCode());
-                memberPackageRelation.setCreateTime(new Date());
-               
-                memberPackageRelationMapper.insertSelective(memberPackageRelation);
-                logger.info("mq.listen.member->insert memberPackageRelation->{}",memberPackageRelation.toString());
-                
-                if(GlobalConstant.CP_TENCENT.equals(cpprNew.getProgramSourceCode()) ){
-                    opsHash.put(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, memberPackageRelation.getMemberCode()),  
-                            memberPackageRelation.getPackageCode(), JSON.toJSONString(memberPackageRelation));
-                }
-            }
-        }
-        
-        for(MemberPackageRelation mpprOld : mpprListOld){
-            isExist = false;
-            for(MemberCppr cpprNew : cpprListNew){
-                if(cpprNew.getPackageCode().equals(mpprOld.getPackageCode())){
-                    //遍历老的，如果老的存在新的中，那么前面肯定已经处理过了
-                    isExist = true;
-                }
-            }
-            
-            if(!isExist){
-                //如果老的不在新的里面，则删除
-                mpprOld.setStatus(GlobalEnum.Bound.UNBOUND.getCode());
-                mpprOld.setUpdateTime(new Date());
-                memberPackageRelationMapper.updateByPrimaryKeySelective(mpprOld);
-                logger.info("mq.listen.member->delete memberPackageRelation->{}",mpprOld.toString());
-                
-                opsHash.delete(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, mpprOld.getMemberCode()), mpprOld.getPackageCode());
-            }
-        }        
-    }
     
-    private void copyCommonProperties(MemberCppr source, MemberPackageRelation target, Member member) {
-        target.setMemberName(member.getName());    
-        target.setPackageName(source.getPackageName());
-        target.setProgramSourceCode(source.getProgramSourceCode());
-        target.setProgramSourceExternalCode(source.getProgramSourceExternalCode());
-        target.setProgramSourceLabel(source.getProgramSourceLabel());
-        target.setProgramSourceOriginalType(source.getProgramSourceOriginalType());
-        target.setStatus(source.getRelationStatus());
-        target.setUpdateTime(new Date());
-    }
 
     /**
      * 处理会员模型
