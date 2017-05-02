@@ -14,9 +14,9 @@ import java.util.Date;
 public class DeliveredOrder extends BaseModel<Integer> implements Serializable {
     /**
      * item的唯一标识
-     * business_code
+     * order_item_code
      */
-    private String businessCode;
+    private String orderItemCode;
 
     /**
      * 电视猫账号
@@ -106,20 +106,20 @@ public class DeliveredOrder extends BaseModel<Integer> implements Serializable {
 
     /**
      * item的唯一标识
-     * business_code
+     * order_item_code
      */
-    public String getBusinessCode() {
-        return businessCode;
+    public String getOrderItemCode() {
+        return orderItemCode;
     }
 
     /**
      * item的唯一标识
-     * business_code
+     * order_item_code
      *
-     * @param businessCode item的唯一标识
+     * @param orderItemCode item的唯一标识
      */
-    public void setBusinessCode(String businessCode) {
-        this.businessCode = businessCode;
+    public void setOrderItemCode(String orderItemCode) {
+        this.orderItemCode = orderItemCode;
     }
 
     /**
@@ -381,7 +381,7 @@ public class DeliveredOrder extends BaseModel<Integer> implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", businessCode=").append(businessCode);
+        sb.append(", orderItemCode=").append(orderItemCode);
         sb.append(", accountId=").append(accountId);
         sb.append(", orderCode=").append(orderCode);
         sb.append(", memberCode=").append(memberCode);

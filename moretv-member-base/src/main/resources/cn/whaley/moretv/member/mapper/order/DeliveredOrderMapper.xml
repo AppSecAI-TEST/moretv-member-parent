@@ -7,7 +7,7 @@
     
   <resultMap id="BaseResultMap" type="cn.whaley.moretv.member.model.order.DeliveredOrder" >
     <id column="dlvo_id" property="id" jdbcType="INTEGER" />
-    <result column="dlvo_business_code" property="businessCode" jdbcType="VARCHAR" />
+    <result column="dlvo_order_item_code" property="orderItemCode" jdbcType="VARCHAR" />
     <result column="dlvo_account_id" property="accountId" jdbcType="INTEGER" />
     <result column="dlvo_order_code" property="orderCode" jdbcType="VARCHAR" />
     <result column="dlvo_member_code" property="memberCode" jdbcType="VARCHAR" />
@@ -24,7 +24,7 @@
     <result column="dlvo_update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    dlvo.id as dlvo_id, dlvo.business_code as dlvo_business_code, dlvo.account_id as dlvo_account_id, 
+    dlvo.id as dlvo_id, dlvo.order_item_code as dlvo_order_item_code, dlvo.account_id as dlvo_account_id, 
     dlvo.order_code as dlvo_order_code, dlvo.member_code as dlvo_member_code, dlvo.member_name as dlvo_member_name, 
     dlvo.duration_month as dlvo_duration_month, dlvo.duration_day as dlvo_duration_day, 
     dlvo.create_time as dlvo_create_time, dlvo.start_time as dlvo_start_time, dlvo.end_time as dlvo_end_time, 
@@ -42,13 +42,13 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="cn.whaley.moretv.member.model.order.DeliveredOrder" useGeneratedKeys="true" keyProperty="id" >
-    insert into delivered_order (business_code, account_id, order_code, 
+    insert into delivered_order (order_item_code, account_id, order_code, 
       member_code, member_name, duration_month, 
       duration_day, create_time, start_time, 
       end_time, invalid_time, valid_time, 
       status, operator_id, update_time
       )
-    values (#{businessCode,jdbcType=VARCHAR}, #{accountId,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, 
+    values (#{orderItemCode,jdbcType=VARCHAR}, #{accountId,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, 
       #{memberCode,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, #{durationMonth,jdbcType=INTEGER}, 
       #{durationDay,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, 
       #{endTime,jdbcType=TIMESTAMP}, #{invalidTime,jdbcType=TIMESTAMP}, #{validTime,jdbcType=TIMESTAMP}, 
@@ -58,8 +58,8 @@
   <insert id="insertSelective" parameterType="cn.whaley.moretv.member.model.order.DeliveredOrder" useGeneratedKeys="true" keyProperty="id" >
     insert into delivered_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="businessCode != null" >
-        business_code,
+      <if test="orderItemCode != null" >
+        order_item_code,
       </if>
       <if test="accountId != null" >
         account_id,
@@ -105,8 +105,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="businessCode != null" >
-        #{businessCode,jdbcType=VARCHAR},
+      <if test="orderItemCode != null" >
+        #{orderItemCode,jdbcType=VARCHAR},
       </if>
       <if test="accountId != null" >
         #{accountId,jdbcType=INTEGER},
@@ -155,8 +155,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="cn.whaley.moretv.member.model.order.DeliveredOrder" >
     update delivered_order
     <set >
-      <if test="businessCode != null" >
-        business_code = #{businessCode,jdbcType=VARCHAR},
+      <if test="orderItemCode != null" >
+        order_item_code = #{orderItemCode,jdbcType=VARCHAR},
       </if>
       <if test="accountId != null" >
         account_id = #{accountId,jdbcType=INTEGER},
@@ -205,7 +205,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.whaley.moretv.member.model.order.DeliveredOrder" >
     update delivered_order
-    set business_code = #{businessCode,jdbcType=VARCHAR},
+    set order_item_code = #{orderItemCode,jdbcType=VARCHAR},
       account_id = #{accountId,jdbcType=INTEGER},
       order_code = #{orderCode,jdbcType=VARCHAR},
       member_code = #{memberCode,jdbcType=VARCHAR},

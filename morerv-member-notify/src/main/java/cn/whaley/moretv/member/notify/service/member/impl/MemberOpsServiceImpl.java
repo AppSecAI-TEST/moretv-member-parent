@@ -22,11 +22,13 @@ import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.util.BeanHandler;
 import cn.whaley.moretv.member.base.util.DateFormatUtil;
 import cn.whaley.moretv.member.mapper.member.MemberUserAuthorityMapper;
+import cn.whaley.moretv.member.mapper.order.DeliveredOrderMapper;
 import cn.whaley.moretv.member.mapper.order.OrderItemMapper;
 import cn.whaley.moretv.member.mapper.order.OrderMapper;
 import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.model.goods.GoodsSku;
 import cn.whaley.moretv.member.model.member.MemberUserAuthority;
+import cn.whaley.moretv.member.model.order.DeliveredOrder;
 import cn.whaley.moretv.member.model.order.Order;
 import cn.whaley.moretv.member.model.order.OrderItem;
 import cn.whaley.moretv.member.notify.service.member.MemberOpsService;
@@ -52,6 +54,9 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 	private MemberUserAuthorityMapper memberUserAuthorityMapper;
 	
 	@Autowired
+	private DeliveredOrderMapper deliveredOrderMapper;
+	
+	@Autowired
 	private TencentService tencentService;
 	
     @Autowired
@@ -66,7 +71,7 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 		
 		//通过订单id查询订单
 		Order order = orderMapper.getByOrderIdForUpdate(orderId);
-		if (order == null) {
+		if (order == null || order.getTradeStatus()==OrderEnum.TradeStatus.TRADE_FINISHED.getCode()) {
 			return ResultResponse.define(ApiCodeEnum.API_DATA_ERR);
 		}
 		
@@ -74,18 +79,38 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 		OrderItem orderItem = orderItemList.get(0);
 		
 		Date now =new Date();
+		Date memberStartTime = null;
+		Date deliveredStartTime = null;
 		Integer accountId = order.getAccountId();
 		String memberCode = orderItem.getMemberCode();
 		String memberName = orderItem.getMemberName();
-		Integer duration = orderItem.getDurationMonth();
+		Integer durationMonth = orderItem.getDurationMonth();
 		Integer durationDay = orderItem.getDurationDay();
 
 		MemberUserAuthority userAuthority = memberUserAuthorityMapper.selectByAccountIdAndMemberCode(accountId, memberCode);
-		Date memberStartTime = userAuthority == null ? now:userAuthority.getStartTime();
-		Date memberEndTime = DateFormatUtil.addMonthAndDay(memberStartTime, duration,durationDay);
+		if(userAuthority==null){
+			memberStartTime = now;
+			deliveredStartTime = now;
+		}else{
+			memberStartTime = userAuthority.getStartTime();
+			deliveredStartTime = userAuthority.getEndTime();
+		}
+		Date memberEndTime = DateFormatUtil.addMonthAndDay(memberStartTime, durationMonth,durationDay);
 		
-		//生成会员发货单
-		
+		//创建发货单
+		DeliveredOrder deliveredOrder = new DeliveredOrder();
+		deliveredOrder.setOrderCode(order.getOrderCode());
+		deliveredOrder.setOrderItemCode(orderItem.getOrderItemCode());
+		deliveredOrder.setAccountId(accountId);
+		deliveredOrder.setCreateTime(now);
+		deliveredOrder.setDurationDay(durationDay);
+		deliveredOrder.setDurationMonth(durationMonth);
+		deliveredOrder.setStartTime(deliveredStartTime);
+		deliveredOrder.setEndTime(memberEndTime);
+		deliveredOrder.setMemberCode(memberCode);
+		deliveredOrder.setMemberName(memberName);
+		deliveredOrder.setStatus(GlobalEnum.Status.VALID.getCode());
+		deliveredOrderMapper.insert(deliveredOrder);
 		
 		//修改会员权益
 		if(userAuthority == null){
@@ -104,10 +129,9 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 			userAuthority.setStatus(GlobalEnum.Status.VALID.getCode());
 			memberUserAuthorityMapper.updateByPrimaryKey(userAuthority);
 		}
-		logger.info("userAuthority : {}", userAuthority);
+		logger.info("userAuthority : {}", userAuthority);		
 		
-		
-		
+		//修改订单状态
 		order.setTradeStatus(OrderEnum.TradeStatus.TRADE_FINISHED.getCode());
 		order.setUpdateTime(new Date());
 		orderMapper.updateByPrimaryKeySelective(order);
@@ -120,6 +144,7 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 		publishMemberToAdmin.publishOrder(order);
 		publishMemberToAdmin.publishOrderItem(orderItem);
 		publishMemberToAdmin.publishMemberUserAuthority(userAuthority);
+		publishMemberToAdmin.publishDeliveredOrder(deliveredOrder);
 		
 		return ResultResponse.success();
 	}

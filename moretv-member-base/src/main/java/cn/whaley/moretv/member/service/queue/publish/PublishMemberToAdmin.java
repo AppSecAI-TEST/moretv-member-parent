@@ -4,6 +4,7 @@ package cn.whaley.moretv.member.service.queue.publish;
 import cn.whaley.moretv.member.model.cp.CpAccount;
 import cn.whaley.moretv.member.model.cp.CpOrder;
 import cn.whaley.moretv.member.model.cp.CpOrderItem;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import cn.whaley.moretv.member.base.constant.GlobalConstant;
 import cn.whaley.moretv.member.model.member.MemberUserAuthority;
+import cn.whaley.moretv.member.model.order.DeliveredOrder;
 import cn.whaley.moretv.member.model.order.Order;
 import cn.whaley.moretv.member.model.order.OrderItem;
 
@@ -48,12 +50,21 @@ public class PublishMemberToAdmin {
     }
     
     /**
-     * 订单同步
+     * 订单明细同步
      * @param 
      */
     public void publishOrderItem(OrderItem orderItem) {
         String str = JSON.toJSONString(orderItem);
         send(GlobalConstant.MORETV_PUBLISH_BUSINESS_EXCHANGE, GlobalConstant.MORETV_PUBLISH_BUSINESS_ORDER_ITEM_ROUTER_KEY,str);
+    }
+    
+    /**
+     * 订单发货
+     * @param 
+     */
+    public void publishDeliveredOrder(DeliveredOrder deliveredOrder) {
+        String str = JSON.toJSONString(deliveredOrder);
+        send(GlobalConstant.MORETV_PUBLISH_BUSINESS_EXCHANGE, GlobalConstant.MORETV_PUBLISH_DELIVERED_ORDER_ROUTER_KEY,str);
     }
     
     /**
