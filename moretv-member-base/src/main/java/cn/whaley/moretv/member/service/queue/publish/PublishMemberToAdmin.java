@@ -32,7 +32,7 @@ public class PublishMemberToAdmin {
 	public void send(String exchange, String routingKey, Object object) {
 		try {
 			this.rabbitTemplate.convertAndSend(exchange, routingKey, object);
-			logger.info("[MessageProducer] exchange : {}, routingKey : {}, queue : {}",
+			logger.info("[PublishMemberToAdmin] exchange : {}, routingKey : {}, queue : {}",
 					exchange, routingKey, object.toString());
 		} catch (Throwable e) {
             logger.error("rabbit send queue error", e);
@@ -73,14 +73,22 @@ public class PublishMemberToAdmin {
      */
     public void publishMemberUserAuthority(MemberUserAuthority memberUserAuthority) {
         String str = JSON.toJSONString(memberUserAuthority);
-        send(GlobalConstant.MORETV_PUBLISH_BUSINESS_EXCHANGE, GlobalConstant.MORETV_PUBLISH_BUSINESS_ORDER_ITEM_ROUTER_KEY,str);
+        send(GlobalConstant.MORETV_PUBLISH_MEMBER_EXCHANGE, GlobalConstant.MORETV_PUBLISH_MEMBER_USER_AUTHORITY_ROUTER_KEY,str);
     }
 
+    /**
+     * CP订单
+     * @param cpOrder
+     */
     public void publishCpOrder(CpOrder cpOrder) {
         send(GlobalConstant.MORETV_PUBLISH_CP_EXCHANGE,
                 GlobalConstant.MORETV_PUBLISH_CP_ORDER_ROUTER_KEY, JSON.toJSONString(cpOrder));
     }
 
+    /**
+     * CP订单明细
+     * @param cpOrderItemList
+     */
     public void publishCpOrderItem(List<CpOrderItem> cpOrderItemList) {
         for (CpOrderItem item : cpOrderItemList) {
             send(GlobalConstant.MORETV_PUBLISH_CP_EXCHANGE,
@@ -88,6 +96,10 @@ public class PublishMemberToAdmin {
         }
     }
 
+    /**
+     * CP账号
+     * @param cpAccount
+     */
     public void publishCpAccount(CpAccount cpAccount) {
         send(GlobalConstant.MORETV_PUBLISH_CP_EXCHANGE,
                 GlobalConstant.MORETV_PUBLISH_CP_ACCOUNT_ROUTER_KEY, JSON.toJSONString(cpAccount));
