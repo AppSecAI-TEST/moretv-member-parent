@@ -4,6 +4,7 @@ import cn.whaley.moretv.member.api.dto.member.MemberInfoResponse;
 import cn.whaley.moretv.member.api.dto.member.MemberStatusResponse;
 import cn.whaley.moretv.member.api.service.member.MemberService;
 import cn.whaley.moretv.member.api.service.member.MemberUserAuthorityService;
+import cn.whaley.moretv.member.api.util.OrderingUtil;
 import cn.whaley.moretv.member.api.util.ResponseHandler;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
@@ -74,7 +75,7 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
             statusResponseList.add(memberStatus);
         }
 
-        return ResultResponse.success(statusResponseList);
+        return ResultResponse.success(OrderingUtil.orderingMember(statusResponseList));
     }
 
     @Override
@@ -97,7 +98,7 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
         if (infoResponseList.isEmpty()) {
             return ResultResponse.define(ApiCodeEnum.API_DATA_MEMBER_AUTH_NOT_EXIST);
         }
-        return ResultResponse.success(infoResponseList);
+        return ResultResponse.success(OrderingUtil.orderingMember(infoResponseList));
     }
 
     @Override

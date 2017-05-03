@@ -31,5 +31,10 @@ public class OrderTest {
         List<Order> orderList = orderService.selectAll();
         assertEquals(orderList.size(), 0);
     }
+
+    @Test
+    public void testGoods() {
+        System.out.println(goodsService.getGoodsByTag("10002", "member_tag_tag"));
+    }
     
 }

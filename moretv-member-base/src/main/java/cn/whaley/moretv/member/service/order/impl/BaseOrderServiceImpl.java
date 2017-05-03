@@ -84,18 +84,17 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
     
     /**
      * 检验下单次数
-     * @param scene
      * @param accountId
      * @return
      */
     @Override
-    public ResultResponse checkCanOrderCount(String scene, String accountId){
-    	BoundValueOperations<String,String> opsValue = redisTemplate.boundValueOps(scene+accountId);
+    public ResultResponse checkCanOrderCount(String accountId){
+    	BoundValueOperations<String,String> opsValue = redisTemplate.boundValueOps(CacheKeyConstant.REDIS_KEY_CREAT_ORDER + accountId);
     	String creteOrderCount = opsValue.get();
-    	if(creteOrderCount == null){
+    	if (creteOrderCount == null) {
     		opsValue.expireAt(DateFormatUtil.addDay(1));
-    	}else{
-    		if(Long.parseLong(creteOrderCount) >= 50){
+    	} else {
+    		if (Long.parseLong(creteOrderCount) >= 50) {
     			return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_REQUEST_OVER_FIFTY);
     		}
     	}

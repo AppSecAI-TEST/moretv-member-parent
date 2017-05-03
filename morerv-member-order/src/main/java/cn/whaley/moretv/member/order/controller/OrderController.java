@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.whaley.moretv.member.base.util.RedisLock;
 import cn.whaley.moretv.member.model.order.Order;
 import cn.whaley.moretv.member.order.service.order.OrderService;
 
@@ -46,20 +47,18 @@ public class OrderController {
     		@RequestParam(value = "payType")String payType) {
     	
     	if (StringUtils.isEmpty(payType)||StringUtils.isEmpty(goodsCode) || payAutoRenew ==null) {
-	      return ResultResponse.define(ApiCodeEnum.API_PARAM_NULL);
+			return ResultResponse.define(ApiCodeEnum.API_PARAM_NULL);
     	}
     	
-    	//
-    	ResultResponse checkOrderCount = orderService.checkCanOrderCount(CacheKeyConstant.REDIS_KEY_CREAT_ORDER,baseRequest.getAccountId());
-    	if(!checkOrderCount.isSuccess()){
+    	ResultResponse checkOrderCount = orderService.checkCanOrderCount(baseRequest.getAccountId());
+    	if (!checkOrderCount.isSuccess()) {
     		return checkOrderCount.define();
     	}
-    	
-    	
+
     	ResultResponse<Order> result = orderService.createOrder(goodsCode, payType, payAutoRenew, baseRequest.getAccountId());
 
     	//设定返回值
-    	if(result.isSuccess()){
+    	if (result.isSuccess()) {
     	    Map<String,String> data = new HashMap<String,String>();
             Order order = result.getData();
 

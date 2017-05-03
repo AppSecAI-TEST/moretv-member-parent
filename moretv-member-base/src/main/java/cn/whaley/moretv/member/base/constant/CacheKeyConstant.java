@@ -61,19 +61,29 @@ public interface CacheKeyConstant {
     String REDIS_KEY_MEMBER_AUTHORITY = "moretv:member:authority:%s";
     
     /**
-     * 下单场景次数
-     * field : accountId
+     * 下单场景次数 accountId
      *
      * 存储规则：场景KEY加上用户id
      */
-    String REDIS_KEY_CREAT_ORDER = "moretv:creatOrder";
+    String REDIS_KEY_CREAT_ORDER = "moretv:create:order";
     
     /**
-     * 订购会员场景
-     * field : accountId
+     * 订购会员场景 %s -> accountId
      *
      * 存储规则：场景KEY加上用户id
      */
-    String REDIS_KEY_ORDER_MEMBER = "moretv:orderMember";
+    String REDIS_KEY_ORDER_MEMBER = "moretv:order:member:%s";
+
+    /**
+     * 订单创建锁 %s -> accountId
+     *
+     */
+    String REDIS_KEY_ORDER_CREATE_LOCK = "moretv:order:create:%s";
+
+    /**
+     * 订单支付锁 %s -> orderCode
+     *
+     */
+    String REDIS_KEY_ORDER_PAY_LOCK = "moretv:order:pay:%s";
 
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.whaley.moretv.member.base.exception.SystemException;
+import cn.whaley.moretv.member.base.util.RedisLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +55,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 		GoodsSku goodsSku = null;
 		Date now = new Date();
 		//检查商品
-	    ResultResponse<GoodsDto> goodCheck= baseGoodsService.checkCanBuyGoods(goodsCode,accountId);
+	    ResultResponse<GoodsDto> goodCheck = baseGoodsService.checkCanBuyGoods(goodsCode,accountId);
 	    if (!goodCheck.isSuccess()) {
 	    	logger.info("goodsError:"+goodCheck.toString());
 	    	return ResultResponse.define(goodCheck.getCode(),goodCheck.getMsg());
@@ -68,33 +70,46 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	    } else {
 	    	goodsSku = goodsSkuList.get(0);
 	    }
-	    
-	    //创建订单
-	    Order order =new Order();
-	    order.setAccountId(accountId);
-	    order.setBusinessType(OrderEnum.BusinessType.PAY.getCode());
-	    order.setOrderChannel(OrderEnum.OrderChannel.WAP.getCode());
-	    order.setOrderChannelKey(null);
-	    order.setIsAutoRenewal(payAutoRenew);
-	    order.setPayChannel(payType);
-	    order.setOrderType(OrderEnum.OrderType.BUY.getCode());
-	    order.setValidStatus(GlobalEnum.Status.VALID.getCode());
-	    order.setTradeStatus(OrderEnum.TradeStatus.TRADE_INIT.getCode());
-	    order.setPayStatus(OrderEnum.PayStatus.WAITING_PAY.getCode());
-	    order.setCreateTime(now);
-	    order.setOverTime(DateFormatUtil.addHours(now, 2));
-	    order = createOrderByGoods(goods,order);
 
-	    //创建订单明细
-	    OrderItem orderItem = new OrderItem();
-	    orderItem.setOrderCode(order.getOrderCode());
-	    orderItem.setCreateTime(now);
-	    orderItem = createOrderItemByGoodsSku(goodsSku, orderItem);
+	    String key = String.format(CacheKeyConstant.REDIS_KEY_ORDER_CREATE_LOCK, accountId);
+        RedisLock redisLock = new RedisLock(redisTemplate, key, 0, 10000);
 
-	    publishMemberToAdmin.publishOrder(order);
-	    publishMemberToAdmin.publishOrderItem(orderItem);
-	    
-	    return ResultResponse.success(order);
+        try {
+            if (redisLock.lock()) {
+                //创建订单
+                Order order = new Order();
+                order.setAccountId(accountId);
+                order.setBusinessType(OrderEnum.BusinessType.PAY.getCode());
+                order.setOrderChannel(OrderEnum.OrderChannel.WAP.getCode());
+                order.setOrderChannelKey(null);
+                order.setIsAutoRenewal(payAutoRenew);
+                order.setPayChannel(payType);
+                order.setOrderType(OrderEnum.OrderType.BUY.getCode());
+                order.setValidStatus(GlobalEnum.Status.VALID.getCode());
+                order.setTradeStatus(OrderEnum.TradeStatus.TRADE_INIT.getCode());
+                order.setPayStatus(OrderEnum.PayStatus.WAITING_PAY.getCode());
+                order.setCreateTime(now);
+                order.setOverTime(DateFormatUtil.addHours(now, 2));
+                order = createOrderByGoods(goods,order);
+
+                //创建订单明细
+                OrderItem orderItem = new OrderItem();
+                orderItem.setOrderCode(order.getOrderCode());
+                orderItem.setCreateTime(now);
+                orderItem = createOrderItemByGoodsSku(goodsSku, orderItem);
+
+                publishMemberToAdmin.publishOrder(order);
+                publishMemberToAdmin.publishOrderItem(orderItem);
+                return ResultResponse.success(order);
+            } else {
+                return ResultResponse.failed("order create failed");
+            }
+        } catch (Exception e) {
+            logger.error("create order lock error", e);
+            return ResultResponse.failed();
+        } finally {
+            redisLock.unlock();
+        }
 	}
 	
     @Override
@@ -102,49 +117,70 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
     public ResultResponse pay(PayGatewayRequest payGatewayRequest) {
         Date now = new Date();
         //1、验证MD5
-        if(!checkSign(payGatewayRequest)){
+        if (!checkSign(payGatewayRequest)) {
             logger.error("申请支付, md5验证失败, 请求参数->{}", payGatewayRequest.toString());
             return ResultResponse.define(ApiCodeEnum.API_SIGN_ERR);
         }
-        
+
         //2、验证订单超时时间
         long overtime = payGatewayRequest.getCreateTime().longValue() + (payGatewayRequest.getExpireTime().longValue() * 60 * 1000);
-        if(overtime < now.getTime()){
+        if (overtime < now.getTime()) {
             logger.error("申请支付, 订单已超时, 请求参数->{}", payGatewayRequest.toString());
             return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_OVER_TIME_ERR);
         }
-        
+
         //3、验证商品是否存在redis中
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
         String goodsStr = opsHash.get(CacheKeyConstant.REDIS_KEY_GOODS, payGatewayRequest.getGoodsCode());
-        if(StringUtils.isEmpty(goodsStr)){
+        if (StringUtils.isEmpty(goodsStr)) {
             logger.error("申请支付, 商品不存在, 请求参数->{}", payGatewayRequest.toString());
             return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE);
         }
-        
-        //4、更新订单状态为【支付中】，防止并发请求
-        Map<String, Object> map = new HashMap<>();
-        map.put("updateTime", now);
-        map.put("newPayStatus", OrderEnum.PayStatus.PAYING.getCode());
-        map.put("oldPayStatus", OrderEnum.PayStatus.WAITING_PAY.getCode());
-        map.put("orderCode", payGatewayRequest.getOrderCode());
-        map.put("tradeStatus", OrderEnum.TradeStatus.TRADE_INIT.getCode());
-        int result = orderMapper.updateOrderPayStatus(map);//在当前连接事务提交前，其他连接都在这里等待;而当前事务提交后，支付状态已经是2了，其他的连接执行的话影响行数必为0
-        
-        if(result == 0){
-            logger.error("申请支付,订单不存在或订单状态错误！->{}", payGatewayRequest.toString());
-            return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
-        }
-        
-        //5、向支付网关支付
-        PayGatewayResponse payGatewayResponse = PayGatewayUtil.pay(payGatewayRequest);
-        
-        if(payGatewayResponse.getStatus().intValue() != 1){
-            logger.error("申请支付, 支付网关错误, 支付网关返回->{}", payGatewayResponse.toString());
-            throw new RuntimeException("向支付网关申请支付失败");
-        }
-        
-        return ResultResponse.success(new OrderPayResponse(payGatewayResponse.getContent()));
+
+		String orderCode = payGatewayRequest.getOrderCode();
+		String key = String.format(CacheKeyConstant.REDIS_KEY_ORDER_PAY_LOCK, orderCode);
+		RedisLock redisLock = new RedisLock(redisTemplate, key, 0, 10000);
+
+		try {
+			if (redisLock.lock()) {
+                Order order = getGenericMapper().getByOrderCode(orderCode);
+                if (order == null) {
+                    return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
+                }
+
+                if (OrderEnum.PayStatus.WAITING_PAY.getCode() != order.getPayStatus()
+                        || OrderEnum.TradeStatus.TRADE_INIT.getCode() != order.getTradeStatus()) {
+                    return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_STATUS_ERR);
+                }
+
+                //4、更新订单状态为【支付中】
+                Map<String, Object> map = new HashMap<>();
+                map.put("updateTime", now);
+                map.put("newPayStatus", OrderEnum.PayStatus.PAYING.getCode());
+                map.put("oldPayStatus", OrderEnum.PayStatus.WAITING_PAY.getCode());
+                map.put("orderCode", orderCode);
+                map.put("tradeStatus", OrderEnum.TradeStatus.TRADE_INIT.getCode());
+                orderMapper.updateOrderPayStatus(map);
+
+				//5、向支付网关支付
+                PayGatewayResponse payGatewayResponse = PayGatewayUtil.pay(payGatewayRequest);
+				if (payGatewayResponse.getStatus().intValue() == 1) {
+
+                    return ResultResponse.success(new OrderPayResponse(payGatewayResponse.getContent()));
+				} else {
+                    logger.error("申请支付, 支付网关错误, 支付网关返回->{}", payGatewayResponse.toString());
+                    return ResultResponse.define(ApiCodeEnum.API_DATA_PAY_GATEWAY_ERR.getCode(), payGatewayResponse.getMsg());
+                }
+			} else {
+                logger.error("订单正在支付中！");
+				return ResultResponse.define(ApiCodeEnum.API_DATA_PAY_GATEWAY_ERR.getCode(), "订单支付中!");
+			}
+		} catch (Exception e) {
+            logger.error("order lock error", e);
+            return ResultResponse.define(ApiCodeEnum.API_DATA_PAY_GATEWAY_ERR);
+		} finally {
+			redisLock.unlock();
+		}
     }
 
     private boolean checkSign(PayGatewayRequest payGatewayRequest) {

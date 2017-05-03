@@ -39,5 +39,5 @@ public interface BaseOrderService extends GenericService<Order, Integer> {
      * @param accountId
      * @return
      */
-    ResultResponse checkCanOrderCount(String scene, String accountId);
+    ResultResponse checkCanOrderCount(String accountId);
 }

@@ -1,5 +1,6 @@
 package cn.whaley.moretv.member.api.service.goods.impl;
 
+import cn.whaley.moretv.member.api.util.OrderingUtil;
 import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.api.dto.goods.GoodsResponse;
 import cn.whaley.moretv.member.api.service.goods.GoodsService;
@@ -98,7 +99,7 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
         logger.info("get_goods_by_tag :  accountId:{}, goodsSize:{}, hasPurchaseOrder:{}",
                 accountId, goodsList.size(), hasPurchaseOrder);
 
-        return ResultResponse.success(goodsList);
+        return ResultResponse.success(OrderingUtil.orderingGoods(goodsList));
     }
 
 }
