@@ -19,10 +19,10 @@ public class DeliveredOrder extends BaseModel<Integer> implements Serializable {
     private String orderItemCode;
 
     /**
-     * 电视猫账号
+     * 账号ID
      * account_id
      */
-    private Integer accountId;
+    private String accountId;
 
     /**
      * 订单编号
@@ -123,20 +123,20 @@ public class DeliveredOrder extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * 电视猫账号
+     * 账号ID
      * account_id
      */
-    public Integer getAccountId() {
+    public String getAccountId() {
         return accountId;
     }
 
     /**
-     * 电视猫账号
+     * 账号ID
      * account_id
      *
-     * @param accountId 电视猫账号
+     * @param accountId 账号ID
      */
-    public void setAccountId(Integer accountId) {
+    public void setAccountId(String accountId) {
         this.accountId = accountId;
     }
 

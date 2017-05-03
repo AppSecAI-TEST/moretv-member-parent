@@ -10,7 +10,7 @@
     <result column="cpacc_cp_account" property="cpAccount" jdbcType="VARCHAR" />
     <result column="cpacc_cp_token" property="cpToken" jdbcType="VARCHAR" />
     <result column="cpacc_cp_source" property="cpSource" jdbcType="VARCHAR" />
-    <result column="cpacc_account_id" property="accountId" jdbcType="INTEGER" />
+    <result column="cpacc_account_id" property="accountId" jdbcType="VARCHAR" />
     <result column="cpacc_status" property="status" jdbcType="VARCHAR" />
     <result column="cpacc_create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="cpacc_update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -35,7 +35,7 @@
       account_id, status, create_time, 
       update_time)
     values (#{cpAccount,jdbcType=VARCHAR}, #{cpToken,jdbcType=VARCHAR}, #{cpSource,jdbcType=VARCHAR}, 
-      #{accountId,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{accountId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="cn.whaley.moretv.member.model.cp.CpAccount" useGeneratedKeys="true" keyProperty="id" >
@@ -74,7 +74,7 @@
         #{cpSource,jdbcType=VARCHAR},
       </if>
       <if test="accountId != null" >
-        #{accountId,jdbcType=INTEGER},
+        #{accountId,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
@@ -100,7 +100,7 @@
         cp_source = #{cpSource,jdbcType=VARCHAR},
       </if>
       <if test="accountId != null" >
-        account_id = #{accountId,jdbcType=INTEGER},
+        account_id = #{accountId,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
@@ -119,7 +119,7 @@
     set cp_account = #{cpAccount,jdbcType=VARCHAR},
       cp_token = #{cpToken,jdbcType=VARCHAR},
       cp_source = #{cpSource,jdbcType=VARCHAR},
-      account_id = #{accountId,jdbcType=INTEGER},
+      account_id = #{accountId,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}

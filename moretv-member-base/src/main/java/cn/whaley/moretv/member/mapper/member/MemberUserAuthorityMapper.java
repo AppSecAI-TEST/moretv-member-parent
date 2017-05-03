@@ -15,5 +15,5 @@ import cn.whaley.moretv.member.model.member.MemberUserAuthority;
 */
 public interface MemberUserAuthorityMapper extends GenericMapper<MemberUserAuthority, Integer> {
 	
-	MemberUserAuthority selectByAccountIdAndMemberCode(Integer accountId,String memberCode);
+	MemberUserAuthority selectByAccountIdAndMemberCode(String accountId, String memberCode);
 }

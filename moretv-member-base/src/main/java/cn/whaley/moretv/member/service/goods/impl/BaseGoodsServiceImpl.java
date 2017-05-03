@@ -57,7 +57,7 @@ public class BaseGoodsServiceImpl extends GenericServiceImpl<Goods, Integer, Goo
     }
     
     @Override
-	public ResultResponse<GoodsDto> checkCanBuyGoods(String goodsNo,int accountId){
+	public ResultResponse<GoodsDto> checkCanBuyGoods(String goodsNo, String accountId){
     	ResultResponse<GoodsDto> response = null;
     	Date now = new Date();
     	//获取商品

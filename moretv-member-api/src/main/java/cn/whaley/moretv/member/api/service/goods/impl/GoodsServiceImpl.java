@@ -44,7 +44,7 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     private OrderService orderService;
 
     @Override
-    public ResultResponse getGoodsByTag(Integer accountId, String goodsTag) {
+    public ResultResponse getGoodsByTag(String accountId, String goodsTag) {
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
         List<GoodsResponse> goodsList = Lists.newArrayList();
         Integer normalGoods = GlobalEnum.GoodsType.NORMAL_GOODS.getValue();

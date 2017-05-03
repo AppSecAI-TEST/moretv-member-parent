@@ -23,7 +23,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 
     @Override
     public ResultResponse listByAccountId(BaseRequest baseRequest) {
-        List<Order> orderList = orderMapper.listByAccountId(baseRequest.getAccountId().toString());
+        List<Order> orderList = orderMapper.listByAccountId(baseRequest.getAccountId());
         List<OrderListDto> orderDtoList = new ArrayList<>(orderList.size());
         for(Order order : orderList){
             //只有交易状态为已完成的才返回

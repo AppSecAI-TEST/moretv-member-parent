@@ -14,7 +14,7 @@ import java.util.Date;
 */
 public interface CpAccountService extends BaseCpAccountService {
 
-    CpAccount getCpAccount(Integer accountId, String cpSource);
+    CpAccount getCpAccount(String accountId, String cpSource);
 
-    CpAccount createCpAccount(String cpAccountId, String cpToken, Integer accountId, Date date);
+    CpAccount createCpAccount(String cpAccountId, String cpToken, String accountId, Date date);
 }

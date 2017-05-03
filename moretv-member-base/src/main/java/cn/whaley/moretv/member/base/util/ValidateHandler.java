@@ -26,14 +26,14 @@ public class ValidateHandler {
         if (args[0] instanceof BaseRequest || BaseRequest.class.isAssignableFrom(args[0].getClass())) {
             BaseRequest baseRequest = (BaseRequest) args[0];
 
-            if (StringUtils.isEmpty(baseRequest.getAccessToken()) && baseRequest.getAccountId() == null
+            if (StringUtils.isEmpty(baseRequest.getAccessToken()) && StringUtils.isEmpty(baseRequest.getAccountId())
                     && StringUtils.isEmpty(baseRequest.getAppVersion()) && StringUtils.isEmpty(baseRequest.getClientType())
                     && StringUtils.isEmpty(baseRequest.getDeviceId()) && baseRequest.getTimestamp() == null) {
                 return define(ApiCodeEnum.API_PARAM_NULL, logInfo);
             }
 
             ValidateIgnore accountIgnore = getAccountIgnore(logInfo.getClazz(), logInfo.getMethodName());
-            if (accountIgnore == null && baseRequest.getAccountId() == null) {
+            if (accountIgnore == null && StringUtils.isEmpty(baseRequest.getAccountId())) {
                 return define(ApiCodeEnum.API_PARAM_ACCOUNT_ID_NULL, logInfo);
             }
         }

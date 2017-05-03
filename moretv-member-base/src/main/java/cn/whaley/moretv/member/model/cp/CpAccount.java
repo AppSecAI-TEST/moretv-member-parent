@@ -31,10 +31,10 @@ public class CpAccount extends BaseModel<Integer> implements Serializable {
     private String cpSource;
 
     /**
-     * 电视猫用户名
+     * 账号ID
      * account_id
      */
-    private Integer accountId;
+    private String accountId;
 
     /**
      * delete：删除，valid：正常
@@ -111,20 +111,20 @@ public class CpAccount extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * 电视猫用户名
+     * 账号ID
      * account_id
      */
-    public Integer getAccountId() {
+    public String getAccountId() {
         return accountId;
     }
 
     /**
-     * 电视猫用户名
+     * 账号ID
      * account_id
      *
-     * @param accountId 电视猫用户名
+     * @param accountId 账号ID
      */
-    public void setAccountId(Integer accountId) {
+    public void setAccountId(String accountId) {
         this.accountId = accountId;
     }
 

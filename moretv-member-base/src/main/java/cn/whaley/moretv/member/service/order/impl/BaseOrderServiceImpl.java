@@ -40,15 +40,17 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
     protected RedisTemplate redisTemplate;
     
     @Override
-    public Boolean hasPurchaseOrder(Integer accountId) {
+    public Boolean hasPurchaseOrder(String accountId) {
         Integer count = getGenericMapper().hasPurchaseOrder(accountId);
         return count > 0 ? true : false;
     }
-    
-    @Override
+
+	@Override
     public  Order createOrderByGoods(Goods goods, Order order) {
 		UUID uuid = UUID.randomUUID();
-		order.setOrderCode("MT" + uuid.toString().replace("-", "")+order.getAccountId()%10000);
+		String accountId = order.getAccountId();
+		accountId = accountId.substring(accountId.length() - 4, accountId.length());
+		order.setOrderCode("MT" + uuid.toString().replace("-", "") + accountId);
 	    order.setOrderTitle(goods.getGoodsName());
 	    order.setOrderDesc(goods.getGoodsDesc());
 	    order.setTotalPrice(goods.getSellingPrice());
@@ -85,7 +87,7 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
      * @return
      */
     @Override
-    public ResultResponse checkCanOrderCount(String scene,Integer accountId){
+    public ResultResponse checkCanOrderCount(String scene, String accountId){
     	BoundValueOperations<String,String> opsValue = redisTemplate.boundValueOps(scene+accountId);
     	String creteOrderCount = opsValue.get();
     	if(creteOrderCount == null){

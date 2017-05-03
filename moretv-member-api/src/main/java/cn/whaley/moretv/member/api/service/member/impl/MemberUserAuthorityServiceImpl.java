@@ -36,11 +36,11 @@ public class MemberUserAuthorityServiceImpl extends GenericServiceImpl<MemberUse
     private RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public List<MemberUserAuthority> getMemberUserAuthority(Integer accountId) {
+    public List<MemberUserAuthority> getMemberUserAuthority(String accountId) {
         List<MemberUserAuthority> list = Lists.newArrayList();
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
 
-        String key = String.format(CacheKeyConstant.REDIS_KEY_MEMBER_AUTHORITY, accountId.toString());
+        String key = String.format(CacheKeyConstant.REDIS_KEY_MEMBER_AUTHORITY, accountId);
         List<String> authorityList = opsHash.values(key);
         if (CollectionUtils.isEmpty(authorityList)) {
             return list;

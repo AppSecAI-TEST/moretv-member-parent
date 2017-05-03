@@ -21,5 +21,5 @@ public interface MemberUserAuthorityService extends GenericService<MemberUserAut
      * @param accountId
      * @return
      */
-    List<MemberUserAuthority> getMemberUserAuthority(Integer accountId);
+    List<MemberUserAuthority> getMemberUserAuthority(String accountId);
 }

@@ -16,7 +16,7 @@ public interface BaseOrderService extends GenericService<Order, Integer> {
      * @param accountId
      * @return
      */
-    Boolean hasPurchaseOrder(Integer accountId);
+    Boolean hasPurchaseOrder(String accountId);
 
     /**
      * 创建订单
@@ -39,5 +39,5 @@ public interface BaseOrderService extends GenericService<Order, Integer> {
      * @param accountId
      * @return
      */
-    ResultResponse checkCanOrderCount(String scene,Integer accountId);
+    ResultResponse checkCanOrderCount(String scene, String accountId);
 }

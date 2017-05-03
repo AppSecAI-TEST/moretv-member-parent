@@ -21,13 +21,13 @@ public interface CpAccountMapper extends GenericMapper<CpAccount, Integer> {
      * @param cpSource
      * @return
      */
-    CpAccount getCpAccount(@Param("accountId") Integer accountId, @Param("cpSource") String cpSource);
+    CpAccount getCpAccount(@Param("accountId") String accountId, @Param("cpSource") String cpSource);
 
     /**
      * 查询accountId对应的所有CP账号
      * @param accountId
      * @return
      */
-    List<CpAccount> getCpAccountList(Integer accountId);
+    List<CpAccount> getCpAccountList(String accountId);
 
 }
