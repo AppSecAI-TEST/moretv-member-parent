@@ -7,7 +7,7 @@
     
   <resultMap id="BaseResultMap" type="cn.whaley.moretv.member.model.member.MemberUserAuthority" >
     <id column="mua_id" property="id" jdbcType="INTEGER" />
-    <result column="mua_account_id" property="accountId" jdbcType="INTEGER" />
+    <result column="mua_account_id" property="accountId" jdbcType="VARCHAR" />
     <result column="mua_member_code" property="memberCode" jdbcType="VARCHAR" />
     <result column="mua_member_name" property="memberName" jdbcType="VARCHAR" />
     <result column="mua_status" property="status" jdbcType="INTEGER" />
@@ -35,7 +35,7 @@
     insert into member_user_authority (account_id, member_code, member_name, 
       status, start_time, end_time, 
       create_time, update_time)
-    values (#{accountId,jdbcType=INTEGER}, #{memberCode,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, 
+    values (#{accountId,jdbcType=VARCHAR}, #{memberCode,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, 
       #{status,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -69,7 +69,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="accountId != null" >
-        #{accountId,jdbcType=INTEGER},
+        #{accountId,jdbcType=VARCHAR},
       </if>
       <if test="memberCode != null" >
         #{memberCode,jdbcType=VARCHAR},
@@ -98,7 +98,7 @@
     update member_user_authority
     <set >
       <if test="accountId != null" >
-        account_id = #{accountId,jdbcType=INTEGER},
+        account_id = #{accountId,jdbcType=VARCHAR},
       </if>
       <if test="memberCode != null" >
         member_code = #{memberCode,jdbcType=VARCHAR},
@@ -126,7 +126,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.whaley.moretv.member.model.member.MemberUserAuthority" >
     update member_user_authority
-    set account_id = #{accountId,jdbcType=INTEGER},
+    set account_id = #{accountId,jdbcType=VARCHAR},
       member_code = #{memberCode,jdbcType=VARCHAR},
       member_name = #{memberName,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},

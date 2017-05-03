@@ -23,6 +23,6 @@ public interface BaseGoodsService extends GenericService<Goods, Integer> {
 	 */
 	GoodsDto getGoodsByGoodsNo(String goodsNo);
     
-    ResultResponse<GoodsDto> checkCanBuyGoods(String goodsNo,int accountId);
+    ResultResponse<GoodsDto> checkCanBuyGoods(String goodsNo, String accountId);
 
 }

@@ -13,10 +13,10 @@ import java.util.Date;
 */
 public class MemberUserAuthority extends BaseModel<Integer> implements Serializable {
     /**
-     * 电视猫用户名
+     * 账号ID
      * account_id
      */
-    private Integer accountId;
+    private String accountId;
 
     /**
      * 会员模型编码
@@ -63,20 +63,20 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
     private static final long serialVersionUID = 1L;
 
     /**
-     * 电视猫用户名
+     * 账号ID
      * account_id
      */
-    public Integer getAccountId() {
+    public String getAccountId() {
         return accountId;
     }
 
     /**
-     * 电视猫用户名
+     * 账号ID
      * account_id
      *
-     * @param accountId 电视猫用户名
+     * @param accountId 账号ID
      */
-    public void setAccountId(Integer accountId) {
+    public void setAccountId(String accountId) {
         this.accountId = accountId;
     }
 

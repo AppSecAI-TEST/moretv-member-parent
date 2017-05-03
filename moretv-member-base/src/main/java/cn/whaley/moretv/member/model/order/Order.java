@@ -34,7 +34,7 @@ public class Order extends BaseModel<Integer> implements Serializable {
      * 账号ID
      * account_id
      */
-    private Integer accountId;
+    private String accountId;
 
     /**
      * 订单价格
@@ -210,7 +210,7 @@ public class Order extends BaseModel<Integer> implements Serializable {
      * 账号ID
      * account_id
      */
-    public Integer getAccountId() {
+    public String getAccountId() {
         return accountId;
     }
 
@@ -220,7 +220,7 @@ public class Order extends BaseModel<Integer> implements Serializable {
      *
      * @param accountId 账号ID
      */
-    public void setAccountId(Integer accountId) {
+    public void setAccountId(String accountId) {
         this.accountId = accountId;
     }
 

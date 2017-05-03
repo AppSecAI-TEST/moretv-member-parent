@@ -10,7 +10,7 @@
     <result column="bod_order_code" property="orderCode" jdbcType="VARCHAR" />
     <result column="bod_order_title" property="orderTitle" jdbcType="VARCHAR" />
     <result column="bod_order_desc" property="orderDesc" jdbcType="VARCHAR" />
-    <result column="bod_account_id" property="accountId" jdbcType="INTEGER" />
+    <result column="bod_account_id" property="accountId" jdbcType="VARCHAR" />
     <result column="bod_total_price" property="totalPrice" jdbcType="INTEGER" />
     <result column="bod_real_price" property="realPrice" jdbcType="INTEGER" />
     <result column="bod_payment_amount" property="paymentAmount" jdbcType="INTEGER" />
@@ -61,7 +61,7 @@
       over_time, foreign_key, goods_code, 
       goods_name, goods_type)
     values (#{orderCode,jdbcType=VARCHAR}, #{orderTitle,jdbcType=VARCHAR}, #{orderDesc,jdbcType=VARCHAR}, 
-      #{accountId,jdbcType=INTEGER}, #{totalPrice,jdbcType=INTEGER}, #{realPrice,jdbcType=INTEGER}, 
+      #{accountId,jdbcType=VARCHAR}, #{totalPrice,jdbcType=INTEGER}, #{realPrice,jdbcType=INTEGER}, 
       #{paymentAmount,jdbcType=INTEGER}, #{businessType,jdbcType=INTEGER}, #{payChannel,jdbcType=VARCHAR}, 
       #{orderChannel,jdbcType=INTEGER}, #{orderChannelKey,jdbcType=VARCHAR}, #{isAutoRenewal,jdbcType=INTEGER}, 
       #{orderType,jdbcType=INTEGER}, #{validStatus,jdbcType=INTEGER}, #{tradeStatus,jdbcType=INTEGER}, 
@@ -153,7 +153,7 @@
         #{orderDesc,jdbcType=VARCHAR},
       </if>
       <if test="accountId != null" >
-        #{accountId,jdbcType=INTEGER},
+        #{accountId,jdbcType=VARCHAR},
       </if>
       <if test="totalPrice != null" >
         #{totalPrice,jdbcType=INTEGER},
@@ -227,7 +227,7 @@
         order_desc = #{orderDesc,jdbcType=VARCHAR},
       </if>
       <if test="accountId != null" >
-        account_id = #{accountId,jdbcType=INTEGER},
+        account_id = #{accountId,jdbcType=VARCHAR},
       </if>
       <if test="totalPrice != null" >
         total_price = #{totalPrice,jdbcType=INTEGER},
@@ -294,7 +294,7 @@
     set order_code = #{orderCode,jdbcType=VARCHAR},
       order_title = #{orderTitle,jdbcType=VARCHAR},
       order_desc = #{orderDesc,jdbcType=VARCHAR},
-      account_id = #{accountId,jdbcType=INTEGER},
+      account_id = #{accountId,jdbcType=VARCHAR},
       total_price = #{totalPrice,jdbcType=INTEGER},
       real_price = #{realPrice,jdbcType=INTEGER},
       payment_amount = #{paymentAmount,jdbcType=INTEGER},

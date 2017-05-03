@@ -81,7 +81,7 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 		Date now =new Date();
 		Date memberStartTime = null;
 		Date deliveredStartTime = null;
-		Integer accountId = order.getAccountId();
+		String accountId = order.getAccountId();
 		String memberCode = orderItem.getMemberCode();
 		String memberName = orderItem.getMemberName();
 		Integer durationMonth = orderItem.getDurationMonth();

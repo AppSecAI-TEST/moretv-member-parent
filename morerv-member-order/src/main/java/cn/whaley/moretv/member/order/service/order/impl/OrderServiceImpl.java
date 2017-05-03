@@ -48,7 +48,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	@Transactional
 	@Override
 	public ResultResponse<Order> createOrder(String goodsCode, String payType,
-			int payAutoRenew, int accountId) {
+			int payAutoRenew, String accountId) {
 		Goods goods = null;
 		GoodsSku goodsSku = null;
 		Date now = new Date();

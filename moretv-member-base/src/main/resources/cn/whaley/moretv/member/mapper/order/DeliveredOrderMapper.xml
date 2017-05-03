@@ -8,7 +8,7 @@
   <resultMap id="BaseResultMap" type="cn.whaley.moretv.member.model.order.DeliveredOrder" >
     <id column="dlvo_id" property="id" jdbcType="INTEGER" />
     <result column="dlvo_order_item_code" property="orderItemCode" jdbcType="VARCHAR" />
-    <result column="dlvo_account_id" property="accountId" jdbcType="INTEGER" />
+    <result column="dlvo_account_id" property="accountId" jdbcType="VARCHAR" />
     <result column="dlvo_order_code" property="orderCode" jdbcType="VARCHAR" />
     <result column="dlvo_member_code" property="memberCode" jdbcType="VARCHAR" />
     <result column="dlvo_member_name" property="memberName" jdbcType="VARCHAR" />
@@ -48,7 +48,7 @@
       end_time, invalid_time, valid_time, 
       status, operator_id, update_time
       )
-    values (#{orderItemCode,jdbcType=VARCHAR}, #{accountId,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, 
+    values (#{orderItemCode,jdbcType=VARCHAR}, #{accountId,jdbcType=VARCHAR}, #{orderCode,jdbcType=VARCHAR}, 
       #{memberCode,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, #{durationMonth,jdbcType=INTEGER}, 
       #{durationDay,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, 
       #{endTime,jdbcType=TIMESTAMP}, #{invalidTime,jdbcType=TIMESTAMP}, #{validTime,jdbcType=TIMESTAMP}, 
@@ -109,7 +109,7 @@
         #{orderItemCode,jdbcType=VARCHAR},
       </if>
       <if test="accountId != null" >
-        #{accountId,jdbcType=INTEGER},
+        #{accountId,jdbcType=VARCHAR},
       </if>
       <if test="orderCode != null" >
         #{orderCode,jdbcType=VARCHAR},
@@ -159,7 +159,7 @@
         order_item_code = #{orderItemCode,jdbcType=VARCHAR},
       </if>
       <if test="accountId != null" >
-        account_id = #{accountId,jdbcType=INTEGER},
+        account_id = #{accountId,jdbcType=VARCHAR},
       </if>
       <if test="orderCode != null" >
         order_code = #{orderCode,jdbcType=VARCHAR},
@@ -206,7 +206,7 @@
   <update id="updateByPrimaryKey" parameterType="cn.whaley.moretv.member.model.order.DeliveredOrder" >
     update delivered_order
     set order_item_code = #{orderItemCode,jdbcType=VARCHAR},
-      account_id = #{accountId,jdbcType=INTEGER},
+      account_id = #{accountId,jdbcType=VARCHAR},
       order_code = #{orderCode,jdbcType=VARCHAR},
       member_code = #{memberCode,jdbcType=VARCHAR},
       member_name = #{memberName,jdbcType=VARCHAR},

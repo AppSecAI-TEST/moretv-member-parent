@@ -22,12 +22,12 @@ import java.util.Date;
 public class CpAccountServiceImpl extends BaseCpAccountServiceImpl implements CpAccountService {
 
     @Override
-    public CpAccount getCpAccount(Integer accountId, String cpSource) {
+    public CpAccount getCpAccount(String accountId, String cpSource) {
         return cpAccountMapper.getCpAccount(accountId, cpSource);
     }
 
     @Override
-    public CpAccount createCpAccount(String cpAccountId, String cpToken, Integer accountId, Date date) {
+    public CpAccount createCpAccount(String cpAccountId, String cpToken, String accountId, Date date) {
         CpAccount account = new CpAccount();
         account.setCpAccount(cpAccountId);
         account.setCpToken(cpToken);

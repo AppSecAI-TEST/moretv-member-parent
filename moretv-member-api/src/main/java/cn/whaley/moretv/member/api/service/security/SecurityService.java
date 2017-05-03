@@ -7,7 +7,7 @@ import cn.whaley.moretv.member.base.dto.response.ResultResponse;
  */
 public interface SecurityService {
 
-    ResultResponse authentication(Integer accountId, String cp, String videoInfo, String memberCode);
+    ResultResponse authentication(String accountId, String cp, String videoInfo, String memberCode);
 
     ResultResponse authenticationNoLogin(String cp, String videoInfo);
 

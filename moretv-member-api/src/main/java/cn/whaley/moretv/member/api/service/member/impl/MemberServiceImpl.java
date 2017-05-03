@@ -36,7 +36,7 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
     private MemberUserAuthorityService memberUserAuthorityService;
 
     @Override
-    public ResultResponse<List<MemberStatusResponse>> getAllMemberInfo(Integer accountId) {
+    public ResultResponse<List<MemberStatusResponse>> getAllMemberInfo(String accountId) {
         List<MemberStatusResponse> statusResponseList = Lists.newArrayList();
         Date now = new Date();
 
@@ -78,7 +78,7 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
     }
 
     @Override
-    public ResultResponse<List<MemberInfoResponse>> getMemberInfo(Integer accountId) {
+    public ResultResponse<List<MemberInfoResponse>> getMemberInfo(String accountId) {
         List<MemberInfoResponse> infoResponseList = Lists.newArrayList();
         Date now = new Date();
 
@@ -101,7 +101,7 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
     }
 
     @Override
-    public Boolean accountIsMember(Integer accountId) {
+    public Boolean accountIsMember(String accountId) {
         ResultResponse response = getMemberInfo(accountId);
         if (response.isSuccess()) {
             return true;
@@ -110,7 +110,7 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
     }
 
     @Override
-    public Boolean accountIsMember(Integer accountId, String memberCode) {
+    public Boolean accountIsMember(String accountId, String memberCode) {
         ResultResponse<List<MemberInfoResponse>> response = getMemberInfo(accountId);
         if (response.isSuccess()) {
             List<MemberInfoResponse> responseList = response.getData();
@@ -124,7 +124,7 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
     }
 
     @Override
-    public Boolean accountIsTencentMember(Integer accountId) {
+    public Boolean accountIsTencentMember(String accountId) {
         ResultResponse<List<MemberInfoResponse>> response = getMemberInfo(accountId);
         if (response.isSuccess()) {
             HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();

@@ -33,7 +33,7 @@ public class SecurityServiceImpl implements SecurityService {
     private MemberService memberService;
 
     @Override
-    public ResultResponse authentication(Integer accountId, String cp, String videoInfo, String memberCode) {
+    public ResultResponse authentication(String accountId, String cp, String videoInfo, String memberCode) {
         validate(cp, videoInfo);
 
         ResultResponse<MemberProgramRelation> vipResponse = isProgramVIP(videoInfo);
@@ -98,7 +98,7 @@ public class SecurityServiceImpl implements SecurityService {
         return response;
     }
 
-    private Boolean isTencentMember(Integer accountId) {
+    private Boolean isTencentMember(String accountId) {
         return memberService.accountIsTencentMember(accountId);
     }
 
@@ -109,7 +109,7 @@ public class SecurityServiceImpl implements SecurityService {
      * @param videoInfo
      * @return
      */
-    private ResultResponse getAccessToken(Integer accountId, String cp, String videoInfo) {
+    private ResultResponse getAccessToken(String accountId, String cp, String videoInfo) {
         String accessToken = "";
 
         if (GlobalConstant.CP_TENCENT.equals(cp)) {

@@ -24,7 +24,7 @@ public interface MemberService extends BaseMemberService {
      * @param accountId
      * @return
      */
-    ResultResponse<List<MemberStatusResponse>> getAllMemberInfo(Integer accountId);
+    ResultResponse<List<MemberStatusResponse>> getAllMemberInfo(String accountId);
 
     /**
      * <p>获取当前会员</p>
@@ -33,7 +33,7 @@ public interface MemberService extends BaseMemberService {
      * @param accountId
      * @return
      */
-    ResultResponse<List<MemberInfoResponse>> getMemberInfo(Integer accountId);
+    ResultResponse<List<MemberInfoResponse>> getMemberInfo(String accountId);
 
     /**
      * <p>账户是否是有效会员</p>
@@ -41,7 +41,7 @@ public interface MemberService extends BaseMemberService {
      * @param accountId
      * @return
      */
-    Boolean accountIsMember(Integer accountId);
+    Boolean accountIsMember(String accountId);
 
     /**
      * <p>账户是否为指定的会员</p>
@@ -50,7 +50,7 @@ public interface MemberService extends BaseMemberService {
      * @param memberCode
      * @return
      */
-    Boolean accountIsMember(Integer accountId, String memberCode);
+    Boolean accountIsMember(String accountId, String memberCode);
 
 
     /**
@@ -59,6 +59,6 @@ public interface MemberService extends BaseMemberService {
      * @param accountId
      * @return
      */
-    Boolean accountIsTencentMember(Integer accountId);
+    Boolean accountIsTencentMember(String accountId);
 
 }

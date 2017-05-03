@@ -73,7 +73,7 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
     }
 
     @Override
-    public String getCpAccount(Integer accountId, Boolean createAccount) {
+    public String getCpAccount(String accountId, Boolean createAccount) {
         CpAccount cpAccount = cpAccountService.getCpAccount(accountId, GlobalConstant.CP_TENCENT);
         logger.info("getCpAccount : get cpAccount : {}", cpAccount);
         if (cpAccount != null) {
@@ -143,8 +143,8 @@ public class TencentServiceImpl extends BaseTencentServiceImpl implements Tencen
      * @param accountId
      * @return
      */
-    private JSONObject tencentGetVuid(Integer accountId) {
-        String tpUserId = MD5Util.string2MD5(String.valueOf(accountId) + now.get().getTime());
+    private JSONObject tencentGetVuid(String accountId) {
+        String tpUserId = MD5Util.string2MD5(accountId + now.get().getTime());
         logger.info("tencentGetVuid : tpUserId : {}", tpUserId);
         String url = String.format("%s&access_token=%s&tp_userid=%s",
                 tencent.getAccountApplicationServer(), getAccessToken(), tpUserId);

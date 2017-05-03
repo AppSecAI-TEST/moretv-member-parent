@@ -16,13 +16,13 @@ import org.apache.ibatis.annotations.Select;
 */
 public interface OrderMapper extends GenericMapper<Order, Integer> {
 
-    List<Order> listByAccountId(String accoundId);
+    List<Order> listByAccountId(String accountId);
 
     Order getByOrderCode(String orderCode);
 
     @Select("select count(1) from business_order where account_id = #{accountId} " +
             "and order_type = 1 and valid_status = 1 and trade_status = 3")
-    Integer hasPurchaseOrder(Integer accountId);
+    Integer hasPurchaseOrder(String accountId);
     
     Order getByOrderIdForUpdate(int orderId);
     

@@ -22,5 +22,5 @@ public interface GoodsService extends BaseGoodsService {
      * @param goodsTag
      * @return
      */
-    ResultResponse getGoodsByTag(Integer accountId, String goodsTag);
+    ResultResponse getGoodsByTag(String accountId, String goodsTag);
 }

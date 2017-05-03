@@ -164,14 +164,13 @@ public class PayManage {
 		}
 		return localNotifyUrl;
 	}
+
 	/**
 	 * 通知临时服务器修改状态
-	 * @param payMethod
+	 *
 	 * @param orderNo
-	 * @param amount
-	 * @param goodsNo
+	 * @param info
 	 * @return
-	 * @throws Exception
 	 */
 	public static Map<String, Object> notifyTempServer(String orderNo, String info){
 		
@@ -221,7 +220,7 @@ public class PayManage {
 	 * @return
 	 */
 	public static String getPayUrl(String sessionToken, String cip,Long timestamp,String goodsCode,String subject
-			,int payAutoRenew,String payType,String orderCode,int fee,int accountId){
+			,int payAutoRenew, String payType, String orderCode, int fee, String accountId){
 	    long createTime = new Date().getTime();
 		StringBuffer parm = getParams4Sign(cip, timestamp, goodsCode, subject, payAutoRenew, payType, orderCode, fee, accountId, createTime);
 		String sign = getPayUrlSign(parm.toString());
@@ -241,7 +240,7 @@ public class PayManage {
     }
 	
 	public static StringBuffer getParams4Sign(String cip,Long timestamp,String goodsCode,String subject
-            ,int payAutoRenew,String payType,String orderCode,int fee,int accountId, long createTime){
+            ,int payAutoRenew,String payType,String orderCode,int fee, String accountId, long createTime){
 	    StringBuffer parm = new StringBuffer();
         //需要作为验签的参数
         parm.append("orderCode=" + orderCode);

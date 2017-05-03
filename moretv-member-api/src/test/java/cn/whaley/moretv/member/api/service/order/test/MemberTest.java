@@ -30,7 +30,7 @@ public class MemberTest {
     
     @Test
     public void testCreateMember() {
-        Integer accountId = 100001;
+        String accountId = "100001";
         String memberCode = "member_tag";
         MemberUserAuthority userAuthority = new MemberUserAuthority();
         userAuthority.setAccountId(accountId);

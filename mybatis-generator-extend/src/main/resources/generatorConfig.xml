@@ -24,20 +24,22 @@
             <property name="mapperTargetPackage" value="${mapperTargetPackage}"/>
         </plugin>
 
-        <!--Service接口生成器，若不需要生成Service接口，可以将此插件删掉-->
+        <!--Service接口生成器，若不需要生成Service接口，可以将此插件删掉
         <plugin type="org.mybatis.generator.extend.plugins.GenericServiceGeneratorPlugin">
             <property name="serviceTargetDir" value="${serviceTargetDir}"/>
             <property name="serviceTargetPackage" value="${serviceTargetPackage}"/>
         </plugin>
+        -->
 
-        <!--Service实现类生成器，若不需要生成Service实现类，可以将此插件删掉-->
+        <!--Service实现类生成器，若不需要生成Service实现类，可以将此插件删掉
         <plugin type="org.mybatis.generator.extend.plugins.GenericServiceImplGeneratorPlugin">
             <property name="serviceTargetDir" value="${serviceTargetDir}"/>
             <property name="serviceTargetPackage" value="${serviceTargetPackage}"/>
             <property name="mapperTargetPackage" value="${mapperTargetPackage}"/>
-            <!--是否添加spring注解，默认为添加-->
+            <!- -是否添加spring注解，默认为添加- ->
             <property name="statement" value="true"/>
         </plugin>
+        -->
 
         <!--selectAll方法生成器-->
         <plugin type="org.mybatis.generator.extend.plugins.SelectAllSqlMapGeneratorPlugin"/>
@@ -71,7 +73,7 @@
             *ByExample: 指定是否生成相关Example的方法。
         -->
 
-        <table tableName="member" alias="mem" domainObjectName="member.Member">
+        <table tableName="cp_account" alias="cpacc" domainObjectName="cp.CpAccount">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 
@@ -83,9 +85,6 @@
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 
-        <table tableName="business_order_item" alias="boi" domainObjectName="order.OrderItem">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>
         <table tableName="delivered_order" alias="dlvo" domainObjectName="order.DeliveredOrder">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>

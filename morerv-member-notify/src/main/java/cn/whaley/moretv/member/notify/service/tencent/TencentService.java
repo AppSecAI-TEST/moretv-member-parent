@@ -33,6 +33,6 @@ public interface TencentService extends BaseTencentService {
      * @param createAccount 若会员库中不存在此CP账号，是否需要请求腾讯创建
      * @return
      */
-    String getCpAccount(Integer accountId, Boolean createAccount);
+    String getCpAccount(String accountId, Boolean createAccount);
 
 }
