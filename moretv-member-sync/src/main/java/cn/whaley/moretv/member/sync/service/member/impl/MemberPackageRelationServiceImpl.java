@@ -62,7 +62,6 @@ public class MemberPackageRelationServiceImpl extends GenericServiceImpl<MemberP
         List<MemberPackageRelation> mpprListOld = memberPackageRelationMapper.listByMemberCode(memberCppr.getMemberCode());
         boolean isExist = false;
         
-        isExist = false;
         for(MemberPackageRelation mpprOld : mpprListOld){
             if(memberCppr.getPackageCode().equals(mpprOld.getPackageCode())){
                 //新的在数据库里已经存在了,更新数据库中的

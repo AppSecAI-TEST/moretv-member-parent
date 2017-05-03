@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.security.auth.message.MessagePolicy;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +12,6 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import com.alibaba.fastjson.JSON;
 
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
@@ -136,8 +132,8 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
         int result = orderMapper.updateOrderPayStatus(map);//在当前连接事务提交前，其他连接都在这里等待;而当前事务提交后，支付状态已经是2了，其他的连接执行的话影响行数必为0
         
         if(result == 0){
-            logger.error("申请支付,订单不存在或订单状态错误！->{}",payGatewayRequest.toString());
-            throw new RuntimeException("申请支付, 订单不存在或订单状态错误！");
+            logger.error("申请支付,订单不存在或订单状态错误！->{}", payGatewayRequest.toString());
+            return ResultResponse.define(ApiCodeEnum.API_DATA_NOT_EXIST);
         }
         
         //5、向支付网关支付
