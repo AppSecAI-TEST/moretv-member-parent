@@ -98,7 +98,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 		ResultResponse memberResult = ResultResponse.failed();
 
 		String key = String.format(CacheKeyConstant.REDIS_KEY_ORDER_MEMBER, order.getAccountId());
-		RedisLock redisLock = new RedisLock(redisTemplate, key, 0, 10000);
+		RedisLock redisLock = new RedisLock(redisTemplate, key, 0, 5000);
 		try {
 			if (redisLock.lock()) {
 				memberResult = memberOpsService.deliveryMemberByOrderId(order.getId());

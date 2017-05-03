@@ -5,15 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.whaley.moretv.member.base.exception.SystemException;
 import cn.whaley.moretv.member.base.util.RedisLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
@@ -72,7 +69,7 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 	    }
 
 	    String key = String.format(CacheKeyConstant.REDIS_KEY_ORDER_CREATE_LOCK, accountId);
-        RedisLock redisLock = new RedisLock(redisTemplate, key, 0, 10000);
+        RedisLock redisLock = new RedisLock(redisTemplate, key, 0, 5000);
 
         try {
             if (redisLock.lock()) {
@@ -129,17 +126,9 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
             return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_OVER_TIME_ERR);
         }
 
-        //3、验证商品是否存在redis中
-        HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
-        String goodsStr = opsHash.get(CacheKeyConstant.REDIS_KEY_GOODS, payGatewayRequest.getGoodsCode());
-        if (StringUtils.isEmpty(goodsStr)) {
-            logger.error("申请支付, 商品不存在, 请求参数->{}", payGatewayRequest.toString());
-            return ResultResponse.define(ApiCodeEnum.API_DATA_GOODS_NOT_ONLINE);
-        }
-
 		String orderCode = payGatewayRequest.getOrderCode();
 		String key = String.format(CacheKeyConstant.REDIS_KEY_ORDER_PAY_LOCK, orderCode);
-		RedisLock redisLock = new RedisLock(redisTemplate, key, 0, 10000);
+		RedisLock redisLock = new RedisLock(redisTemplate, key, 0, 5000);
 
 		try {
 			if (redisLock.lock()) {

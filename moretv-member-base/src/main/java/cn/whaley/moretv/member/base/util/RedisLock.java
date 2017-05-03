@@ -174,8 +174,9 @@ public class RedisLock {
                 只会有一个进程获得锁,其他的都用同样的频率进行尝试,后面有来了一些进行,也以同样的频率申请锁,这将可能导致前面来的锁得不到满足.
                 使用随机的等待时间可以一定程度上保证公平性
              */
-            Thread.sleep(DEFAULT_ACQUIRY_RESOLUTION_MILLIS);
-
+            if (timeoutMsecs > 0) {
+                Thread.sleep(DEFAULT_ACQUIRY_RESOLUTION_MILLIS);
+            }
         }
         return false;
     }
