@@ -99,6 +99,7 @@ public class StringHelper {
 		//MD5校验
 		logger.info("payparam:"+signStr);
 		String calculateSign = MD5Util.string2MD5(signStr);
+		logger.info("md5:"+calculateSign);
 		if (calculateSign == null || !calculateSign.equals(sign)) {
 			return false;
 		}

@@ -80,7 +80,6 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 		
 		Date now =new Date();
 		Date memberStartTime = null;
-		Date deliveredStartTime = null;
 		String accountId = order.getAccountId();
 		String memberCode = orderItem.getMemberCode();
 		String memberName = orderItem.getMemberName();
@@ -90,10 +89,8 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 		MemberUserAuthority userAuthority = memberUserAuthorityMapper.selectByAccountIdAndMemberCode(accountId, memberCode);
 		if(userAuthority==null){
 			memberStartTime = now;
-			deliveredStartTime = now;
 		}else{
-			memberStartTime = userAuthority.getStartTime();
-			deliveredStartTime = userAuthority.getEndTime();
+			memberStartTime = userAuthority.getEndTime();
 		}
 		Date memberEndTime = DateFormatUtil.addMonthAndDay(memberStartTime, durationMonth,durationDay);
 		
@@ -105,7 +102,7 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 		deliveredOrder.setCreateTime(now);
 		deliveredOrder.setDurationDay(durationDay);
 		deliveredOrder.setDurationMonth(durationMonth);
-		deliveredOrder.setStartTime(deliveredStartTime);
+		deliveredOrder.setStartTime(memberStartTime);
 		deliveredOrder.setEndTime(memberEndTime);
 		deliveredOrder.setMemberCode(memberCode);
 		deliveredOrder.setMemberName(memberName);
