@@ -162,4 +162,7 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 			logger.info("saveMemberAuthorityToRedis error:{}",memberAuthority.toString());
 		}
     }
+	
+	
+	
 }

@@ -1,6 +1,7 @@
 package cn.whaley.moretv.member.service.order.impl;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import cn.whaley.moretv.member.mapper.order.OrderItemMapper;
 import cn.whaley.moretv.member.model.goods.GoodsSku;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;

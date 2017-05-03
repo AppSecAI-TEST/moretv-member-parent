@@ -66,6 +66,14 @@ public interface CacheKeyConstant {
      *
      * 存储规则：场景KEY加上用户id
      */
-    String REDIS_KEY_CREAT_ORDER = "creatOrder";
+    String REDIS_KEY_CREAT_ORDER = "moretv:creatOrder";
+    
+    /**
+     * 订购会员场景
+     * field : accountId
+     *
+     * 存储规则：场景KEY加上用户id
+     */
+    String REDIS_KEY_ORDER_MEMBER = "moretv:orderMember";
 
 }

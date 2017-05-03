@@ -8,15 +8,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
+import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
 import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
+import cn.whaley.moretv.member.base.exception.SystemException;
+import cn.whaley.moretv.member.base.util.RedisLock;
 import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.model.order.Order;
 import cn.whaley.moretv.member.notify.service.member.MemberOpsService;
@@ -27,7 +31,6 @@ import cn.whaley.moretv.member.service.order.impl.BaseOrderServiceImpl;
 import cn.whaley.moretv.member.service.queue.publish.PublishMemberToAdmin;
 
 @Service
-@Transactional
 public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderService {
 
 	private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
@@ -36,8 +39,14 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
     protected BaseGoodsService baseGoodsService;
 	
 	@Autowired
+    protected BaseOrderService baseOrderService;
+	
+	@Autowired
     protected MemberOpsService memberOpsService;
 	
+    @Autowired
+    protected RedisTemplate redisTemplate;
+    
 	@Autowired
 	private PublishMemberToAdmin publishMemberToAdmin;
 	
@@ -95,18 +104,25 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
      			orderMapper.updateByPrimaryKeySelective(order);
  				return ResultResponse.success();
     		}
- 			
  			publishMemberToAdmin.publishOrder(order);
  			
- 			//TODO
  			//锁定用户，保持一个用户只能同时订购一个会员
+ 			ResultResponse  memberResult = null;
+ 			RedisLock redisLock =  new RedisLock(redisTemplate,CacheKeyConstant.REDIS_KEY_ORDER_MEMBER+order.getAccountId(),0,10000);
+ 			try {
+				if(redisLock.lock()){
+				    memberResult = memberOpsService.deliveryMemberByOrderId(order.getId());
+				}else{
+					return ResultResponse.define(ApiCodeEnum.API_DATA_MEMBER_IS_ORDERING);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("redisLock:error");
+			} finally {
+				redisLock.unlock();
+			}
  			
- 			//订购会员
- 			ResultResponse  memberResult = memberOpsService.deliveryMemberByOrderId(order.getId());
- 			if (!memberResult.isSuccess()) {
-				return memberResult;
- 			}
- 			return ResultResponse.success();
+			return memberResult;
  	}
     
 }

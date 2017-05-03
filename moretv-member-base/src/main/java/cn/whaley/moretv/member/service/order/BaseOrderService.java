@@ -35,9 +35,10 @@ public interface BaseOrderService extends GenericService<Order, Integer> {
      */
     OrderItem createOrderItemByGoodsSku(GoodsSku goodsSku, OrderItem orderItem);
     /**
-     * 
+     * 检查用户的下单次数
      * @param accountId
      * @return
      */
     ResultResponse checkCanOrderCount(String scene,Integer accountId);
+    
 }
