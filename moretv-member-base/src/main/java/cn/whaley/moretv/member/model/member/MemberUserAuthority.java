@@ -19,34 +19,40 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
     private String accountId;
 
     /**
-     * 会员模型编码
+     * 电视猫账号昵称
+     * account_name
+     */
+    private String accountName;
+
+    /**
+     * 会员编码
      * member_code
      */
     private String memberCode;
 
     /**
-     * 会员模型名称
+     * 会员名称
      * member_name
      */
     private String memberName;
 
     /**
-     * 0：删除，1：正常
-     * status
-     */
-    private Integer status;
-
-    /**
-     * 权益开始时间
+     * 开始时间
      * start_time
      */
     private Date startTime;
 
     /**
-     * 权益结束时间
-     * end_time
+     * 有效时间
+     * effective_time
      */
-    private Date endTime;
+    private Date effectiveTime;
+
+    /**
+     * 有效状态，1：有效，0：无效
+     * status
+     */
+    private Integer status;
 
     /**
      * 创建时间
@@ -55,7 +61,7 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
     private Date createTime;
 
     /**
-     * 更新时间
+     * 修改时间
      * update_time
      */
     private Date updateTime;
@@ -81,7 +87,25 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
     }
 
     /**
-     * 会员模型编码
+     * 电视猫账号昵称
+     * account_name
+     */
+    public String getAccountName() {
+        return accountName;
+    }
+
+    /**
+     * 电视猫账号昵称
+     * account_name
+     *
+     * @param accountName 电视猫账号昵称
+     */
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    /**
+     * 会员编码
      * member_code
      */
     public String getMemberCode() {
@@ -89,17 +113,17 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
     }
 
     /**
-     * 会员模型编码
+     * 会员编码
      * member_code
      *
-     * @param memberCode 会员模型编码
+     * @param memberCode 会员编码
      */
     public void setMemberCode(String memberCode) {
         this.memberCode = memberCode;
     }
 
     /**
-     * 会员模型名称
+     * 会员名称
      * member_name
      */
     public String getMemberName() {
@@ -107,35 +131,17 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
     }
 
     /**
-     * 会员模型名称
+     * 会员名称
      * member_name
      *
-     * @param memberName 会员模型名称
+     * @param memberName 会员名称
      */
     public void setMemberName(String memberName) {
         this.memberName = memberName;
     }
 
     /**
-     * 0：删除，1：正常
-     * status
-     */
-    public Integer getStatus() {
-        return status;
-    }
-
-    /**
-     * 0：删除，1：正常
-     * status
-     *
-     * @param status 0：删除，1：正常
-     */
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    /**
-     * 权益开始时间
+     * 开始时间
      * start_time
      */
     public Date getStartTime() {
@@ -143,31 +149,49 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
     }
 
     /**
-     * 权益开始时间
+     * 开始时间
      * start_time
      *
-     * @param startTime 权益开始时间
+     * @param startTime 开始时间
      */
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
     /**
-     * 权益结束时间
-     * end_time
+     * 有效时间
+     * effective_time
      */
-    public Date getEndTime() {
-        return endTime;
+    public Date getEffectiveTime() {
+        return effectiveTime;
     }
 
     /**
-     * 权益结束时间
-     * end_time
+     * 有效时间
+     * effective_time
      *
-     * @param endTime 权益结束时间
+     * @param effectiveTime 有效时间
      */
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setEffectiveTime(Date effectiveTime) {
+        this.effectiveTime = effectiveTime;
+    }
+
+    /**
+     * 有效状态，1：有效，0：无效
+     * status
+     */
+    public Integer getStatus() {
+        return status;
+    }
+
+    /**
+     * 有效状态，1：有效，0：无效
+     * status
+     *
+     * @param status 有效状态，1：有效，0：无效
+     */
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     /**
@@ -189,7 +213,7 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
     }
 
     /**
-     * 更新时间
+     * 修改时间
      * update_time
      */
     public Date getUpdateTime() {
@@ -197,10 +221,10 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
     }
 
     /**
-     * 更新时间
+     * 修改时间
      * update_time
      *
-     * @param updateTime 更新时间
+     * @param updateTime 修改时间
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
@@ -214,11 +238,12 @@ public class MemberUserAuthority extends BaseModel<Integer> implements Serializa
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", accountId=").append(accountId);
+        sb.append(", accountName=").append(accountName);
         sb.append(", memberCode=").append(memberCode);
         sb.append(", memberName=").append(memberName);
-        sb.append(", status=").append(status);
         sb.append(", startTime=").append(startTime);
-        sb.append(", endTime=").append(endTime);
+        sb.append(", effectiveTime=").append(effectiveTime);
+        sb.append(", status=").append(status);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append("]");

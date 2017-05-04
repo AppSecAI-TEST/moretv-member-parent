@@ -21,7 +21,9 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
 * ServiceImpl: GoodsServiceImpl
@@ -104,8 +106,10 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     }
 
     @Override
-    public void resetRedis() {
+    public Map<String, String> resetRedis() {
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
+        Map<String, String> result = new HashMap<>();
+        
         
         //1、获取数据库全部商品
         List<Goods> goodsList = goodsMapper.selectAll();
@@ -120,11 +124,16 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
             
             if(GlobalEnum.StatusText.PUBLISHED.getCode().equals(goods.getGoodsStatus()) && goodsSkuList.size() == 1){
                 opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS, goods.getGoodsCode(), JSON.toJSONString(goodsDto));
-                logger.info("resetGoods: 重新刷入, goodsCode:{}", goodsDto.getGoodsCode());
+                result.put("add", goods.getGoodsCode());
+                logger.info("resetGoods: 重新插入商品缓存, goodsCode:{}", goodsDto.getGoodsCode());
             }else{
                 opsHash.delete(CacheKeyConstant.REDIS_KEY_GOODS, goods.getGoodsCode());
+                logger.info("resetGoods: 重新删除商品缓存, goodsCode:{}", goodsDto.getGoodsCode());
+                result.put("delete", goods.getGoodsCode());
             }
         }
+        
+        return result;
     }
 
 }

@@ -43,8 +43,7 @@ public class ProductListener {
             productDto = JSON.parseObject(str, ProductDto.class);
             memberProgramRelationService.sync(productDto);
         } catch (Exception e) {
-            logger.error("mq.listen.product->{}",e.getMessage());
-            e.printStackTrace();
+            logger.error("mq.listen.product->", e);
         }
        
     }

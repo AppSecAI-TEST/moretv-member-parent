@@ -37,7 +37,7 @@ public class MemberTest {
         userAuthority.setMemberCode(memberCode);
         userAuthority.setMemberName("会员模型_白猫片库");
         userAuthority.setStartTime(DateFormatUtil.stringFormatDateTime("2017-05-02 16:10:00"));
-        userAuthority.setEndTime(DateFormatUtil.stringFormatDateTime("2018-05-02 16:10:00"));
+        userAuthority.setEffectiveTime(DateFormatUtil.stringFormatDateTime("2018-05-02 16:10:00"));
         userAuthority.setCreateTime(new Date());
         userAuthority.setStatus(GlobalEnum.Status.VALID.getCode());
         memberUserAuthorityMapper.insert(userAuthority);

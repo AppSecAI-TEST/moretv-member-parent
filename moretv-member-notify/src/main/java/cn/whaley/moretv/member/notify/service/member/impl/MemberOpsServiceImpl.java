@@ -19,6 +19,7 @@ import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.base.util.DateFormatUtil;
+import cn.whaley.moretv.member.base.util.longconnect.LongConnectService;
 import cn.whaley.moretv.member.mapper.member.MemberUserAuthorityMapper;
 import cn.whaley.moretv.member.mapper.order.DeliveredOrderMapper;
 import cn.whaley.moretv.member.mapper.order.OrderItemMapper;
@@ -57,6 +58,9 @@ public class MemberOpsServiceImpl implements MemberOpsService {
     @Autowired
     private PublishMemberToAdmin publishMemberToAdmin;
     
+    @Autowired
+    private LongConnectService longConnectService;
+    
     @Transactional
     @Override
 	public ResultResponse deliveryMemberByOrderId(Integer orderId) {
@@ -82,7 +86,7 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 		if(userAuthority==null){
 			memberStartTime = now;
 		}else{
-			memberStartTime = userAuthority.getEndTime();
+			memberStartTime = userAuthority.getEffectiveTime();
 		}
 		Date memberEndTime = DateFormatUtil.addMonthAndDay(memberStartTime, durationMonth,durationDay);
 		
@@ -108,12 +112,12 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 			userAuthority.setMemberCode(memberCode);
 			userAuthority.setMemberName(memberName);
 			userAuthority.setStartTime(memberStartTime);
-			userAuthority.setEndTime(memberEndTime);
+			userAuthority.setEffectiveTime(memberEndTime);
 			userAuthority.setCreateTime(now);
 			userAuthority.setStatus(GlobalEnum.Status.VALID.getCode());
 			memberUserAuthorityMapper.insert(userAuthority);
 		}else{
-			userAuthority.setEndTime(memberEndTime);
+			userAuthority.setEffectiveTime(memberEndTime);
 			userAuthority.setUpdateTime(now);
 			userAuthority.setStatus(GlobalEnum.Status.VALID.getCode());
 			memberUserAuthorityMapper.updateByPrimaryKey(userAuthority);
@@ -134,6 +138,9 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 		publishMemberToAdmin.publishOrderItem(orderItem);
 		publishMemberToAdmin.publishMemberUserAuthority(userAuthority);
 		publishMemberToAdmin.publishDeliveredOrder(deliveredOrder);
+		
+		//长连接提醒
+		longConnectService.sendByAccountId(userAuthority, now);
 		
 		return ResultResponse.success();
 	}

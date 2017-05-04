@@ -1,11 +1,12 @@
 package cn.whaley.moretv.member.sync.service.member.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,13 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSON;
 
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
-import cn.whaley.moretv.member.base.constant.GlobalConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
-import cn.whaley.moretv.member.mapper.member.MemberPackageRelationMapper;
 import cn.whaley.moretv.member.model.member.Member;
-import cn.whaley.moretv.member.model.member.MemberPackageRelation;
 import cn.whaley.moretv.member.service.member.impl.BaseMemberServiceImpl;
-import cn.whaley.moretv.member.sync.dto.goods.MemberCppr;
 import cn.whaley.moretv.member.sync.dto.goods.MemberDto;
 import cn.whaley.moretv.member.sync.dto.goods.MemberMpr;
 import cn.whaley.moretv.member.sync.service.member.MemberService;
@@ -87,12 +84,35 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
             logger.info("mq.listen.member->update member->{}",member.toString());
         }   
         
-        if(member.getStatus().equals(GlobalEnum.StatusText.PUBLISHED.getCode()))
+        if(member.getStatus().equals(GlobalEnum.StatusText.PUBLISHED.getCode())){
             opsHash.put(CacheKeyConstant.REDIS_KEY_MEMBER, member.getCode(), JSON.toJSONString(member));
-        else
+            logger.info("sync member, add redis member->{}", member.getCode());
+        }else{
             opsHash.delete(CacheKeyConstant.REDIS_KEY_MEMBER, member.getCode());
-        
+            logger.info("sync member, delete redis member->{}", member.getCode());
+        }
         return member;
     }
 
+
+
+    @Override
+    public Map<String, String> resetRedis() {
+        HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
+        Map<String, String> result = new HashMap<>();
+        
+        List<Member> memberList = memberMapper.selectAll();
+        for(Member member : memberList){
+            if(member.getStatus().equals(GlobalEnum.StatusText.PUBLISHED.getCode())){
+                opsHash.put(CacheKeyConstant.REDIS_KEY_MEMBER, member.getCode(), JSON.toJSONString(member));
+                result.put("add", member.getCode());
+                logger.info("reset member, add redis member->{}", member.getCode());
+            }else{
+                opsHash.delete(CacheKeyConstant.REDIS_KEY_MEMBER, member.getCode());
+                result.put("delete", member.getCode());
+                logger.info("reset member, delete redis member->{}", member.getCode());
+            }
+        }
+        return result;
+    }
 }

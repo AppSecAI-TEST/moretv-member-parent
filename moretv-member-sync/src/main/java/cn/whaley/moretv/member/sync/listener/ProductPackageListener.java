@@ -40,8 +40,7 @@ public class ProductPackageListener {
             memberCppr = JSON.parseObject(str, MemberCppr.class);
             memberPackageRelationService.sync(memberCppr);
         } catch (Exception e) {
-            logger.error("mq.listen.product.package->{}",e.getMessage());
-            e.printStackTrace();
+            logger.error("mq.listen.product.package", e);
         }
        
     }

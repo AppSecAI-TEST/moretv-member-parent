@@ -8,18 +8,20 @@
   <resultMap id="BaseResultMap" type="cn.whaley.moretv.member.model.member.MemberUserAuthority" >
     <id column="mua_id" property="id" jdbcType="INTEGER" />
     <result column="mua_account_id" property="accountId" jdbcType="VARCHAR" />
+    <result column="mua_account_name" property="accountName" jdbcType="VARCHAR" />
     <result column="mua_member_code" property="memberCode" jdbcType="VARCHAR" />
     <result column="mua_member_name" property="memberName" jdbcType="VARCHAR" />
-    <result column="mua_status" property="status" jdbcType="INTEGER" />
     <result column="mua_start_time" property="startTime" jdbcType="TIMESTAMP" />
-    <result column="mua_end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="mua_effective_time" property="effectiveTime" jdbcType="TIMESTAMP" />
+    <result column="mua_status" property="status" jdbcType="INTEGER" />
     <result column="mua_create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="mua_update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    mua.id as mua_id, mua.account_id as mua_account_id, mua.member_code as mua_member_code, 
-    mua.member_name as mua_member_name, mua.status as mua_status, mua.start_time as mua_start_time, 
-    mua.end_time as mua_end_time, mua.create_time as mua_create_time, mua.update_time as mua_update_time
+    mua.id as mua_id, mua.account_id as mua_account_id, mua.account_name as mua_account_name, 
+    mua.member_code as mua_member_code, mua.member_name as mua_member_name, mua.start_time as mua_start_time, 
+    mua.effective_time as mua_effective_time, mua.status as mua_status, mua.create_time as mua_create_time, 
+    mua.update_time as mua_update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -32,12 +34,14 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="cn.whaley.moretv.member.model.member.MemberUserAuthority" useGeneratedKeys="true" keyProperty="id" >
-    insert into member_user_authority (account_id, member_code, member_name, 
-      status, start_time, end_time, 
-      create_time, update_time)
-    values (#{accountId,jdbcType=VARCHAR}, #{memberCode,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into member_user_authority (account_id, account_name, member_code, 
+      member_name, start_time, effective_time, 
+      status, create_time, update_time
+      )
+    values (#{accountId,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, #{memberCode,jdbcType=VARCHAR}, 
+      #{memberName,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{effectiveTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.whaley.moretv.member.model.member.MemberUserAuthority" useGeneratedKeys="true" keyProperty="id" >
     insert into member_user_authority
@@ -45,20 +49,23 @@
       <if test="accountId != null" >
         account_id,
       </if>
+      <if test="accountName != null" >
+        account_name,
+      </if>
       <if test="memberCode != null" >
         member_code,
       </if>
       <if test="memberName != null" >
         member_name,
       </if>
-      <if test="status != null" >
-        status,
-      </if>
       <if test="startTime != null" >
         start_time,
       </if>
-      <if test="endTime != null" >
-        end_time,
+      <if test="effectiveTime != null" >
+        effective_time,
+      </if>
+      <if test="status != null" >
+        status,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -71,20 +78,23 @@
       <if test="accountId != null" >
         #{accountId,jdbcType=VARCHAR},
       </if>
+      <if test="accountName != null" >
+        #{accountName,jdbcType=VARCHAR},
+      </if>
       <if test="memberCode != null" >
         #{memberCode,jdbcType=VARCHAR},
       </if>
       <if test="memberName != null" >
         #{memberName,jdbcType=VARCHAR},
       </if>
-      <if test="status != null" >
-        #{status,jdbcType=INTEGER},
-      </if>
       <if test="startTime != null" >
         #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTime != null" >
-        #{endTime,jdbcType=TIMESTAMP},
+      <if test="effectiveTime != null" >
+        #{effectiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -100,20 +110,23 @@
       <if test="accountId != null" >
         account_id = #{accountId,jdbcType=VARCHAR},
       </if>
+      <if test="accountName != null" >
+        account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
       <if test="memberCode != null" >
         member_code = #{memberCode,jdbcType=VARCHAR},
       </if>
       <if test="memberName != null" >
         member_name = #{memberName,jdbcType=VARCHAR},
       </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=INTEGER},
-      </if>
       <if test="startTime != null" >
         start_time = #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTime != null" >
-        end_time = #{endTime,jdbcType=TIMESTAMP},
+      <if test="effectiveTime != null" >
+        effective_time = #{effectiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -127,11 +140,12 @@
   <update id="updateByPrimaryKey" parameterType="cn.whaley.moretv.member.model.member.MemberUserAuthority" >
     update member_user_authority
     set account_id = #{accountId,jdbcType=VARCHAR},
+      account_name = #{accountName,jdbcType=VARCHAR},
       member_code = #{memberCode,jdbcType=VARCHAR},
       member_name = #{memberName,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
       start_time = #{startTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
+      effective_time = #{effectiveTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
