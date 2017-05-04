@@ -11,7 +11,7 @@ public class ResultResponse<V> extends HashMap<String, Object> {
 
     private static final long serialVersionUID = -2746096075868445005L;
 
-    protected static final String CODE = "code";
+    protected static final String CODE = "status";
     protected static final String MSG = "msg";
     protected static final String DATA = "data";
     protected String dataKey;
