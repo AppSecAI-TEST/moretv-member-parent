@@ -92,9 +92,9 @@ public class BaseOrderServiceImpl extends GenericServiceImpl<Order, Integer, Ord
     	BoundValueOperations<String,String> opsValue = redisTemplate.boundValueOps(CacheKeyConstant.REDIS_KEY_CREAT_ORDER + accountId);
     	String creteOrderCount = opsValue.get();
     	if (creteOrderCount == null) {
-    		opsValue.expireAt(DateFormatUtil.addDay(1));
+    		opsValue.expireAt(DateFormatUtil.addMinute(15));
     	} else {
-    		if (Long.parseLong(creteOrderCount) >= 50) {
+    		if (Long.parseLong(creteOrderCount) > 30) {
     			return ResultResponse.define(ApiCodeEnum.API_DATA_ORDER_REQUEST_OVER_FIFTY);
     		}
     	}

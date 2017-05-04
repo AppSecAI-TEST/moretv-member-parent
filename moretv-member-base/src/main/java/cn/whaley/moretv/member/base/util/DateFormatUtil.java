@@ -65,6 +65,18 @@ public class DateFormatUtil {
     }
     
     /** 
+     * 按分钟加 
+     *  
+     * @param value 
+     * @return 
+     */  
+     public static Date addMinute(int value) {  
+        Calendar now = Calendar.getInstance();  
+        now.add(Calendar.MINUTE, value);  
+        return now.getTime();  
+     }
+    
+    /** 
      * 按日加 
      *  
      * @param value 
