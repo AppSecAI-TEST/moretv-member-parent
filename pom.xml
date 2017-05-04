@@ -12,8 +12,8 @@
         <module>moretv-member-base</module>
         <module>moretv-member-sync</module>
         <module>moretv-member-api</module>
-        <module>morerv-member-order</module>
-        <module>morerv-member-notify</module>
+        <module>moretv-member-order</module>
+        <module>moretv-member-notify</module>
     </modules>
   
     <properties>
