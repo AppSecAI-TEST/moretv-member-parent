@@ -9,7 +9,9 @@ import cn.whaley.moretv.member.sync.dto.goods.ProductDto;
 import cn.whaley.moretv.member.sync.service.member.MemberProgramRelationService;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,5 +86,37 @@ public class MemberProgramRelationServiceImpl extends GenericServiceImpl<MemberP
             opsValue.set(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, mpr.getProgramCode()), JSON.toJSONString(mpr));
             logger.info("mq.listen.product->insert memberProgramRelation->{}",mpr.toString());
         }
+    }
+
+
+    @Override
+    public Map<String, String> resetRedis(String programCode) {
+        ValueOperations<String, String> opsValue = redisTemplate.opsForValue();
+        Map<String, String> result = new HashMap<>();
+        
+        String[] programCodeArray = programCode.split(",");
+        for(String programId : programCodeArray){
+            boolean isBound = false;
+            
+            List<MemberProgramRelation> mprList = memberProgramRelationMapper.listByProgramCode(programId);
+            for(MemberProgramRelation mpr : mprList){
+                if(GlobalEnum.Bound.BOUND.getCode().equals(mpr.getStatus())){
+                    //绑定的，插入redis
+                    isBound = true;
+                    opsValue.set(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, programId), JSON.toJSONString(mpr));
+                    result.put("add", programId);
+                    logger.info("reset program-member-relation, add prgoram->{}", programId);
+                }
+            }
+            
+            if(!isBound){
+                //这个节目没有跟会员的绑定关系，删除redis
+                redisTemplate.delete(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, programId));
+                result.put("delete", programId);
+                logger.info("reset program-member-relation, delete prgoram->{}", programId);
+            }
+        }
+        
+        return result;
     }
 }

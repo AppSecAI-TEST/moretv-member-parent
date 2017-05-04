@@ -60,9 +60,9 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
             for (MemberUserAuthority authority : authorityList) {
                 if (member.getCode().equals(authority.getMemberCode())) {
                     memberStatus.setStartTime(authority.getStartTime());
-                    memberStatus.setEndTime(authority.getEndTime());
+                    memberStatus.setEndTime(authority.getEffectiveTime());
 
-                    if (authority.getEndTime().after(now)) {
+                    if (authority.getEffectiveTime().after(now)) {
                         status = GlobalEnum.MemberStatus.OPEN;
                     } else {
                         status = GlobalEnum.MemberStatus.EXPIRED;
@@ -90,7 +90,7 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
 
         for (MemberUserAuthority authority : authorityList) {
             //有效会员权益
-            if (authority.getEndTime().after(now)) {
+            if (authority.getEffectiveTime().after(now)) {
                 MemberInfoResponse response = ResponseHandler.copyProperties(authority, MemberInfoResponse.class);
                 infoResponseList.add(response);
             }

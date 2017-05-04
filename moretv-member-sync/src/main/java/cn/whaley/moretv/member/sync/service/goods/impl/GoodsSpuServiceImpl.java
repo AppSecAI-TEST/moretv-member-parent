@@ -9,6 +9,11 @@ import cn.whaley.moretv.member.model.goods.GoodsSpu;
 import cn.whaley.moretv.member.service.goods.impl.BaseGoodsSpuServiceImpl;
 import cn.whaley.moretv.member.sync.service.goods.GoodsSpuService;
 import com.alibaba.fastjson.JSON;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +37,7 @@ public class GoodsSpuServiceImpl extends BaseGoodsSpuServiceImpl implements Good
 
     @Autowired
     private RedisTemplate redisTemplate;
-
+    
     @Override
     public ResultResponse syncGoodsSpu(GoodsSpu goodsSpu) {
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
@@ -80,6 +85,27 @@ public class GoodsSpuServiceImpl extends BaseGoodsSpuServiceImpl implements Good
             goodsSpuMapper.insertWithId(goodsSpu);
             logger.info("syncGoodsSpu: 同步商品模型数据, goodsBaseCode:{}", goodsSpu.getGoodsBaseCode());
         }
+    }
+
+    @Override
+    public Map<String, String> resetRedis() {
+        HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
+        Map<String, String> result = new HashMap<>();
+        
+        List<GoodsSpu> goodsSpuList = goodsSpuMapper.selectAll();
+        for(GoodsSpu goodsSpu : goodsSpuList){
+            if (GlobalEnum.CompositedType.SINGLE.getCode() == goodsSpu.getCompositedType().intValue()) {
+                String value = JSON.toJSONString(goodsSpu);
+                opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS_SPU, goodsSpu.getGoodsBaseCode(), value);
+                result.put("add", goodsSpu.getGoodsBaseCode());
+                logger.info("resetGoodsSpu: 重新插入商品模型缓存, goodsBaseCode:{}", goodsSpu.getGoodsBaseCode());
+            }else{
+                opsHash.delete(CacheKeyConstant.REDIS_KEY_GOODS_SPU, goodsSpu.getGoodsBaseCode());
+                result.put("delete", goodsSpu.getGoodsBaseCode());
+                logger.info("resetGoodsSpu: 重新删除商品模型缓存, goodsBaseCode:{}", goodsSpu.getGoodsBaseCode());
+            }
+        }
+        return result;
     }
 
 }

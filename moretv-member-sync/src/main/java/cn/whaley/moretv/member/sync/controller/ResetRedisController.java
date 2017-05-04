@@ -1,18 +1,20 @@
 package cn.whaley.moretv.member.sync.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.whaley.moretv.member.base.dto.request.BaseRequest;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
-import cn.whaley.moretv.member.sync.listener.GoodsListener;
 import cn.whaley.moretv.member.sync.service.goods.GoodsService;
+import cn.whaley.moretv.member.sync.service.goods.GoodsSpuService;
+import cn.whaley.moretv.member.sync.service.member.MemberProgramRelationService;
+import cn.whaley.moretv.member.sync.service.member.MemberService;
 
 @RestController
 @RequestMapping("/resetRedis")
@@ -22,20 +24,51 @@ public class ResetRedisController {
     @Autowired
     private GoodsService goodsService;
     
+    @Autowired
+    private GoodsSpuService goodsSpuService;
+    
+    @Autowired
+    private MemberService memberService;
+    
+    @Autowired
+    private MemberProgramRelationService memberProgramRelationService;
+    
     @RequestMapping(value = "/doReset")
-    public ResultResponse reset(String type) {
+    public ResultResponse reset(String type, String programCode) {
         if(StringUtils.isEmpty(type)){
             return ResultResponse.failed();
         }
         
+        Map<String, String> result = null;
+        
         switch(type){
             case "goods":
-                goodsService.resetRedis();
+                result = goodsService.resetRedis();
+                break;
+            case "goodsSpu":
+                result = goodsSpuService.resetRedis();
+                break;
+            case "member":
+                result = memberService.resetRedis();
+                break;
+            case "product":
+                if(StringUtils.isEmpty(programCode)){
+                    result = getFailedMap();
+                    break;
+                }else
+                    result = memberProgramRelationService.resetRedis(programCode);
                 break;
             default:
+                result = getFailedMap();
                 break;
         }
         
-        return ResultResponse.success();
+        return ResultResponse.success(result);
+    }
+    
+    private Map<String, String> getFailedMap(){
+        Map<String, String> result = new HashMap<>();
+        result.put("note", "wrong params!!!");
+        return result;
     }
 }

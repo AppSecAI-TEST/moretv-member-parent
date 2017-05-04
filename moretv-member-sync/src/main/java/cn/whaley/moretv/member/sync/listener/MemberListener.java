@@ -45,8 +45,7 @@ public class MemberListener {
             memberDto = JSON.parseObject(str, MemberDto.class);
             memberService.sync(memberDto);
         } catch (Exception e) {
-            logger.error("mq.listen.member->{}",e.getMessage());
-            e.printStackTrace();
+            logger.error("mq.listen.member", e);
         }
        
     }

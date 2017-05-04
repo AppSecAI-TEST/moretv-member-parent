@@ -1,5 +1,7 @@
 package cn.whaley.moretv.member.sync.service.goods;
 
+import java.util.Map;
+
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.model.goods.GoodsSpu;
 import cn.whaley.moretv.member.service.goods.BaseGoodsSpuService;
@@ -20,4 +22,6 @@ public interface GoodsSpuService extends BaseGoodsSpuService {
      * @return
      */
     ResultResponse syncGoodsSpu(GoodsSpu goodsSpu);
+
+    Map<String, String> resetRedis();
 }

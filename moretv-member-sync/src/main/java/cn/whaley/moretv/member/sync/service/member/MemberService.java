@@ -1,5 +1,7 @@
 package cn.whaley.moretv.member.sync.service.member;
 
+import java.util.Map;
+
 import cn.whaley.moretv.member.service.member.BaseMemberService;
 import cn.whaley.moretv.member.sync.dto.goods.MemberDto;
 
@@ -13,4 +15,6 @@ import cn.whaley.moretv.member.sync.dto.goods.MemberDto;
 public interface MemberService extends BaseMemberService {
 
     void sync(MemberDto memberDto);
+
+    Map<String, String> resetRedis();
 }
