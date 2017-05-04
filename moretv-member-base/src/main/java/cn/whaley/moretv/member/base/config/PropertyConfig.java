@@ -1,6 +1,5 @@
 package cn.whaley.moretv.member.base.config;
 
-import cn.whaley.moretv.member.base.manager.AppsCipherManage;
 import cn.whaley.moretv.member.base.manager.ExternalManage;
 import cn.whaley.moretv.member.base.manager.MsdManage;
 import cn.whaley.moretv.member.base.manager.PayManage;
@@ -25,11 +24,10 @@ public class PropertyConfig {
     public void initProperty() {
         ExternalManage.setTencent(customProperty.getTencent());
         LongConnectionUtil.setLongConnection(customProperty.getLongConnection());
-        AppsCipherManage.setAppsEncryptUrl(customProperty.getAppsEncryptUrl());
-        AppsCipherManage.setAppsDecryptoUrl(customProperty.getAppsDecryptoUrl());
         MsdManage.setMsdServer(customProperty.getMsdServer());
         MsdManage.setXiangguServer(customProperty.getXiangguServer());
         PayManage.setLocalHostServer(customProperty.getLocalHostServer());
+        PayManage.setPayGatewaySignKey(customProperty.getPayGatewaySignKey());
         PayGatewayUtil.setCustomProperty(customProperty);
     }
 }

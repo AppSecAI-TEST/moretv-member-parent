@@ -8,13 +8,17 @@ public class PayManage {
 
 	private static String LOCAL_HOST_SERVER;
     
-    private static String payParamSignKey; //支付签名常量
+    private static String PAY_GATEWAY_SIGN_KEY; //支付签名常量
     
 	public static void setLocalHostServer(String localHostServer) {
 		LOCAL_HOST_SERVER = localHostServer;
 	}
-	
-	/**
+
+    public static void setPayGatewaySignKey(String payGatewaySignKey) {
+        PAY_GATEWAY_SIGN_KEY = payGatewaySignKey;
+    }
+
+    /**
 	 * 支付加密前端加密参数
 	 * @param sessionToken
 	 * @param cip
@@ -34,16 +38,16 @@ public class PayManage {
 		String sign = getPayUrlSign(parm.toString());
 		//需要作为验签的参数
 		parm.append("&version=1.0");
-		parm.append("&sign="+sign);
+		parm.append("&sign=" + sign);
 		//域名路径
-		String hostStr = LOCAL_HOST_SERVER+"/order_api/pay?";
+		String hostStr = LOCAL_HOST_SERVER + "/order_api/pay?";
 		
 		return hostStr+parm.toString();
     }
 	
 	public static String getPayUrlSign(String url){
 		StringBuffer parm = new StringBuffer(url);
-		parm.append(payParamSignKey);
+		parm.append(PAY_GATEWAY_SIGN_KEY);
 		return MD5Util.string2MD5(parm.toString());
     }
 	

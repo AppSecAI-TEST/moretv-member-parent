@@ -17,16 +17,12 @@ import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
-import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
-import cn.whaley.moretv.member.base.util.BeanHandler;
 import cn.whaley.moretv.member.base.util.DateFormatUtil;
 import cn.whaley.moretv.member.mapper.member.MemberUserAuthorityMapper;
 import cn.whaley.moretv.member.mapper.order.DeliveredOrderMapper;
 import cn.whaley.moretv.member.mapper.order.OrderItemMapper;
 import cn.whaley.moretv.member.mapper.order.OrderMapper;
-import cn.whaley.moretv.member.model.goods.Goods;
-import cn.whaley.moretv.member.model.goods.GoodsSku;
 import cn.whaley.moretv.member.model.member.MemberUserAuthority;
 import cn.whaley.moretv.member.model.order.DeliveredOrder;
 import cn.whaley.moretv.member.model.order.Order;
@@ -34,7 +30,6 @@ import cn.whaley.moretv.member.model.order.OrderItem;
 import cn.whaley.moretv.member.notify.service.member.MemberOpsService;
 import cn.whaley.moretv.member.notify.service.tencent.TencentService;
 import cn.whaley.moretv.member.service.queue.publish.PublishMemberToAdmin;
-import cn.whaley.moretv.member.service.tencent.BaseTencentService;
 
 @Service
 public class MemberOpsServiceImpl implements MemberOpsService {
@@ -46,10 +41,7 @@ public class MemberOpsServiceImpl implements MemberOpsService {
 	
 	@Autowired
 	private OrderItemMapper orderItemMapper;
-	
-	/*@Autowired
-	private DeliveredOrderMapper deliveredOrderMapper;
-	*/
+
 	@Autowired
 	private MemberUserAuthorityMapper memberUserAuthorityMapper;
 	

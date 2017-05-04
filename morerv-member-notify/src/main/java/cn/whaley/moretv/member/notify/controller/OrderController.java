@@ -56,7 +56,7 @@ public class OrderController {
     		paramMap.put("fee", String.valueOf(fee));
     		paramMap.put("orderStatus", orderStatus);
     		
-			if (!StringHelper.checkSignNew(paramMap, customProperty.getPayGatewayServer(), sign)) {
+			if (!StringHelper.checkSignNew(paramMap, customProperty.getPayGatewaySignKey(), sign)) {
 				return ResultResponse.define(ApiCodeEnum.API_SIGN_ERR);
 			}
         

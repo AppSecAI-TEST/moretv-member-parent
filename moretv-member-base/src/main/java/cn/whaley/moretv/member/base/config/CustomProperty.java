@@ -17,12 +17,6 @@ public class CustomProperty {
     // 长连接配置
     private LongConnection longConnection;
 
-    //apps加密
-    private String appsEncryptUrl;
-
-    //apps解密
-    private String appsDecryptoUrl;
-
     // 支付网关
     private String payGatewayServer;
     
@@ -31,9 +25,6 @@ public class CustomProperty {
 
     // 本地服务地址
     private String localHostServer;
-
-    // 临时服务地址
-    private String tempPayDispatchUrl;
 
     //MSD地址
     private String msdServer;
@@ -170,22 +161,6 @@ public class CustomProperty {
         this.longConnection = longConnection;
     }
 
-    public String getAppsEncryptUrl() {
-        return appsEncryptUrl;
-    }
-
-    public void setAppsEncryptUrl(String appsEncryptUrl) {
-        this.appsEncryptUrl = appsEncryptUrl;
-    }
-
-    public String getAppsDecryptoUrl() {
-        return appsDecryptoUrl;
-    }
-
-    public void setAppsDecryptoUrl(String appsDecryptoUrl) {
-        this.appsDecryptoUrl = appsDecryptoUrl;
-    }
-
     public String getMsdServer() {
         return msdServer;
     }
@@ -208,14 +183,6 @@ public class CustomProperty {
 
     public void setLocalHostServer(String localHostServer) {
         this.localHostServer = localHostServer;
-    }
-
-    public String getTempPayDispatchUrl() {
-        return tempPayDispatchUrl;
-    }
-
-    public void setTempPayDispatchUrl(String tempPayDispatchUrl) {
-        this.tempPayDispatchUrl = tempPayDispatchUrl;
     }
 
     public String getXiangguServer() {
