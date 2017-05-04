@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
+import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
+import cn.whaley.moretv.member.base.constant.GlobalConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
 import cn.whaley.moretv.member.base.constant.OrderEnum;
 import cn.whaley.moretv.member.base.dto.goods.GoodsDto;
@@ -153,9 +155,9 @@ public class OrderServiceImpl extends BaseOrderServiceImpl implements OrderServi
 
 				//5、向支付网关支付
                 PayGatewayResponse payGatewayResponse = PayGatewayUtil.pay(payGatewayRequest);
-				if (payGatewayResponse.getStatus().intValue() == 1) {
+				if (payGatewayResponse.getStatus().intValue() == ApiCodeInfo.API_OK) {
 
-                    return ResultResponse.success(new OrderPayResponse(payGatewayResponse.getContent()));
+                    return ResultResponse.success(new OrderPayResponse(payGatewayResponse.getData()));
 				} else {
                     logger.error("申请支付, 支付网关错误, 支付网关返回->{}", payGatewayResponse.toString());
                     return ResultResponse.define(ApiCodeEnum.API_DATA_PAY_GATEWAY_ERR.getCode(), payGatewayResponse.getMsg());

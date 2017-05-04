@@ -17,7 +17,7 @@ public class PayGatewayResponse {
     /**
      * 支付宝支付需要的数据
      */
-    private String content;
+    private String data;
 
     public Integer getStatus() {
         return status;
@@ -35,16 +35,16 @@ public class PayGatewayResponse {
         this.msg = msg;
     }
 
-    public String getContent() {
-        return content;
+    public String getData() {
+        return data;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setData(String data) {
+        this.data = data;
     }
 
     @Override
     public String toString() {
-        return "PayGatewayResponse [status=" + status + ", msg=" + msg + ", content=" + content + "]";
+        return "PayGatewayResponse [status=" + status + ", msg=" + msg + ", data=" + data + "]";
     }
 }

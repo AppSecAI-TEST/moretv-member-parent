@@ -2,6 +2,9 @@ package cn.whaley.moretv.member.mapper.goods;
 
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.model.goods.GoodsSku;
+
+import java.util.List;
+
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -17,5 +20,7 @@ public interface GoodsSkuMapper extends GenericMapper<GoodsSku, Integer> {
     int existGoodsSkuById(Integer id);
 
     int insertWithId(GoodsSku goodsSku);
+
+    List<GoodsSku> selectByGoodsCode(String goodsCode);
 
 }

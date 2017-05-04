@@ -56,7 +56,7 @@ public class PayGatewayUtil {
         map.put("businessType", GlobalConstant.PAY_GATEWAY_PRODUCT_CODE);
         map.put("orderNo", payGatewayRequest.getOrderCode());
         map.put("accountId", payGatewayRequest.getAccountId());
-        map.put("totalAmount", getYuanByFen(payGatewayRequest.getFee()));
+        map.put("totalAmount", payGatewayRequest.getFee());
         map.put("subject", payGatewayRequest.getSubject());
         map.put("goodsNo", payGatewayRequest.getGoodsCode());
         map.put("notifyUrl", customProperty.getNotifyUrl());
@@ -91,6 +91,7 @@ public class PayGatewayUtil {
     /**
      * 将单位「分」转成单位 「元」
      */
+    @Deprecated
     private static String getYuanByFen(Integer fen){
         return new BigDecimal(fen).divide(new BigDecimal(100), 2, BigDecimal.ROUND_UP).toString();
     }

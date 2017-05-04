@@ -3,6 +3,7 @@ package cn.whaley.moretv.member.sync.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,8 +22,12 @@ public class ResetRedisController {
     @Autowired
     private GoodsService goodsService;
     
-/*    @RequestMapping(value = "/doReset")
-    public ResultResponse reset(@RequestParam(required=true) String type) {
+    @RequestMapping(value = "/doReset")
+    public ResultResponse reset(String type) {
+        if(StringUtils.isEmpty(type)){
+            return ResultResponse.failed();
+        }
+        
         switch(type){
             case "goods":
                 goodsService.resetRedis();
@@ -30,5 +35,7 @@ public class ResetRedisController {
             default:
                 break;
         }
-    }*/
+        
+        return ResultResponse.success();
+    }
 }

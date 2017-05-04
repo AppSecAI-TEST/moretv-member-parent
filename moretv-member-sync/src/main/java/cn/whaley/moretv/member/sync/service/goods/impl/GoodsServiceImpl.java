@@ -15,6 +15,7 @@ import cn.whaley.moretv.member.sync.service.goods.GoodsService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
@@ -104,25 +105,26 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
 
     @Override
     public void resetRedis() {
-/*        HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
+        HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
         
         //1、获取数据库全部商品
         List<Goods> goodsList = goodsMapper.selectAll();
         
-        //2、遍历商品，根据状态在redis中删除/添加
+        //2、遍历商品，查询商品的sku，如果商品状态为[发布]&&sku数量为1，那么存入redis
         for(Goods goods : goodsList){
-            if(GlobalEnum.StatusText.PUBLISHED.getCode().equals(goods.getGoodsStatus())){
-                //上架的，redis添加
-                opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS, goods.getGoodsCode(), JSON.toJSONString(goods));
-                logger.info("resetGoods: 重刷, goodsCode:{}", goodsDto.getGoodsCode());
+            List<GoodsSku> goodsSkuList = goodsSkuMapper.selectByGoodsCode(goods.getGoodsCode());
+            
+            GoodsDto goodsDto = new GoodsDto();
+            BeanUtils.copyProperties(goods, goodsDto);
+            goodsDto.setGoodsSkuList(goodsSkuList);
+            
+            if(GlobalEnum.StatusText.PUBLISHED.getCode().equals(goods.getGoodsStatus()) && goodsSkuList.size() == 1){
+                opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS, goods.getGoodsCode(), JSON.toJSONString(goodsDto));
+                logger.info("resetGoods: 重新刷入, goodsCode:{}", goodsDto.getGoodsCode());
             }else{
-                //其他状态，redis删除
                 opsHash.delete(CacheKeyConstant.REDIS_KEY_GOODS, goods.getGoodsCode());
             }
         }
-        
-        */
-       
     }
 
 }
