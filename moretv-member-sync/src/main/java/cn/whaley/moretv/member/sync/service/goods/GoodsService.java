@@ -20,4 +20,6 @@ public interface GoodsService extends BaseGoodsService {
      * @return
      */
     ResultResponse syncGoods(GoodsDto goodsDto);
+
+    void resetRedis();
 }

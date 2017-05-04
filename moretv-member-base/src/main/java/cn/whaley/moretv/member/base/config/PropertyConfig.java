@@ -30,8 +30,6 @@ public class PropertyConfig {
         MsdManage.setMsdServer(customProperty.getMsdServer());
         MsdManage.setXiangguServer(customProperty.getXiangguServer());
         PayManage.setLocalHostServer(customProperty.getLocalHostServer());
-        PayManage.setPayGatewayServer(customProperty.getPayGatewayServer());
-        PayManage.setTempPayDispatchUrl(customProperty.getTempPayDispatchUrl());
         PayGatewayUtil.setCustomProperty(customProperty);
     }
 }

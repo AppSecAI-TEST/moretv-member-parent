@@ -102,4 +102,27 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
         }
     }
 
+    @Override
+    public void resetRedis() {
+/*        HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
+        
+        //1、获取数据库全部商品
+        List<Goods> goodsList = goodsMapper.selectAll();
+        
+        //2、遍历商品，根据状态在redis中删除/添加
+        for(Goods goods : goodsList){
+            if(GlobalEnum.StatusText.PUBLISHED.getCode().equals(goods.getGoodsStatus())){
+                //上架的，redis添加
+                opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS, goods.getGoodsCode(), JSON.toJSONString(goods));
+                logger.info("resetGoods: 重刷, goodsCode:{}", goodsDto.getGoodsCode());
+            }else{
+                //其他状态，redis删除
+                opsHash.delete(CacheKeyConstant.REDIS_KEY_GOODS, goods.getGoodsCode());
+            }
+        }
+        
+        */
+       
+    }
+
 }
