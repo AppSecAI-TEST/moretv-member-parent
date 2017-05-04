@@ -1,16 +1,6 @@
 package cn.whaley.moretv.member.sync.service.goods.impl;
 
-import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
-import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
-import cn.whaley.moretv.member.base.constant.GlobalEnum;
-import cn.whaley.moretv.member.base.dto.response.ResultResponse;
-import cn.whaley.moretv.member.base.exception.SystemException;
-import cn.whaley.moretv.member.model.goods.GoodsSpu;
-import cn.whaley.moretv.member.service.goods.impl.BaseGoodsSpuServiceImpl;
-import cn.whaley.moretv.member.sync.service.goods.GoodsSpuService;
-import com.alibaba.fastjson.JSON;
-
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +11,18 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.alibaba.fastjson.JSON;
+
+import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
+import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
+import cn.whaley.moretv.member.base.constant.GlobalEnum;
+import cn.whaley.moretv.member.base.dto.response.ResultResponse;
+import cn.whaley.moretv.member.base.exception.SystemException;
+import cn.whaley.moretv.member.model.goods.GoodsSpu;
+import cn.whaley.moretv.member.service.goods.impl.BaseGoodsSpuServiceImpl;
+import cn.whaley.moretv.member.sync.service.goods.GoodsSpuService;
+import cn.whaley.moretv.member.sync.util.RedisResetResponseUtil;
 
 /**
 * ServiceImpl: GoodsSpuServiceImpl
@@ -88,24 +90,25 @@ public class GoodsSpuServiceImpl extends BaseGoodsSpuServiceImpl implements Good
     }
 
     @Override
-    public Map<String, String> resetRedis() {
+    public Map<String, Object> resetRedis() {
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
-        Map<String, String> result = new HashMap<>();
+        List<String> addList = new ArrayList<>();
+        List<String> deleteList = new ArrayList<>();
         
         List<GoodsSpu> goodsSpuList = goodsSpuMapper.selectAll();
         for(GoodsSpu goodsSpu : goodsSpuList){
             if (GlobalEnum.CompositedType.SINGLE.getCode() == goodsSpu.getCompositedType().intValue()) {
                 String value = JSON.toJSONString(goodsSpu);
                 opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS_SPU, goodsSpu.getGoodsBaseCode(), value);
-                result.put("add", goodsSpu.getGoodsBaseCode());
+                addList.add( goodsSpu.getGoodsBaseCode());
                 logger.info("resetGoodsSpu: 重新插入商品模型缓存, goodsBaseCode:{}", goodsSpu.getGoodsBaseCode());
             }else{
                 opsHash.delete(CacheKeyConstant.REDIS_KEY_GOODS_SPU, goodsSpu.getGoodsBaseCode());
-                result.put("delete", goodsSpu.getGoodsBaseCode());
+                deleteList.add(goodsSpu.getGoodsBaseCode());
                 logger.info("resetGoodsSpu: 重新删除商品模型缓存, goodsBaseCode:{}", goodsSpu.getGoodsBaseCode());
             }
         }
-        return result;
+        return RedisResetResponseUtil.getResetRedisMap(addList, deleteList);
     }
 
 }

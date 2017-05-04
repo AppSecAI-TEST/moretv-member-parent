@@ -1,7 +1,9 @@
 package cn.whaley.moretv.member.sync.service.member.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,7 @@ import cn.whaley.moretv.member.mapper.member.MemberPackageRelationMapper;
 import cn.whaley.moretv.member.model.member.MemberPackageRelation;
 import cn.whaley.moretv.member.sync.dto.goods.MemberCppr;
 import cn.whaley.moretv.member.sync.service.member.MemberPackageRelationService;
+import cn.whaley.moretv.member.sync.util.RedisResetResponseUtil;
 
 /**
 * ServiceImpl: MemberProgramRelationServiceImpl
@@ -106,5 +109,30 @@ public class MemberPackageRelationServiceImpl extends GenericServiceImpl<MemberP
         target.setProgramSourceOriginalType(source.getProgramSourceOriginalType());
         target.setStatus(source.getRelationStatus());
         target.setUpdateTime(new Date());
+    }
+
+
+    @Override
+    public Map<String, Object> resetRedis() {
+        HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
+        List<String> addList = new ArrayList<>();
+        List<String> deleteList = new ArrayList<>();
+        
+        List<MemberPackageRelation> mppList = memberPackageRelationMapper.selectAll();
+        for(MemberPackageRelation mpp : mppList){
+            String temp = mpp.getMemberCode() + "->" + mpp.getPackageCode();
+            
+            if(GlobalConstant.CP_TENCENT.equals(mpp.getProgramSourceCode()) &&  GlobalEnum.Bound.BOUND.getCode().equals(mpp.getStatus())){
+                opsHash.put(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, mpp.getMemberCode()),  
+                        mpp.getPackageCode(), JSON.toJSONString(mpp));
+                addList.add(temp);
+                logger.info("reset memberPackageRelation, add memberPackageRelation->{}", temp);
+            }else{
+                opsHash.delete(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, mpp.getMemberCode()), mpp.getPackageCode());
+                deleteList.add(temp);
+                logger.info("reset memberPackageRelation, delete memberPackageRelation->{}", temp);
+            }
+        }
+        return RedisResetResponseUtil.getResetRedisMap(addList, deleteList);
     }
 }

@@ -1,5 +1,19 @@
 package cn.whaley.moretv.member.sync.service.goods.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.alibaba.fastjson.JSON;
+
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
 import cn.whaley.moretv.member.base.constant.GlobalEnum;
@@ -12,18 +26,7 @@ import cn.whaley.moretv.member.model.goods.Goods;
 import cn.whaley.moretv.member.model.goods.GoodsSku;
 import cn.whaley.moretv.member.service.goods.impl.BaseGoodsServiceImpl;
 import cn.whaley.moretv.member.sync.service.goods.GoodsService;
-import com.alibaba.fastjson.JSON;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import cn.whaley.moretv.member.sync.util.RedisResetResponseUtil;
 
 /**
 * ServiceImpl: GoodsServiceImpl
@@ -106,10 +109,10 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
     }
 
     @Override
-    public Map<String, String> resetRedis() {
+    public Map<String, Object> resetRedis() {
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
-        Map<String, String> result = new HashMap<>();
-        
+        List<String> addList = new ArrayList<>();
+        List<String> deleteList = new ArrayList<>();
         
         //1、获取数据库全部商品
         List<Goods> goodsList = goodsMapper.selectAll();
@@ -124,16 +127,16 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
             
             if(GlobalEnum.StatusText.PUBLISHED.getCode().equals(goods.getGoodsStatus()) && goodsSkuList.size() == 1){
                 opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS, goods.getGoodsCode(), JSON.toJSONString(goodsDto));
-                result.put("add", goods.getGoodsCode());
+                addList.add(goods.getGoodsCode());
                 logger.info("resetGoods: 重新插入商品缓存, goodsCode:{}", goodsDto.getGoodsCode());
             }else{
                 opsHash.delete(CacheKeyConstant.REDIS_KEY_GOODS, goods.getGoodsCode());
+                deleteList.add(goods.getGoodsCode());
                 logger.info("resetGoods: 重新删除商品缓存, goodsCode:{}", goodsDto.getGoodsCode());
-                result.put("delete", goods.getGoodsCode());
             }
         }
         
-        return result;
+        return RedisResetResponseUtil.getResetRedisMap(addList, deleteList);
     }
 
 }

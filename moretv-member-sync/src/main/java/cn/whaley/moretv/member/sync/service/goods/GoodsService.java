@@ -23,5 +23,5 @@ public interface GoodsService extends BaseGoodsService {
      */
     ResultResponse syncGoods(GoodsDto goodsDto);
 
-    Map<String, String> resetRedis();
+    Map<String, Object> resetRedis();
 }

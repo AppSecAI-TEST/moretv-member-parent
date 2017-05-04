@@ -1,15 +1,7 @@
 package cn.whaley.moretv.member.sync.service.member.impl;
 
-import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
-import cn.whaley.moretv.member.base.constant.GlobalEnum;
-import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
-import cn.whaley.moretv.member.mapper.member.MemberProgramRelationMapper;
-import cn.whaley.moretv.member.model.member.MemberProgramRelation;
-import cn.whaley.moretv.member.sync.dto.goods.ProductDto;
-import cn.whaley.moretv.member.sync.service.member.MemberProgramRelationService;
-
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +15,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
+
+import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
+import cn.whaley.moretv.member.base.constant.GlobalEnum;
+import cn.whaley.moretv.member.base.service.impl.GenericServiceImpl;
+import cn.whaley.moretv.member.mapper.member.MemberProgramRelationMapper;
+import cn.whaley.moretv.member.model.member.MemberProgramRelation;
+import cn.whaley.moretv.member.sync.dto.goods.ProductDto;
+import cn.whaley.moretv.member.sync.service.member.MemberProgramRelationService;
+import cn.whaley.moretv.member.sync.util.RedisResetResponseUtil;
 
 /**
 * ServiceImpl: MemberProgramRelationServiceImpl
@@ -90,9 +91,10 @@ public class MemberProgramRelationServiceImpl extends GenericServiceImpl<MemberP
 
 
     @Override
-    public Map<String, String> resetRedis(String programCode) {
+    public Map<String, Object> resetRedis(String programCode) {
         ValueOperations<String, String> opsValue = redisTemplate.opsForValue();
-        Map<String, String> result = new HashMap<>();
+        List<String> addList = new ArrayList<>();
+        List<String> deleteList = new ArrayList<>();
         
         String[] programCodeArray = programCode.split(",");
         for(String programId : programCodeArray){
@@ -104,7 +106,7 @@ public class MemberProgramRelationServiceImpl extends GenericServiceImpl<MemberP
                     //绑定的，插入redis
                     isBound = true;
                     opsValue.set(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, programId), JSON.toJSONString(mpr));
-                    result.put("add", programId);
+                    addList.add(programId);
                     logger.info("reset program-member-relation, add prgoram->{}", programId);
                 }
             }
@@ -112,11 +114,11 @@ public class MemberProgramRelationServiceImpl extends GenericServiceImpl<MemberP
             if(!isBound){
                 //这个节目没有跟会员的绑定关系，删除redis
                 redisTemplate.delete(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, programId));
-                result.put("delete", programId);
+                deleteList.add(programId);
                 logger.info("reset program-member-relation, delete prgoram->{}", programId);
             }
         }
         
-        return result;
+        return RedisResetResponseUtil.getResetRedisMap(addList, deleteList);
     }
 }

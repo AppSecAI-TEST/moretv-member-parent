@@ -17,5 +17,5 @@ public interface MemberProgramRelationService extends GenericService<MemberProgr
 
     void sync(ProductDto productDto);
 
-    Map<String, String> resetRedis(String programCode);
+    Map<String, Object> resetRedis(String programCode);
 }

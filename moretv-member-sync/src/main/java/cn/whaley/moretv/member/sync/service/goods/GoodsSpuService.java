@@ -23,5 +23,5 @@ public interface GoodsSpuService extends BaseGoodsSpuService {
      */
     ResultResponse syncGoodsSpu(GoodsSpu goodsSpu);
 
-    Map<String, String> resetRedis();
+    Map<String, Object> resetRedis();
 }

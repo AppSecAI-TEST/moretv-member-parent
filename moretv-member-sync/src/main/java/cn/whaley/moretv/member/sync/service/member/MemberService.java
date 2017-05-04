@@ -16,5 +16,5 @@ public interface MemberService extends BaseMemberService {
 
     void sync(MemberDto memberDto);
 
-    Map<String, String> resetRedis();
+    Map<String, Object> resetRedis();
 }

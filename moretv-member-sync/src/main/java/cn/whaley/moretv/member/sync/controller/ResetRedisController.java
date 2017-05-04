@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
 import cn.whaley.moretv.member.sync.service.goods.GoodsService;
 import cn.whaley.moretv.member.sync.service.goods.GoodsSpuService;
+import cn.whaley.moretv.member.sync.service.member.MemberPackageRelationService;
 import cn.whaley.moretv.member.sync.service.member.MemberProgramRelationService;
 import cn.whaley.moretv.member.sync.service.member.MemberService;
 
@@ -33,13 +34,16 @@ public class ResetRedisController {
     @Autowired
     private MemberProgramRelationService memberProgramRelationService;
     
+    @Autowired
+    private MemberPackageRelationService memberPackageRelationService;
+    
     @RequestMapping(value = "/doReset")
     public ResultResponse reset(String type, String programCode) {
         if(StringUtils.isEmpty(type)){
             return ResultResponse.failed();
         }
         
-        Map<String, String> result = null;
+        Map<String, Object> result = null;
         
         switch(type){
             case "goods":
@@ -58,6 +62,9 @@ public class ResetRedisController {
                 }else
                     result = memberProgramRelationService.resetRedis(programCode);
                 break;
+            case "productPackage":
+                result = memberPackageRelationService.resetRedis();
+                break;
             default:
                 result = getFailedMap();
                 break;
@@ -66,8 +73,8 @@ public class ResetRedisController {
         return ResultResponse.success(result);
     }
     
-    private Map<String, String> getFailedMap(){
-        Map<String, String> result = new HashMap<>();
+    private Map<String, Object> getFailedMap(){
+        Map<String, Object> result = new HashMap<>();
         result.put("note", "wrong params!!!");
         return result;
     }

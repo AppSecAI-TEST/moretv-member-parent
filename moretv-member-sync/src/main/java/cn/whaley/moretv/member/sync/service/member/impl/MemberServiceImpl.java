@@ -1,7 +1,7 @@
 package cn.whaley.moretv.member.sync.service.member.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +20,7 @@ import cn.whaley.moretv.member.service.member.impl.BaseMemberServiceImpl;
 import cn.whaley.moretv.member.sync.dto.goods.MemberDto;
 import cn.whaley.moretv.member.sync.dto.goods.MemberMpr;
 import cn.whaley.moretv.member.sync.service.member.MemberService;
+import cn.whaley.moretv.member.sync.util.RedisResetResponseUtil;
 
 /**
 * ServiceImpl: MemberServiceImpl
@@ -97,22 +98,23 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
 
 
     @Override
-    public Map<String, String> resetRedis() {
+    public Map<String, Object> resetRedis() {
         HashOperations<String, String, String> opsHash = redisTemplate.opsForHash();
-        Map<String, String> result = new HashMap<>();
+        List<String> addList = new ArrayList<>();
+        List<String> deleteList = new ArrayList<>();
         
         List<Member> memberList = memberMapper.selectAll();
         for(Member member : memberList){
             if(member.getStatus().equals(GlobalEnum.StatusText.PUBLISHED.getCode())){
                 opsHash.put(CacheKeyConstant.REDIS_KEY_MEMBER, member.getCode(), JSON.toJSONString(member));
-                result.put("add", member.getCode());
+                addList.add(member.getCode());
                 logger.info("reset member, add redis member->{}", member.getCode());
             }else{
                 opsHash.delete(CacheKeyConstant.REDIS_KEY_MEMBER, member.getCode());
-                result.put("delete", member.getCode());
+                deleteList.add(member.getCode());
                 logger.info("reset member, delete redis member->{}", member.getCode());
             }
         }
-        return result;
+        return RedisResetResponseUtil.getResetRedisMap(addList, deleteList);
     }
 }
