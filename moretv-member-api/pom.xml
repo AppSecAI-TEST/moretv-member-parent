@@ -40,6 +40,8 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
+                	<finalName>moretv-member-api</finalName>  
+               	    <appendAssemblyId>false</appendAssemblyId>  
                     <descriptor>./assembly/assembly.xml</descriptor>
                 </configuration>
                 <executions>
