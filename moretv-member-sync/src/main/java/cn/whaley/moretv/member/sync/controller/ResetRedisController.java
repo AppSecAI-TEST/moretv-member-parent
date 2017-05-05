@@ -6,6 +6,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,7 @@ import cn.whaley.moretv.member.sync.service.goods.GoodsSpuService;
 import cn.whaley.moretv.member.sync.service.member.MemberPackageRelationService;
 import cn.whaley.moretv.member.sync.service.member.MemberProgramRelationService;
 import cn.whaley.moretv.member.sync.service.member.MemberService;
+import cn.whaley.moretv.member.sync.service.member.MemberUserAuthorityService;
 
 @RestController
 @RequestMapping("/resetRedis")
@@ -37,8 +40,17 @@ public class ResetRedisController {
     @Autowired
     private MemberPackageRelationService memberPackageRelationService;
     
+    @Autowired
+    private MemberUserAuthorityService memberUserAuthorityService;
+    
+    @Value("${custom.redis.reset.key}")
+    private String redisResetKey;
+    
     @RequestMapping(value = "/doReset")
-    public ResultResponse reset(String type, String programCode) {
+    public ResultResponse reset(String type, String programCode, String accountId, String sign) {
+        if(StringUtils.isEmpty(redisResetKey) || !redisResetKey.equals(sign))
+            return ResultResponse.failed();
+        
         if(StringUtils.isEmpty(type)){
             return ResultResponse.failed();
         }
@@ -64,6 +76,13 @@ public class ResetRedisController {
                 break;
             case "productPackage":
                 result = memberPackageRelationService.resetRedis();
+                break;
+            case "memberAuthority":
+                if(StringUtils.isEmpty(accountId)){
+                    result = getFailedMap();
+                    break;
+                }else
+                    result = memberUserAuthorityService.resetRedis(accountId);
                 break;
             default:
                 result = getFailedMap();

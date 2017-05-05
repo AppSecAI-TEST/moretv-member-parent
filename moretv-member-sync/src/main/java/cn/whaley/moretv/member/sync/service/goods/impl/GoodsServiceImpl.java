@@ -3,6 +3,7 @@ package cn.whaley.moretv.member.sync.service.goods.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,7 +116,17 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
         List<String> deleteList = new ArrayList<>();
         
         //1、获取数据库全部商品
-        List<Goods> goodsList = goodsMapper.selectAll();
+        List<Goods> goodsList = goodsMapper.listByStatus(GlobalEnum.StatusText.PUBLISHED.getCode());
+        
+        //2、获取商品hash的所有key
+        Set<String> goodsKeys = opsHash.keys(CacheKeyConstant.REDIS_KEY_GOODS);
+        
+        //3、全部删除并且记录用于返回
+        for(String key : goodsKeys){
+            opsHash.delete(CacheKeyConstant.REDIS_KEY_GOODS, key);
+            deleteList.add(key);
+            logger.info("resetGoods: 遍历清除商品, goodsCode:{}", key);
+        }
         
         //2、遍历商品，查询商品的sku，如果商品状态为[发布]&&sku数量为1，那么存入redis
         for(Goods goods : goodsList){
@@ -125,14 +136,10 @@ public class GoodsServiceImpl extends BaseGoodsServiceImpl implements GoodsServi
             BeanUtils.copyProperties(goods, goodsDto);
             goodsDto.setGoodsSkuList(goodsSkuList);
             
-            if(GlobalEnum.StatusText.PUBLISHED.getCode().equals(goods.getGoodsStatus()) && goodsSkuList.size() == 1){
+            if(goodsSkuList.size() == 1){
                 opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS, goods.getGoodsCode(), JSON.toJSONString(goodsDto));
                 addList.add(goods.getGoodsCode());
                 logger.info("resetGoods: 重新插入商品缓存, goodsCode:{}", goodsDto.getGoodsCode());
-            }else{
-                opsHash.delete(CacheKeyConstant.REDIS_KEY_GOODS, goods.getGoodsCode());
-                deleteList.add(goods.getGoodsCode());
-                logger.info("resetGoods: 重新删除商品缓存, goodsCode:{}", goodsDto.getGoodsCode());
             }
         }
         

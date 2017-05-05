@@ -3,6 +3,7 @@ package cn.whaley.moretv.member.sync.service.goods.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,17 +96,21 @@ public class GoodsSpuServiceImpl extends BaseGoodsSpuServiceImpl implements Good
         List<String> addList = new ArrayList<>();
         List<String> deleteList = new ArrayList<>();
         
+        Set<String> goodsSpuKeys = opsHash.keys(CacheKeyConstant.REDIS_KEY_GOODS_SPU);
+        for(String key : goodsSpuKeys){
+            opsHash.delete(CacheKeyConstant.REDIS_KEY_GOODS_SPU, key);
+            deleteList.add(key);
+            logger.info("resetGoodsSpu: 清除商品模型缓存, goodsBaseCode:{}", key);
+        }
+        
         List<GoodsSpu> goodsSpuList = goodsSpuMapper.selectAll();
         for(GoodsSpu goodsSpu : goodsSpuList){
-            if (GlobalEnum.CompositedType.SINGLE.getCode() == goodsSpu.getCompositedType().intValue()) {
+            if (GlobalEnum.StatusText.PUBLISHED.getCode().equals(goodsSpu.getGoodsStatus()) &&
+                    GlobalEnum.CompositedType.SINGLE.getCode() == goodsSpu.getCompositedType().intValue()) {
                 String value = JSON.toJSONString(goodsSpu);
                 opsHash.put(CacheKeyConstant.REDIS_KEY_GOODS_SPU, goodsSpu.getGoodsBaseCode(), value);
                 addList.add( goodsSpu.getGoodsBaseCode());
                 logger.info("resetGoodsSpu: 重新插入商品模型缓存, goodsBaseCode:{}", goodsSpu.getGoodsBaseCode());
-            }else{
-                opsHash.delete(CacheKeyConstant.REDIS_KEY_GOODS_SPU, goodsSpu.getGoodsBaseCode());
-                deleteList.add(goodsSpu.getGoodsBaseCode());
-                logger.info("resetGoodsSpu: 重新删除商品模型缓存, goodsBaseCode:{}", goodsSpu.getGoodsBaseCode());
             }
         }
         return RedisResetResponseUtil.getResetRedisMap(addList, deleteList);

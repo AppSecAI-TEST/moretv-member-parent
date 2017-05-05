@@ -54,11 +54,27 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
     private Integer expireTime;
     
     /**
-     * 数据签名
+     * MD5验证，由创建订单的时候生成
      */
     private String sign;
     
+    /**
+     * 创建时间
+     */
     private Long createTime;
+    
+    /**
+     * 微信的openId
+     */
+    private String openId;
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
 
     public Integer getFee() {
         return fee;
@@ -150,8 +166,10 @@ public class PayGatewayRequest extends BaseRequest implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString() + "PayRequest [sessionToken=" + sessionToken + ", cip=" + cip + ", goodsCode=" + goodsCode + ", subject="
-                + subject + ", payAutoRenew=" + payAutoRenew + ", payType=" + payType + ", orderCode=" + orderCode
-                + ", fee=" + fee + ", expireTime=" + expireTime + ", sign=" + sign + "]";
+        return super.toString() + "PayGatewayRequest [sessionToken=" + sessionToken + ", cip=" + cip + ", goodsCode=" + goodsCode
+                + ", subject=" + subject + ", payAutoRenew=" + payAutoRenew + ", payType=" + payType + ", orderCode="
+                + orderCode + ", fee=" + fee + ", expireTime=" + expireTime + ", sign=" + sign + ", createTime="
+                + createTime + ", openId=" + openId + "]";
     }
+    
 }

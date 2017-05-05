@@ -62,6 +62,7 @@ public class PayGatewayUtil {
         map.put("notifyUrl", customProperty.getNotifyUrl());
         map.put("overTime", payGatewayRequest.getExpireTime());
         map.put("payMethod", payGatewayRequest.getPayType());
+        map.put("openid", payGatewayRequest.getOpenId());
         
         map.put("sign", getSign(map));
         
@@ -72,7 +73,7 @@ public class PayGatewayUtil {
      * 1、根据参数的key进行按字母顺序排序
      * 2、根据排序好的顺序将非空的值拼接求MD5
      */
-    private static String getSign(Map<String, Object> map){
+    public static String getSign(Map<String, Object> map){
         StringBuffer sb = new StringBuffer();
         //排序
         Set<String> keySet = new TreeSet<>(map.keySet());

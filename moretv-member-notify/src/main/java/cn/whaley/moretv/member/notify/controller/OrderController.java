@@ -49,14 +49,14 @@ public class OrderController {
 				return ResultResponse.define(ApiCodeEnum.API_PARAM_NULL);
 			}
 			
-			Map<String, String> paramMap = new HashMap<String, String>();
+			Map<String, Object> paramMap = new HashMap<String, Object>();
     		paramMap.put("orderCode", orderCode);
     		paramMap.put("payMethodCode", payMethodCode);
     		paramMap.put("payMethodName", payMethodName);
     		paramMap.put("fee", String.valueOf(fee));
     		paramMap.put("orderStatus", orderStatus);
     		
-			if (!StringHelper.checkSignNew(paramMap, customProperty.getPayGatewaySignKey(), sign)) {
+			if (!StringHelper.checkSignNew(paramMap, sign)) {
 				return ResultResponse.define(ApiCodeEnum.API_SIGN_ERR);
 			}
         

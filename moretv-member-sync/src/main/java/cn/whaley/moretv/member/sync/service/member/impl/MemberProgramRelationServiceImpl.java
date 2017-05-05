@@ -1,7 +1,9 @@
 package cn.whaley.moretv.member.sync.service.member.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -96,27 +98,25 @@ public class MemberProgramRelationServiceImpl extends GenericServiceImpl<MemberP
         List<String> addList = new ArrayList<>();
         List<String> deleteList = new ArrayList<>();
         
-        String[] programCodeArray = programCode.split(",");
-        for(String programId : programCodeArray){
-            boolean isBound = false;
-            
-            List<MemberProgramRelation> mprList = memberProgramRelationMapper.listByProgramCode(programId);
-            for(MemberProgramRelation mpr : mprList){
-                if(GlobalEnum.Bound.BOUND.getCode().equals(mpr.getStatus())){
-                    //绑定的，插入redis
-                    isBound = true;
-                    opsValue.set(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, programId), JSON.toJSONString(mpr));
-                    addList.add(programId);
-                    logger.info("reset program-member-relation, add prgoram->{}", programId);
-                }
-            }
-            
-            if(!isBound){
-                //这个节目没有跟会员的绑定关系，删除redis
-                redisTemplate.delete(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, programId));
-                deleteList.add(programId);
-                logger.info("reset program-member-relation, delete prgoram->{}", programId);
-            }
+        List<String> programCodeList = Arrays.asList(programCode.split(","));
+        
+        //根据programCode 和 status 查询出 会员-节目的关系,一个节目只对应一个有效的会员
+        Map<String, Object> params = new HashMap<>();
+        params.put("programCodeList", programCodeList);
+        params.put("status", GlobalEnum.Bound.BOUND.getCode());
+        
+        List<MemberProgramRelation> mprList = memberProgramRelationMapper.listByProgramCodeAndStatus(params);
+        
+        for(String programId : programCodeList){
+            redisTemplate.delete(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, programId));
+            deleteList.add(programId);
+            logger.info("reset program-member-relation, clear prgoram->{}", programId);
+        }
+        
+        for(MemberProgramRelation mpr : mprList){
+            opsValue.set(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PROGRAM_RELATION, mpr.getProgramCode()), JSON.toJSONString(mpr));
+            addList.add(mpr.getProgramCode());
+            logger.info("reset program-member-relation, add prgoram->{}", mpr.getProgramCode());
         }
         
         return RedisResetResponseUtil.getResetRedisMap(addList, deleteList);

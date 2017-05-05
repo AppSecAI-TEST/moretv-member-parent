@@ -4,6 +4,7 @@ import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.model.member.MemberProgramRelation;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * Mapper: MemberProgramRelationMapper
@@ -15,5 +16,7 @@ import java.util.List;
 public interface MemberProgramRelationMapper extends GenericMapper<MemberProgramRelation, Integer> {
 
     List<MemberProgramRelation> listByProgramCode(String productCode);
+
+    List<MemberProgramRelation> listByProgramCodeAndStatus(Map<String, Object> params);
 
 }

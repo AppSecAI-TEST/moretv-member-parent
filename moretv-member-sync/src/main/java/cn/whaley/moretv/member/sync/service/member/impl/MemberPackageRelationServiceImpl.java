@@ -2,8 +2,10 @@ package cn.whaley.moretv.member.sync.service.member.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,6 +121,24 @@ public class MemberPackageRelationServiceImpl extends GenericServiceImpl<MemberP
         List<String> deleteList = new ArrayList<>();
         
         List<MemberPackageRelation> mppList = memberPackageRelationMapper.selectAll();
+        
+        Set<String> memberCodeSet = new HashSet<>();
+        for(MemberPackageRelation mpp : mppList){
+            memberCodeSet.add(mpp.getMemberCode());
+        }
+        
+        for(String memberCode : memberCodeSet){
+            String bigKey =  String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, memberCode);
+            Set<String> redisKeys = opsHash.keys(bigKey);
+            for(String key : redisKeys){
+                String temp = memberCode + "->" + key;
+                opsHash.delete(bigKey, key);
+                deleteList.add(temp);
+                logger.info("reset memberPackageRelation, clear memberPackageRelation->{}", temp);
+            }
+        }
+        
+        
         for(MemberPackageRelation mpp : mppList){
             String temp = mpp.getMemberCode() + "->" + mpp.getPackageCode();
             
@@ -127,10 +147,6 @@ public class MemberPackageRelationServiceImpl extends GenericServiceImpl<MemberP
                         mpp.getPackageCode(), JSON.toJSONString(mpp));
                 addList.add(temp);
                 logger.info("reset memberPackageRelation, add memberPackageRelation->{}", temp);
-            }else{
-                opsHash.delete(String.format(CacheKeyConstant.REDIS_KEY_MEMBER_PACKAGE_RELATION, mpp.getMemberCode()), mpp.getPackageCode());
-                deleteList.add(temp);
-                logger.info("reset memberPackageRelation, delete memberPackageRelation->{}", temp);
             }
         }
         return RedisResetResponseUtil.getResetRedisMap(addList, deleteList);

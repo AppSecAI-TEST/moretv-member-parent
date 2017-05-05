@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,17 +104,18 @@ public class MemberServiceImpl extends BaseMemberServiceImpl implements MemberSe
         List<String> addList = new ArrayList<>();
         List<String> deleteList = new ArrayList<>();
         
-        List<Member> memberList = memberMapper.selectAll();
+        Set<String> memberKeys = opsHash.keys(CacheKeyConstant.REDIS_KEY_MEMBER);
+        for(String key : memberKeys){
+            opsHash.delete(CacheKeyConstant.REDIS_KEY_MEMBER, key);
+            deleteList.add(key);
+            logger.info("reset member, clear redis member->{}", key);
+        }
+        
+        List<Member> memberList = memberMapper.listByStatus(GlobalEnum.StatusText.PUBLISHED.getCode());
         for(Member member : memberList){
-            if(member.getStatus().equals(GlobalEnum.StatusText.PUBLISHED.getCode())){
-                opsHash.put(CacheKeyConstant.REDIS_KEY_MEMBER, member.getCode(), JSON.toJSONString(member));
-                addList.add(member.getCode());
-                logger.info("reset member, add redis member->{}", member.getCode());
-            }else{
-                opsHash.delete(CacheKeyConstant.REDIS_KEY_MEMBER, member.getCode());
-                deleteList.add(member.getCode());
-                logger.info("reset member, delete redis member->{}", member.getCode());
-            }
+            opsHash.put(CacheKeyConstant.REDIS_KEY_MEMBER, member.getCode(), JSON.toJSONString(member));
+            addList.add(member.getCode());
+            logger.info("reset member, add redis member->{}", member.getCode());
         }
         return RedisResetResponseUtil.getResetRedisMap(addList, deleteList);
     }

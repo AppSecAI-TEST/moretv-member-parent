@@ -9,7 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import cn.whaley.moretv.member.base.util.RedisLock;
 import cn.whaley.moretv.member.model.order.Order;
 import cn.whaley.moretv.member.order.service.order.OrderService;
+import cn.whaley.moretv.member.order.service.order.impl.OrderServiceImpl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import cn.whaley.moretv.member.base.constant.ApiCodeEnum;
 import cn.whaley.moretv.member.base.constant.ApiCodeInfo;
 import cn.whaley.moretv.member.base.constant.CacheKeyConstant;
+import cn.whaley.moretv.member.base.constant.GlobalEnum;
+import cn.whaley.moretv.member.base.constant.OrderEnum;
 import cn.whaley.moretv.member.base.dto.pay.gateway.PayGatewayRequest;
 import cn.whaley.moretv.member.base.dto.request.BaseRequest;
 import cn.whaley.moretv.member.base.dto.response.ResultResponse;
@@ -31,6 +36,7 @@ import cn.whaley.moretv.member.base.util.StringHelper;
 @RestController
 @RequestMapping("/order_api")
 public class OrderController {
+    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     private OrderService orderService;
@@ -44,10 +50,16 @@ public class OrderController {
     		@RequestParam(value = "sessionToken") String sessionToken,
     		@RequestParam(value = "goodsCode") String goodsCode,
     		@RequestParam(value = "payAutoRenew") Integer payAutoRenew, 
-    		@RequestParam(value = "payType")String payType) {
+    		@RequestParam(value = "payType")String payType,
+    		@RequestParam(value = "openId", required = false)String openId) {
     	
     	if (StringUtils.isEmpty(payType)||StringUtils.isEmpty(goodsCode) || payAutoRenew ==null) {
 			return ResultResponse.define(ApiCodeEnum.API_PARAM_NULL);
+    	}
+    	
+    	if(OrderEnum.PayChannel.WECHAT.getCode().equals(payType) && StringUtils.isEmpty(openId)){
+    	    logger.error("微信支付缺少openId->{}", baseRequest.toString());
+    	    return ResultResponse.define(ApiCodeEnum.API_PARAM_NULL);
     	}
     	
     	ResultResponse checkOrderCount = orderService.checkCanOrderCount(baseRequest.getAccountId());
@@ -64,7 +76,7 @@ public class OrderController {
 
     		String payUrl = PayManage.getPayUrl(sessionToken, IpUtil.getIp2(request), System.currentTimeMillis(),
                     goodsCode, order.getOrderTitle(), payAutoRenew, payType, order.getOrderCode(),
-                    order.getPaymentAmount(), order.getAccountId());
+                    order.getPaymentAmount(), order.getAccountId(), openId);
 
     		data.put("orderCode",order.getOrderCode());
     		data.put("redirectUrl", payUrl);

@@ -2,6 +2,9 @@ package cn.whaley.moretv.member.mapper.goods;
 
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.model.goods.Goods;
+
+import java.util.List;
+
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -17,4 +20,6 @@ public interface GoodsMapper extends GenericMapper<Goods, Integer> {
     int existGoodsById(Integer id);
 
     int insertWithId(Goods goods);
+
+    List<Goods> listByStatus(String goodsStatus);
 }

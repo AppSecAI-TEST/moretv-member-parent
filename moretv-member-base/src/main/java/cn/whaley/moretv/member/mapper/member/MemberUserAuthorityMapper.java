@@ -1,5 +1,8 @@
 package cn.whaley.moretv.member.mapper.member;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Select;
 
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
@@ -16,4 +19,6 @@ import cn.whaley.moretv.member.model.member.MemberUserAuthority;
 public interface MemberUserAuthorityMapper extends GenericMapper<MemberUserAuthority, Integer> {
 	
 	MemberUserAuthority selectByAccountIdAndMemberCode(String accountId, String memberCode);
+
+    List<MemberUserAuthority> listByAccountIdAndStatus(Map<String, Object> params);
 }

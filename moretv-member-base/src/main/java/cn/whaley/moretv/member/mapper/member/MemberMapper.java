@@ -1,5 +1,7 @@
 package cn.whaley.moretv.member.mapper.member;
 
+import java.util.List;
+
 import cn.whaley.moretv.member.base.mapper.GenericMapper;
 import cn.whaley.moretv.member.model.member.Member;
 
@@ -13,5 +15,7 @@ import cn.whaley.moretv.member.model.member.Member;
 public interface MemberMapper extends GenericMapper<Member, Integer> {
 
     Member selectByCode(String code);
+
+    List<Member> listByStatus(String status);
 
 }

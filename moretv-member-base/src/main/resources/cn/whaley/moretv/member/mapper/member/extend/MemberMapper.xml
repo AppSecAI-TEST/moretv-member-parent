@@ -10,4 +10,11 @@
         from member mem
         where mem.code = #{code,jdbcType=VARCHAR}
     </select>
+    
+    <select id="listByStatus" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from member mem
+        where mem.status = #{status,jdbcType=VARCHAR}
+    </select>
 </mapper>

@@ -8,7 +8,7 @@ public class RedisResetResponseUtil {
     public static Map<String, Object> getResetRedisMap(List<String> addList, List<String> deleteList){
         Map<String, Object> map = new HashMap<>(2);
         map.put("add", addList);
-        map.put("del", deleteList);
+        map.put("clear", deleteList);
         
         return map;
     }
