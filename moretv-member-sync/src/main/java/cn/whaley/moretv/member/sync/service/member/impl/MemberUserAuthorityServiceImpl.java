@@ -84,9 +84,5 @@ public class MemberUserAuthorityServiceImpl extends GenericServiceImpl<MemberUse
         
         return RedisResetResponseUtil.getResetRedisMap(addList, deleteList);
     }
-    
-    public static void main(String[] args) {
-        String str = UUID.randomUUID().toString();
-        System.out.println(str);
-    }
+
 }
